@@ -1,0 +1,40 @@
+/* ToHUM Simulator Styles */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.amber-mode {
+  background-color: #1C1917 !important;
+  color: #F6EFE7 !important;
+  border-color: #F39C12 !important;
+}
+
+.amber-mode .bg-\[\#F6EFE7\] {
+  background-color: #292524 !important;
+  color: #F6EFE7 !important;
+}
+
+.amber-mode .bg-white {
+  background-color: #38322E !important;
+  color: #F6EFE7 !important;
+  border-color: #574B40 !important;
+}
+
+.amber-mode .text-\[\#2C3E50\] {
+  color: #F6EFE7 !important;
+}
+
+.amber-mode .text-\[\#6B7280\] {
+  color: #D6D3D1 !important;
+}
+
+@keyframes pulseSlow {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+.animate-breath {
+  animation: pulseSlow 8s ease-in-out infinite;
+}

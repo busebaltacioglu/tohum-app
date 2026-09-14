@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ToHUM · Anne ve Bebek Yaşam Ekosistemi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0A0605;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+    }
+    .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Maternal Ambient Breathing */
+    @keyframes maternalBreathing {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.025); }
+    }
+    .animate-maternal-breath {
+      animation: maternalBreathing 5.5s ease-in-out infinite;
+    }
+
+    /* Amniotic Fluid Floating */
+    @keyframes amnioticFloat {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      33% { transform: translateY(-5px) scale(1.01) rotate(-0.5deg); }
+      66% { transform: translateY(4px) scale(0.995) rotate(0.5deg); }
+    }
+    .animate-amniotic-float {
+      animation: amnioticFloat 4.8s ease-in-out infinite;
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4 bg-[#0A0605]">
+  <div class="w-full max-w-[420px] h-[100vh] sm:h-[860px] bg-[#120B09] sm:rounded-[44px] shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col relative border-0 sm:border-4 sm:border-white/10">
+    <div id="appRoot" class="flex-1 flex flex-col overflow-hidden relative"></div>
+  </div>
+  <script src="app.js?v=1788508367_v14_clean_alignments"></script>
+</body>
+</html>
