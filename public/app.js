@@ -377,6 +377,9 @@ window.toggleWeekSelector = function() {
 };
 
 window.changePregnancyWeek = function(w) {
+  state.weekTransitionOverlay = true;
+  state.weekTransitionTarget = w;
+  setTimeout(() => { state.weekTransitionOverlay = false; render(); }, 1800);
   const data = getLifecycleDataForWeek(w);
   state.baby.week = w;
   state.baby.sizeComparison = data.sizeComparison;
@@ -564,6 +567,9 @@ const state = {
   // HAFTALIK DİNAMİK YAŞAM DÖNGÜSÜ MOTORU DURUMU (1 - 40. HAFTA)
   // =========================================================================
   isWeekSelectorOpen: false,
+  weekTransitionOverlay: false,
+  weekTransitionTarget: 0,
+  nightMode: (new Date().getHours() >= 22 || new Date().getHours() < 7),
   baby: {
     name: "Güneş",
     week: 31,
@@ -1385,6 +1391,7 @@ function loadSavedState() {
 function render() {
   const root = document.getElementById("appRoot");
   if (!root) return;
+  state.nightMode = (new Date().getHours() >= 22 || new Date().getHours() < 7);
   renderAppShell(root);
   saveState();
   if (state.currentTab === "home") {
@@ -1415,9 +1422,15 @@ function renderAppShell(root) {
       </div>
 
       <div class="flex items-center space-x-2">
-        <span class="text-[10px] font-medium ${hasDeficiency ? 'text-amber-200 bg-amber-500/25 border-amber-400/40' : 'text-emerald-200 bg-emerald-500/25 border-emerald-400/40'} px-2.5 py-1 rounded-full border backdrop-blur-md shadow-xs">
-          ${hasDeficiency ? missing.length + ' İhtiyaç' : 'Dengede'}
-        </span>
+        ${state.birthModule.contractionTimer.isRunning ? `
+          <button onclick="navigateTab('birth'); setBirthSubtab('contraction');" class="text-[10px] font-bold text-rose-200 bg-rose-500/30 border border-rose-400/40 px-2.5 py-1 rounded-full animate-pulse backdrop-blur-md shadow-xs">
+            🔴 ${String(Math.floor(state.birthModule.contractionTimer.currentSeconds/60)).padStart(2,'0')}:${String(state.birthModule.contractionTimer.currentSeconds%60).padStart(2,'0')}
+          </button>
+        ` : `
+          <span class="text-[10px] font-medium ${hasDeficiency ? 'text-amber-200 bg-amber-500/25 border-amber-400/40' : 'text-emerald-200 bg-emerald-500/25 border-emerald-400/40'} px-2.5 py-1 rounded-full border backdrop-blur-md shadow-xs">
+            ${hasDeficiency ? missing.length + ' İhtiyaç' : 'Dengede'}
+          </span>
+        `}
         <div class="relative cursor-pointer" onclick="navigateTab('profile')" title="Profil">
           <img src="${state.user.avatar}" alt="${state.user.name}" class="w-9 h-9 rounded-full object-cover border-2 border-white/30 shadow-md">
           <span class="absolute bottom-0 right-0 w-2.5 h-2.5 ${hasDeficiency ? 'bg-amber-400' : 'bg-emerald-400'} border border-black rounded-full"></span>
@@ -1431,6 +1444,42 @@ function renderAppShell(root) {
     <main class="flex-1 w-full h-full relative overflow-hidden flex flex-col">
       ${getTabContent()}
     </main>
+
+    ${state.weekTransitionOverlay ? `
+      <div class="absolute inset-0 z-[200] flex items-center justify-center pointer-events-none">
+        <div class="bg-[#0D0806]/90 backdrop-blur-2xl rounded-[32px] px-10 py-9 text-center border border-amber-400/30 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-in zoom-in-90 duration-400">
+          <div class="text-[10px] text-amber-300/60 uppercase tracking-[0.35em] mb-2 font-medium">Güneş</div>
+          <div class="text-5xl font-serif font-semibold text-white mb-2">${state.weekTransitionTarget}<span class="text-2xl text-white/50">. Hafta</span></div>
+          <div class="text-xs text-white/60 mt-1">${getLifecycleDataForWeek(state.weekTransitionTarget).stageName}</div>
+          <div class="mt-3 w-16 h-0.5 bg-amber-400/30 mx-auto rounded-full"></div>
+        </div>
+      </div>
+    ` : ''}
+
+    ${state.nightMode ? `
+      <div class="absolute inset-0 z-[195] bg-black/25 pointer-events-none"></div>
+      <div class="absolute top-[68px] left-1/2 -translate-x-1/2 z-[196] pointer-events-none">
+        <span class="text-[9px] text-amber-200/35 font-medium tracking-widest uppercase">Gece Modu</span>
+      </div>
+    ` : ''}
+
+    <nav class="absolute bottom-0 inset-x-0 z-50 h-14 bg-[#0D0806]/97 backdrop-blur-2xl border-t border-white/[0.08] flex items-center justify-around px-1 shadow-[0_-4px_28px_rgba(0,0,0,0.7)]">
+      ${[
+        { id: 'home',     sym: '◎', lbl: 'Güneş'  },
+        { id: 'health',   sym: '✛', lbl: 'Sağlık'  },
+        { id: 'birth',    sym: '◑', lbl: 'Doğum'   },
+        { id: 'calendar', sym: '▦', lbl: 'Takvim'  }
+      ].map(t => `
+        <button
+          onclick="navigateTab('${t.id}')"
+          class="flex flex-col items-center justify-center space-y-[2px] px-4 py-1.5 rounded-xl transition-all active:scale-90
+            ${state.currentTab === t.id ? 'text-amber-300' : 'text-white/35 hover:text-white/60'}">
+          <span class="text-[18px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.7)]' : ''}">${t.sym}</span>
+          <span class="text-[8px] font-semibold tracking-wide">${t.lbl}</span>
+          ${state.currentTab === t.id ? '<span class="block w-3 h-[2px] bg-amber-400 rounded-full mt-0.5"></span>' : '<span class="block w-3 h-[2px] rounded-full mt-0.5"></span>'}
+        </button>
+      `).join('')}
+    </nav>
   `;
 }
 
@@ -1570,10 +1619,10 @@ function renderHomeTab() {
         </div>
       </div>
 
-      <div class="absolute bottom-0 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
+      <div class="absolute bottom-14 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
         <div class="bg-[#140D0B]/95 backdrop-blur-2xl rounded-t-[32px] border-t border-white/15 text-white shadow-[0_-10px_35px_rgba(0,0,0,0.6)] transition-all duration-300 overflow-hidden">
           <div onclick="toggleBottomSheet()" class="px-5 pt-3 pb-3.5 cursor-pointer hover:bg-white/5 active:bg-white/10 transition flex flex-col justify-center select-none">
-            <div class="w-10 h-1 bg-white/30 rounded-full mx-auto mb-2.5"></div>
+            <div class="w-10 h-1 bg-white/30 rounded-full mx-auto mb-2.5 hover:bg-white/50 transition-all"></div>
             <div class="flex justify-between items-center text-xs">
               <div class="flex items-center space-x-2 truncate">
                 <span class="w-2 h-2 rounded-full ${hasDeficiency ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse shrink-0"></span>
@@ -1765,7 +1814,7 @@ function getHomeSubtabContent() {
 // ŞİFA & SAĞLIK TAKİBİ (KORUMA ALTINDAKİ RENDER METODU)
 function renderHealthTab() {
   return `
-    <div class="w-full h-full pt-16 pb-12 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
           <h2 class="text-base font-serif font-semibold text-white/95">Şifa & Sağlık Takibi</h2>
@@ -1852,10 +1901,51 @@ function getHealthSubtabContent() {
               <div class="text-lg font-bold text-white">${state.healthData.bloodPressureHistory[0].systolic}/${state.healthData.bloodPressureHistory[0].diastolic} <span class="text-xs font-normal text-white/60">mmHg</span></div>
               <div class="text-[10px] text-emerald-300 mt-0.5">✓ Son Ölçüm: ${state.healthData.bloodPressureHistory[0].date}</div>
             </div>
-            <span class="text-[10px] bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 px-2.5 py-1 rounded-full font-medium">
-              Doğal Dengede
+            <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold border
+              ${state.healthData.bloodPressureHistory[0].systolic >= 130
+                ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
+                : state.healthData.bloodPressureHistory[0].systolic >= 115
+                ? 'bg-amber-500/25 border-amber-400/40 text-amber-300'
+                : 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'}">
+              ${state.healthData.bloodPressureHistory[0].systolic >= 130 ? '⚠ Yüksek' : state.healthData.bloodPressureHistory[0].systolic >= 115 ? '⚑ İzle' : '✓ Güvenli'}
             </span>
           </div>
+
+          ${(() => {
+            const hist = state.healthData.bloodPressureHistory.slice(0, 6).reverse();
+            const vals = hist.map(h => h.systolic);
+            const minV = Math.min(...vals, 80);
+            const maxV = Math.max(...vals, 135);
+            const range = maxV - minV || 1;
+            const W = 240, H = 50;
+            const pts = vals.map((v, i) => {
+              const x = vals.length === 1 ? W/2 : (i / (vals.length - 1)) * W;
+              const y = H - ((v - minV) / range) * (H - 6) - 3;
+              return `${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(' ');
+            const limitY = H - ((115 - minV) / range) * (H - 6) - 3;
+            const dots = vals.map((v, i) => {
+              const x = vals.length === 1 ? W/2 : (i / (vals.length - 1)) * W;
+              const y = H - ((v - minV) / range) * (H - 6) - 3;
+              const col = v >= 130 ? '#f87171' : v >= 115 ? '#fbbf24' : '#34d399';
+              return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="${col}" stroke="#0D0806" stroke-width="1.5"/>`;
+            }).join('');
+            return `
+              <div class="p-3 bg-black/35 rounded-2xl border border-white/5 space-y-1">
+                <div class="flex justify-between text-[9px] text-white/40">
+                  <span>Sistolik Trend (Son ${vals.length} Ölçüm)</span>
+                  <span class="text-rose-400/60">— 115 mmHg sınırı</span>
+                </div>
+                <svg viewBox="0 0 240 50" class="w-full h-12" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="${limitY.toFixed(1)}" x2="240" y2="${limitY.toFixed(1)}"
+                    stroke="rgba(248,113,113,0.45)" stroke-width="1" stroke-dasharray="5,3"/>
+                  <polyline points="${pts}" fill="none" stroke="rgba(251,191,36,0.7)"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  ${dots}
+                </svg>
+              </div>
+            `;
+          })()}
 
           <div class="p-3 bg-gradient-to-r from-amber-950/40 to-black/30 rounded-2xl border border-amber-400/25 space-y-2">
             <div class="flex justify-between items-center cursor-pointer select-none" onclick="toggleSafetyCorridor()">
@@ -2467,7 +2557,7 @@ function renderBirthTab() {
       <!-- Alt Sekme Seçimi: Erken Trimesterler vs 3. Trimester -->
       ${isEarlyTrimester ? `
         <!-- 1. ve 2. Trimester Sekme Çubuğu -->
-        <div class="grid grid-cols-5 gap-1 bg-white/5 p-1 rounded-2xl text-[10px]">
+        <div class="grid grid-cols-5 gap-1 bg-white/5 p-1.5 rounded-2xl text-[10px]">
           <button onclick="setBirthSubtab('overview')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'overview' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
             ${curW < 14 ? 'Köklenme' : 'Gelişim'}
           </button>
@@ -2624,12 +2714,23 @@ function getBirthSubtabContent() {
           </div>
 
           <div class="space-y-2">
-            ${(data.donts || []).map((item, idx) => `
-              <div class="p-3.5 bg-black/40 rounded-2xl border border-rose-500/20 flex items-start space-x-2.5 text-xs text-white/90">
-                <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">✕</span>
-                <span class="leading-relaxed text-[11px]">${item}</span>
-              </div>
-            `).join('')}
+            ${(data.donts || []).map((item, idx) => {
+              const high = /sauna|kaplıca|hamam|çiğ et|sushi|alkol|ibuprofen|aspirin|kanama|amniyon|düşme|erken|meme ucu masajı|aniden|kesinlikle/i.test(item);
+              const riskLabel = high ? 'YÜKSEK' : 'DİKKAT';
+              const riskCls = high
+                ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
+                : 'bg-amber-500/20 border-amber-400/30 text-amber-300';
+              const borderCls = high ? 'border-rose-500/30' : 'border-amber-500/20';
+              return `
+                <div class="p-3.5 bg-black/40 rounded-2xl border ${borderCls} flex items-start space-x-2.5 text-xs text-white/90">
+                  <div class="flex flex-col items-center space-y-1 shrink-0 mt-0.5">
+                    <span class="w-5 h-5 rounded-full bg-rose-500/20 text-rose-300 flex items-center justify-center font-bold text-[10px]">✕</span>
+                    <span class="text-[7px] font-bold px-1 py-0.5 rounded border ${riskCls} leading-none">${riskLabel}</span>
+                  </div>
+                  <span class="leading-relaxed text-[11px]">${item}</span>
+                </div>
+              `;
+            }).join('')}
           </div>
 
           <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 text-[10px] text-white/70 leading-relaxed">
@@ -2876,11 +2977,30 @@ function getBirthSubtabContent() {
         </div>
 
         <div class="grid grid-cols-4 gap-1 bg-white/5 p-1 rounded-2xl text-[10px]">
-          ${cats.map(c => `
-            <button onclick="setBagCategory('${c}')" class="py-2 text-center rounded-xl transition ${curCat === c ? 'bg-amber-500/25 text-amber-200 font-bold border border-amber-400/30' : 'text-white/50'}">
-              ${c}
-            </button>
-          `).join('')}
+          ${cats.map(c => {
+            const catItems = state.birthModule.bagItems.filter(i => i.category === c);
+            const catDone = catItems.filter(i => i.done).length;
+            const allDone = catDone === catItems.length && catItems.length > 0;
+            return `
+              <button onclick="setBagCategory('${c}')" class="py-2 px-1 text-center rounded-xl transition leading-tight ${curCat === c ? 'bg-amber-500/25 text-amber-200 font-bold border border-amber-400/30' : 'text-white/50 hover:text-white/70'}">
+                <div>${c}</div>
+                <div class="text-[8px] mt-0.5 font-mono ${allDone ? 'text-emerald-400' : 'text-white/35'}">${catDone}/${catItems.length}</div>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="space-y-1.5 mt-1">
+          <div class="flex justify-between text-[10px]">
+            <span class="text-white/50">${curCat} · İlerleme</span>
+            <span class="font-semibold ${items.filter(i=>i.done).length === items.length && items.length > 0 ? 'text-emerald-400' : 'text-amber-300'}">
+              ${items.filter(i=>i.done).length} / ${items.length} Hazır
+            </span>
+          </div>
+          <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500"
+              style="width: ${items.length > 0 ? ((items.filter(i=>i.done).length / items.length)*100).toFixed(0) : 0}%"></div>
+          </div>
         </div>
 
         <div class="space-y-2">
@@ -3241,7 +3361,7 @@ function renderShoppingTab() {
     : state.shopping.items.filter(i => i.category === state.shopping.activeCategory);
 
   return `
-    <div class="w-full h-full pt-16 pb-12 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
           <h2 class="text-base font-serif font-semibold text-white/95">İhtiyaç & Bütçe Planı</h2>
@@ -3281,8 +3401,8 @@ function renderShoppingTab() {
                 <div class="text-[10px] text-white/40">${item.category} ${item.note ? '· ' + item.note : ''}</div>
               </div>
             </div>
-            <div class="text-xs font-semibold text-amber-200 cursor-pointer hover:underline" onclick="editItemPrice(${item.id})" title="Fiyatı Düzenle">
-              ${item.price.toLocaleString('tr-TR')} TL
+            <div class="flex items-center space-x-1 text-xs font-semibold text-amber-200 cursor-pointer hover:text-amber-100 transition" onclick="editItemPrice(${item.id})" title="Fiyatı Düzenle">
+              <span class="text-[9px] text-white/30 mr-0.5">✏</span><span>${item.price.toLocaleString('tr-TR')} TL</span>
             </div>
           </div>
         `).join('')}
@@ -3294,11 +3414,11 @@ function renderShoppingTab() {
 // 6. MODÜL: MURADİYE KOMŞU AĞI
 function renderKovanTab() {
   return `
-    <div class="w-full h-full pt-16 pb-12 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
           <h2 class="text-base font-serif font-semibold text-white/95">Muradiye Komşu Ağı</h2>
-          <p class="text-[11px] text-white/60">Yunusemre ve Çevresi Anne İmecesi (11 Anne)</p>
+          <p class="text-[11px] text-white/60">Yunusemre ve Çevresi Anne İmecesi (${state.imeceItems.length} Paylaşım)</p>
         </div>
         <span class="text-xs bg-cyan-500/20 text-cyan-200 px-2.5 py-1 rounded-full border border-cyan-400/30 font-medium">
           Aktif Çember
@@ -3325,13 +3445,24 @@ function renderKovanTab() {
       </div>
 
       <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2 text-xs">
-        <div class="font-semibold text-white/90">Son Komşu Mesajlaşması</div>
-        ${state.messages.map(m => `
-          <div class="p-2.5 rounded-2xl ${m.isMe ? 'bg-amber-500/15 border border-amber-400/20 text-right ml-4' : 'bg-white/5 border border-white/5 mr-4'}">
-            <div class="text-[10px] text-white/50">${m.sender} · ${m.time}</div>
-            <div class="text-[11px] text-white/90 mt-0.5">${m.text}</div>
-          </div>
-        `).join('')}
+        <div class="font-semibold text-white/90">Muradiye Sohbet Hattı</div>
+        <div class="space-y-2 max-h-36 overflow-y-auto pr-1">
+          ${state.messages.map(m => `
+            <div class="p-2.5 rounded-2xl ${m.isMe ? 'bg-amber-500/15 border border-amber-400/20 text-right ml-6' : 'bg-white/5 border border-white/5 mr-6'}">
+              <div class="text-[9px] text-white/40">${m.sender} · ${m.time}</div>
+              <div class="text-[11px] text-white/90 mt-0.5">${m.text}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="flex items-center space-x-2 pt-2 border-t border-white/10">
+          <input id="kovanMsgInput" type="text" placeholder="Komşuya yaz..."
+            class="flex-1 bg-white/8 border border-white/15 rounded-xl px-3 py-2 text-[11px] text-white placeholder-white/25 focus:outline-none focus:border-amber-400/50 transition"
+            onkeydown="if(event.key==='Enter') sendKovanGroupMessage()">
+          <button onclick="sendKovanGroupMessage()"
+            class="px-3.5 py-2 bg-amber-500/25 border border-amber-400/30 text-amber-200 text-[11px] font-semibold rounded-xl hover:bg-amber-500/35 transition shrink-0">
+            Gönder
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -3340,14 +3471,14 @@ function renderKovanTab() {
 // 7. MODÜL: BABA DESTEK ALANI
 function renderFatherTab() {
   return `
-    <div class="w-full h-full pt-16 pb-12 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
           <h2 class="text-base font-serif font-semibold text-white/95">Baba Destek Alanı</h2>
           <p class="text-[11px] text-white/60">Oğuz için rehber ve eşlik alanı</p>
         </div>
         <span class="text-xs bg-amber-500/20 text-amber-200 px-2.5 py-1 rounded-full border border-amber-400/30 font-medium">
-          31. Hafta
+          ${state.baby.week}. Hafta
         </span>
       </div>
 
@@ -3360,26 +3491,23 @@ function renderFatherTab() {
         </div>
       </div>
 
-      <div class="p-4 bg-white/5 rounded-3xl text-xs space-y-2.5 text-white/85 border border-white/10">
-        <div class="font-bold text-amber-200">31. Haftada Oğuz'a Özel İpuçları:</div>
-        <div class="space-y-2 text-[11px] leading-relaxed">
-          <div class="p-2.5 bg-white/5 rounded-2xl flex items-start space-x-2">
-            <span class="text-amber-300">·</span>
-            <span>Buse bugünlerde 31. hafta ağırlığıyla bel ağrısı yaşayabilir; akşamları dairesel sakrum masajı rahatlatacaktır.</span>
-          </div>
-          <div class="p-2.5 bg-white/5 rounded-2xl flex items-start space-x-2">
-            <span class="text-amber-300">·</span>
-            <span>Güneş babasının derin frekanslı sesine çok duyarlıdır; karına yaklaşıp sakin ses tonuyla konuşabilirsiniz.</span>
-          </div>
-          <div class="p-2.5 bg-white/5 rounded-2xl flex items-start space-x-2">
-            <span class="text-amber-300">·</span>
-            <span>Akşamları Magnezyum saşesini ılık suyla hazırlayıp Buse'ye getirebilirsiniz.</span>
-          </div>
+      <div class="p-4 bg-gradient-to-br from-amber-950/40 via-white/5 to-white/5 rounded-3xl text-xs space-y-3 border border-amber-400/25 shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-amber-200">${state.baby.week}. Haftada Oğuz'a Özel Görev</span>
+          <span class="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/20">${getLifecycleDataForWeek(state.baby.week).trimester}</span>
         </div>
+        <p class="text-[11px] text-white/85 leading-relaxed bg-black/30 p-3 rounded-2xl border border-white/5 italic">
+          "${getLifecycleDataForWeek(state.baby.week).partnerMission}"
+        </p>
       </div>
 
-      <button onclick="playFatherVoice()" class="w-full py-3 bg-gradient-to-r from-amber-500/30 to-amber-600/20 border border-amber-400/40 text-amber-200 text-xs font-semibold rounded-2xl hover:from-amber-500/40 hover:to-amber-600/30 transition shadow-lg flex items-center justify-center space-x-2">
+      <button onclick="playFatherVoice()" class="w-full py-3 bg-gradient-to-r from-amber-500/30 to-amber-600/20 border border-amber-400/40 text-amber-200 text-xs font-semibold rounded-2xl hover:from-amber-500/40 transition shadow-lg flex items-center justify-center space-x-2">
         <span>Güneş'e Sesini Dinlet (Ses Frekansı)</span>
+      </button>
+
+      <button onclick="sendPartnerPainAlert()" class="w-full py-3.5 bg-gradient-to-r from-rose-600/25 to-rose-700/15 border border-rose-400/35 text-rose-200 text-xs font-bold rounded-2xl hover:from-rose-600/35 transition shadow-lg flex items-center justify-center space-x-2">
+        <span class="text-base">📲</span>
+        <span>Oğuz'u Acil Uyar — WhatsApp Bildir</span>
       </button>
     </div>
   `;
@@ -3388,7 +3516,7 @@ function renderFatherTab() {
 // 8. MODÜL: BUSE'NİN PROFİLİ
 function renderProfileTab() {
   return `
-    <div class="w-full h-full pt-16 pb-12 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="p-5 bg-white/5 rounded-3xl border border-white/15 text-center relative overflow-hidden shadow-lg">
         <img src="${state.user.avatar}" class="w-20 h-20 mx-auto rounded-full object-cover border-2 border-amber-400 shadow-md">
         <h2 class="text-base font-bold text-white mt-2.5">${state.user.name}</h2>
@@ -3401,10 +3529,10 @@ function renderProfileTab() {
       <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2 text-xs">
         <div class="flex justify-between items-center font-medium">
           <span class="text-white/90">Güneş'in Yolculuğu</span>
-          <span class="text-amber-200">31. Hafta (63 Gün Kaldı)</span>
+          <span class="text-amber-200">${state.baby.week}. Hafta (${state.baby.daysLeft} Gün Kaldı)</span>
         </div>
         <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden my-2">
-          <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full" style="width: ${(31 / 40) * 100}%"></div>
+          <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full" style="width: ${(state.baby.week / 40) * 100}%"></div>
         </div>
         <div class="flex justify-between text-[10px] text-white/50">
           <span>Başlangıç</span>
