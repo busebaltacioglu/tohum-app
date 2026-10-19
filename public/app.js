@@ -568,6 +568,42 @@ const state = {
   // =========================================================================
   isWeekSelectorOpen: false,
   weekTransitionOverlay: false,
+  wearable: {
+    isConnected: true,
+    deviceName: "Apple Watch / HealthKit",
+    heartRate: 78,
+    hrv: 64,
+    spo2: 98,
+    sleepHours: "7s 25dk",
+    steps: 4820,
+    raffleJoined: false,
+    raffleMonth: "Ekim 2026",
+    lastSync: "Şimdi (Canlı)"
+  },
+  privacyMode: false,
+  selectedLifecycleModule: "M0",
+  familyMembers: [
+    { id: 1, name: "Buse & Oğuz Baltacıoğlu", relation: "Anne & Baba", role: "admin", badge: "🔑 Tam Yetki", desc: "Tüm sağlık, gelişim ve sistem sınırlarını yönetir." },
+    { id: 2, name: "Anneanne & Babaanne", relation: "Büyükanne (Geniş Aile)", role: "observer", badge: "👁️ Gözlemci", desc: "Salt-okunur haftalık bülten görür, sisteme müdahale edemez." },
+    { id: 3, name: "Teyze & Kuzen", relation: "Yakın Akraba", role: "observer", badge: "👁️ Gözlemci", desc: "Yalnızca ebeveynin izin verdiği anıları görüntüler." },
+    { id: 4, name: "Merve (Komşu) & Dr. Ayşe Yılmaz", relation: "Kriz & Lojistik Ağı", role: "emergency", badge: "🚨 Acil Destek", desc: "Yalnızca sağlık alarmı ve doğum anında lokasyon/bildirim alır." }
+  ],
+  lifecycleModules: [
+    { code: "M0", phase: "FAZ-1 (Aktif)", age: "Gebelik (0-40H)", poetic: "Çimlenme", scientific: "Embriyonik ve Fetal Dönem", desc: "Akıllı saat biyometrik takibi, kardiyovasküler dengesiz veri analizi, 5-1-1 dalga sayacı ve anne-baba hazırlığı (v0.0.1 - v0.0.4)." },
+    { code: "M1", phase: "FAZ-1 (BiGG)", age: "0 - 2 Yaş", poetic: "Filizlenme", scientific: "Laktasyon ve Sensorimotor Dönem", desc: "Lohusalık uyku/HRV analizi, emzirme rutini, sesli AI asistan ile güvenli bağlanma ve duyusal uyanış (v0.1.0)." },
+    { code: "M2", phase: "Faz-2 (Ar-Ge)", age: "2 - 4 Yaş", poetic: "Köklenme", scientific: "Preoperasyonel Dönem", desc: "3 Yaş Sendromu (öfke yönetimi) için toprakla temas, şifa bahçesi ve bahçıvanlık terapisi." },
+    { code: "M3", phase: "Faz-2 (Ar-Ge)", age: "4 - 6 Yaş", poetic: "Sürgünlenme", scientific: "Dil ve Sosyal Bilişsel Gelişim", desc: "Adab-ı muaşeret, empati, cinsiyetçilik ve ırkçılıktan arınmış kapsayıcı değerler ve doğa oyunları." },
+    { code: "M4", phase: "Faz-2 (Ar-Ge)", age: "6 - 9 Yaş", poetic: "Dal Verme", scientific: "Somatik Büyüme ve Motor Gelişim", desc: "Yaşam temelli doğal öğrenme: Mutfakta matematik/kimya, parkta fizik, bahçede biyoloji." },
+    { code: "M5", phase: "Faz-3 (Vizyon)", age: "9 - 12 Yaş", poetic: "Çiçeklenme", scientific: "Kognitif Gelişim ve Öz-Yönetim", desc: "Tüm sanat ve spor dallarını deneyimleyerek öz-yönelimli yetenek keşfi ve derinleştirme." },
+    { code: "M6", phase: "Faz-3 (Vizyon)", age: "12 - 18 Yaş", poetic: "Meyve Verme", scientific: "Ergenlik ve Psikososyal Gelişim", desc: "Post-teknolojik yaşam ve zanaat (su arıtma, güneş/rüzgar enerjisi üretimi, çömlek/ahşap) ve Zehir/Şifa içsel bilinci." },
+    { code: "M7", phase: "Faz-3 (Vizyon)", age: "18+ Yaş", poetic: "Tohum Verme", scientific: "Genç Yetişkinlik ve Öz-Gerçekleştirme", desc: "18 yıllık gelişim hafızasıyla; gencin keyif aldığı işler, zanaatlar, sanat/bilim yetenekleri ve kabiliyetleri doğrultusunda üniversite ve meslek pusulası." }
+  ],
+  aiVoiceAgenda: [
+    { id: "morning", time: "07:00", period: "Sabah Rehberi", title: "Bedenin Uyanışı & Hamile Yogası", text: "Günaydın Buse! Bedenin her geçen gün güçleniyor. Bugün 10 dakika pelvik esneme ve 20 dakika yürüyüş için harika bir sabah." },
+    { id: "noon", time: "12:00", period: "Öğle Farkındalığı", title: "8.3 Hz Hum Nefes Dengesi", text: "Kendine bir an ver ve derin nefes al. Her hücren Güneş'i sevgiyle kucaklamaya hazırlanıyor. Su içmeyi hatırla." },
+    { id: "evening", time: "21:00", period: "Akşam Baba Çağrısı", title: "Oğuz'a Eşlik & Sakrum Masajı", text: "İyi akşamlar Oğuz! Bugün Buse'ye 10 dakikalık bir omuz ve bel masajı yapabilir misin? Dokunuşun Güneş'e de güven verir." },
+    { id: "night", time: "23:00", period: "Gece Kaygı Günlüğü", title: "Sakinleştirici Sesli Okuma", text: "Bugün bedenin güçlüydü, zihnin sakinleşti. Sen ve Güneş güvendesiniz; 8.3 Hertz doğa ritmiyle huzurla uyu." }
+  ],
   weekTransitionTarget: 0,
   nightMode: (new Date().getHours() >= 22 || new Date().getHours() < 7),
   baby: {
@@ -1882,9 +1918,60 @@ function getHealthSubtabContent() {
   if (state.healthData.activeHealthSubtab === "biometrics") {
     const weightGain = (state.user.currentWeight - state.user.startWeight).toFixed(1);
     const waistGain = state.user.waistCircumference - state.user.startWaist;
+    const w = state.wearable || { isConnected: true, deviceName: "Apple Watch / HealthKit", heartRate: 78, hrv: 64, spo2: 98, sleepHours: "7s 25dk", steps: 4820, raffleJoined: false, raffleMonth: "Ekim 2026" };
 
     return `
       <div class="space-y-4 animate-in fade-in duration-150">
+        <!-- AKILLI SAAT & GİYİLEBİLİR BİYO-SENSÖR KARTI (FAZ-1 AR-GE) -->
+        <div class="p-4 bg-gradient-to-br from-emerald-950/45 via-white/5 to-amber-950/30 rounded-3xl border border-emerald-400/30 space-y-3 shadow-lg">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full ${w.isConnected ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}"></span>
+                <span class="text-xs font-bold text-white">⌚ Giyilebilir Biyo-Sensör (Akıllı Saat)</span>
+              </div>
+              <p class="text-[10px] text-white/60 mt-0.5">${w.isConnected ? w.deviceName + ' · Otomatik Veri Akışı Aktif' : 'Akıllı saat bağlı değil · Manuel / Çekiliş Modu'}</p>
+            </div>
+            <button onclick="toggleSmartwatchConnection()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-[10px] text-amber-200 font-semibold transition">
+              ${w.isConnected ? 'Saat Bağlı ✓' : 'Saati Bağla'}
+            </button>
+          </div>
+
+          ${w.isConnected ? `
+            <div class="grid grid-cols-4 gap-2 text-center">
+              <div class="p-2.5 bg-black/35 rounded-2xl border border-white/5">
+                <div class="text-[9px] text-white/45">Anne Nabız</div>
+                <div class="text-sm font-bold text-emerald-300 mt-0.5">${w.heartRate} <span class="text-[9px] font-normal">bpm</span></div>
+              </div>
+              <div class="p-2.5 bg-black/35 rounded-2xl border border-white/5">
+                <div class="text-[9px] text-white/45">Otonom HRV</div>
+                <div class="text-sm font-bold text-amber-300 mt-0.5">${w.hrv} <span class="text-[9px] font-normal">ms</span></div>
+              </div>
+              <div class="p-2.5 bg-black/35 rounded-2xl border border-white/5">
+                <div class="text-[9px] text-white/45">Gece Uykusu</div>
+                <div class="text-xs font-bold text-white mt-1">${w.sleepHours}</div>
+              </div>
+              <div class="p-2.5 bg-black/35 rounded-2xl border border-white/5">
+                <div class="text-[9px] text-white/45">SpO2 / Adım</div>
+                <div class="text-xs font-bold text-cyan-300 mt-1">%${w.spo2} · ${(w.steps/1000).toFixed(1)}k</div>
+              </div>
+            </div>
+            <div class="p-2.5 bg-emerald-500/10 border border-emerald-400/20 rounded-2xl flex items-center justify-between text-[10px]">
+              <span class="text-emerald-200">🧠 <b>AI Seed Core:</b> Kardiyovasküler dengesiz veri sınıflandırıcısı (Baz: ${state.user.baselineBP}) otonom stresi normal aralıkta doğruladı.</span>
+              <button onclick="simulateSmartwatchSync()" class="ml-2 px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 rounded-lg shrink-0 font-semibold">Yenile</button>
+            </div>
+          ` : `
+            <div class="p-3 bg-amber-500/15 border border-amber-400/30 rounded-2xl space-y-2 text-xs">
+              <div class="font-bold text-amber-200">🎁 ToHUM Sponsorlu Akıllı Saat Hediye Havuzu (İleri Büyüme Fazı)</div>
+              <p class="text-[11px] text-white/80 leading-relaxed">
+                Hedef abone eşiğine ulaşıldığında ve marka sponsorluklarıyla, akıllı saat verisi gelmeyen annelerimiz arasında yapılacak giyilebilir biyo-sensör çekilişi için ön bekleme listesine katılın!
+              </p>
+              <button onclick="joinSmartwatchRaffle()" class="w-full py-2 rounded-xl font-bold text-[11px] transition ${w.raffleJoined ? 'bg-emerald-500/25 border border-emerald-400/40 text-emerald-200' : 'bg-amber-500/30 hover:bg-amber-500/40 border border-amber-400/50 text-amber-100'}">
+                ${w.raffleJoined ? '✓ Sponsorlu Saat Havuzu Ön Listesine Kaydoldunuz (#1042)' : '✨ Ücretsiz Ön Listeye Katıl (Saati Olmayan Üyelere Özel)'}
+              </button>
+            </div>
+          `}
+        </div>
         <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3 shadow-sm">
           <div class="flex justify-between items-center">
             <div>
@@ -3568,7 +3655,119 @@ function renderProfileTab() {
         </div>
       </div>
 
-      <button onclick="alert('Buse & Oğuz aile hesabı senkronize durumda.')" class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 text-xs font-medium rounded-2xl transition">
+      <!-- 1. M0 - M7 TOHUM 18 YILLIK YAŞAM AĞACI VE YETENEK PUSULASI -->
+      <div class="p-4 bg-gradient-to-br from-amber-950/35 via-white/5 to-emerald-950/25 rounded-3xl border border-amber-400/25 space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="font-bold text-amber-200 text-sm">🌱 ToHUM Yaşam Ağacı (M0 – M7)</div>
+            <div class="text-[10px] text-white/55">To Hum. To Seed. Bee to Hum. · 18 Yıllık Gelişim & Yetenek Pusulası</div>
+          </div>
+          <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-semibold">
+            Aktif: M0 Çimlenme
+          </span>
+        </div>
+
+        <div class="grid grid-cols-4 gap-1.5">
+          ${(state.lifecycleModules || []).map(m => `
+            <button onclick="selectLifecycleModule('${m.code}')"
+              class="p-2 rounded-2xl border text-left transition ${state.selectedLifecycleModule === m.code ? 'bg-amber-500/25 border-amber-400/50 text-white shadow-md' : 'bg-black/30 border-white/10 text-white/60 hover:text-white'}">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-[11px] ${m.code === 'M0' ? 'text-emerald-300' : 'text-amber-200'}">${m.code}</span>
+                <span class="text-[8px] opacity-60">${m.code === 'M0' ? '●' : '○'}</span>
+              </div>
+              <div class="text-[10px] font-semibold truncate mt-0.5">${m.poetic}</div>
+              <div class="text-[8px] text-white/40 truncate">${m.age}</div>
+            </button>
+          `).join('')}
+        </div>
+
+        ${(() => {
+          const curM = (state.lifecycleModules || []).find(x => x.code === (state.selectedLifecycleModule || 'M0')) || (state.lifecycleModules || [])[0];
+          if (!curM) return '';
+          return `
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-white/10 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-amber-200 text-xs">${curM.code} · ${curM.poetic} (${curM.age})</span>
+                <span class="text-[9px] px-2 py-0.5 rounded-full border ${curM.code === 'M0' || curM.code === 'M1' ? 'bg-emerald-500/20 border-emerald-400/30 text-emerald-300' : 'bg-white/10 border-white/15 text-white/60'}">${curM.phase}</span>
+              </div>
+              <div class="text-[10px] text-amber-100/75 font-medium italic">Bilimsel Evre: ${curM.scientific}</div>
+              <p class="text-[11px] text-white/85 leading-relaxed">${curM.desc}</p>
+            </div>
+          `;
+        })()}
+      </div>
+
+      <!-- 2. UYGULAMA İÇİ "TO HUM" SESLİ AI ASİSTAN AJANDASI (8.3 Hz) -->
+      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="font-bold text-white/95">🎙️ "To Hum" Sesli AI Asistan Ajandası</div>
+            <div class="text-[10px] text-white/55">8.3 Hz Biyo-Rezonans · Sabah, Öğle, Akşam & Gece Rehberi</div>
+          </div>
+          <span class="text-[9px] bg-amber-500/20 text-amber-200 border border-amber-400/30 px-2 py-0.5 rounded-full">
+            Çimlenme v0.0.4
+          </span>
+        </div>
+        <div class="space-y-2">
+          ${(state.aiVoiceAgenda || []).map(item => `
+            <div class="p-3 bg-black/30 rounded-2xl border border-white/5 flex items-start justify-between space-x-2">
+              <div class="space-y-0.5">
+                <div class="flex items-center space-x-2">
+                  <span class="text-[10px] font-mono font-bold text-amber-300">${item.time}</span>
+                  <span class="text-[11px] font-semibold text-white/95">${item.period} · ${item.title}</span>
+                </div>
+                <p class="text-[10px] text-white/65 leading-relaxed">"${item.text}"</p>
+              </div>
+              <button onclick="playAiVoicePrompt('${item.id}')" class="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/30 text-amber-200 rounded-xl text-[10px] font-semibold shrink-0 transition">
+                🔊 Dinle
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- 3. TÜRK AİLE KÜLTÜRÜ & ROL TABANLI MAHREMİYET ("KENDİME ALAN") PANELİ -->
+      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="font-bold text-white/95">🔐 Aile Ekosistemi & Mahremiyet</div>
+            <div class="text-[10px] text-white/55">Şefkatli Geniş Aile · Korunan Çekirdek Özel Alan</div>
+          </div>
+          <button onclick="addFamilyObserver()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-[10px] text-amber-200 font-semibold">
+            + Aile Üyesi Ekle
+          </button>
+        </div>
+
+        <div class="p-3 rounded-2xl border flex items-center justify-between ${state.privacyMode ? 'bg-indigo-950/50 border-indigo-400/40' : 'bg-black/30 border-white/10'}">
+          <div>
+            <div class="font-semibold text-white text-xs">🌙 "Kendime Alan" (Gizlilik Günü Modu)</div>
+            <div class="text-[10px] text-white/60 mt-0.5">
+              ${state.privacyMode
+                ? 'Aktif: Gözlemci aile üyelerinin erişimi durduruldu, asistan sessiz modda.'
+                : 'Pasif: Gözlemci yakınlar haftalık genel bülteni görüntüleyebilir.'}
+            </div>
+          </div>
+          <button onclick="togglePrivacyMode()" class="px-3 py-1.5 rounded-xl text-[10px] font-bold border transition ${state.privacyMode ? 'bg-indigo-500/30 border-indigo-300/50 text-indigo-200' : 'bg-white/10 border-white/15 text-white/70'}">
+            ${state.privacyMode ? 'Açık ✓' : 'Aktif Et'}
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          ${(state.familyMembers || []).map(fm => `
+            <div class="p-2.5 bg-black/25 rounded-2xl border border-white/5 flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-white/90 text-[11px]">${fm.name} <span class="text-[10px] text-white/45 font-normal">(${fm.relation})</span></div>
+                <div class="text-[10px] text-white/55 mt-0.5">${fm.desc}</div>
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full bg-white/10 border border-white/10 text-amber-200 shrink-0 ml-2 font-medium">
+                ${fm.badge}
+              </span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <button onclick="alert('Buse & Oğuz aile hesabı ve Akıllı Saat biyo-sensör köprüsü senkronize durumda.')" class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 text-xs font-medium rounded-2xl transition">
         Hesap ve Aile Senkronizasyonu Bilgisi
       </button>
     </div>
@@ -4307,5 +4506,92 @@ window.addNewShoppingItem = function() {
     note: ""
   });
   triggerHaptic([15, 20]);
+  render();
+};
+
+// ─── FAZ 3: AKILLI SAAT, ÇEKİLİŞ, M0-M7 YAŞAM AĞACI VE SESLİ AI ASİSTAN ───
+window.toggleSmartwatchConnection = function() {
+  if (!state.wearable) return;
+  state.wearable.isConnected = !state.wearable.isConnected;
+  triggerHaptic([15, 25]);
+  if (state.wearable.isConnected) {
+    triggerReaction("water", "Akıllı saat biyo-sensör bağlantısı aktif. Nabız ve HRV verileri senkronize edildi.");
+  } else {
+    triggerReaction("folic", "Akıllı saat bağlantısı kapatıldı. Aylık Akıllı Saat Hediye Çekilişi kartı açıldı.");
+  }
+  render();
+};
+
+window.simulateSmartwatchSync = function() {
+  if (!state.wearable) return;
+  const delta = Math.floor(Math.random() * 5) - 2;
+  state.wearable.heartRate = Math.max(68, Math.min(92, 78 + delta));
+  state.wearable.hrv = Math.max(52, Math.min(78, 64 - delta));
+  state.wearable.steps += Math.floor(Math.random() * 120) + 25;
+  triggerHaptic([20, 30, 20]);
+  triggerReaction("water", "Akıllı saat verileri güncellendi: Nabız " + state.wearable.heartRate + " bpm, HRV " + state.wearable.hrv + " ms.");
+  render();
+};
+
+window.joinSmartwatchRaffle = function() {
+  if (!state.wearable) return;
+  state.wearable.raffleJoined = true;
+  state.growth.points += 15;
+  triggerHaptic([30, 40, 60]);
+  triggerReaction("folic", "Tebrikler! Ekim 2026 ToHUM Akıllı Saat Hediye Çekilişine kaydınız alındı (Bilet #1042).");
+  render();
+};
+
+window.selectLifecycleModule = function(code) {
+  state.selectedLifecycleModule = code;
+  triggerHaptic(15);
+  render();
+};
+
+window.playAiVoicePrompt = function(id) {
+  const item = (state.aiVoiceAgenda || []).find(x => x.id === id);
+  if (!item) return;
+  triggerHaptic([20, 40, 20]);
+  triggerReaction("omega", "To Hum AI (" + item.time + "): " + item.text);
+  if ("speechSynthesis" in window) {
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(item.text);
+      utter.lang = "tr-TR";
+      utter.rate = 0.92;
+      utter.pitch = 1.0;
+      window.speechSynthesis.speak(utter);
+    } catch (e) {}
+  }
+};
+
+window.togglePrivacyMode = function() {
+  state.privacyMode = !state.privacyMode;
+  triggerHaptic([25, 35]);
+  if (state.privacyMode) {
+    triggerReaction("water", "Kendime Alan (Gizlilik Modu) aktif: Gözlemci erişimleri durduruldu, özel alanınız korumada.");
+  } else {
+    triggerReaction("folic", "Kendime Alan modu kapatıldı: Gözlemci aile üyeleri haftalık bülteni görebilir.");
+  }
+  render();
+};
+
+window.addFamilyObserver = function() {
+  const name = prompt("Eklemek istediğiniz aile üyesi (örn: Ayşe Teyze, Mehmet Dede, Zeynep Kuzen):");
+  if (!name) return;
+  const relation = prompt("Yakınlık derecesi ve rolü (Gözlemci / Acil Destek):", "Teyze · Gözlemci");
+  const isEmerg = /acil/i.test(relation || "");
+  state.familyMembers.push({
+    id: Date.now(),
+    name: name.trim(),
+    relation: (relation || "Geniş Aile").trim(),
+    role: isEmerg ? "emergency" : "observer",
+    badge: isEmerg ? "🚨 Acil Destek" : "👁️ Gözlemci",
+    desc: isEmerg
+      ? "Sadece acil sağlık/doğum alarmında bildirim alır, verilere müdahale edemez."
+      : "Sadece ebeveynin izin verdiği haftalık özeti görür, özel alana müdahale edemez."
+  });
+  triggerHaptic([20, 30]);
+  triggerReaction("folic", name + " aile ağacına sınırlı yetkiyle eklendi.");
   render();
 };
