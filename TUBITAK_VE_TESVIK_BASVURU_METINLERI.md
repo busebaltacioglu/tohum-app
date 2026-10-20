@@ -1,4 +1,4 @@
-# ToHUM — BİGG İTÜ Çekirdek & TÜBİTAK 1812 Resmi Başvuru Formu Cevapları ve Jüri Analizi (Soru 4 – Soru 32 Tam Sürüm)
+﻿# ToHUM — BİGG İTÜ Çekirdek & TÜBİTAK 1812 Resmi Başvuru Formu Cevapları ve Jüri Analizi (Soru 4 – Soru 32 Tam Sürüm)
 
 Bu doküman, önceki proje geliştirme ve strateji çalışmalarındaki hiçbir mikro detayı (*Zaman Tüneli/Kapsülü, haftalık tahlil nedenleri ve doktor soruları, kaygı yaratmayan tahlil/bazal tansiyon yorumlama, takviye biyoyararlanımı, Cardiff 10 ve 5-1-1 dalga sayacı, Doğum Planı A/B, doğum çantası, evcil hayvan/acil rota lojistiği, babaya özel oturum ve düşünceli "gizli destek" motoru, önceliklendirilmiş bütçe yönetimi, Kovan eşya takası ve anneler/babalar arası iletişim alanı, 8.3 Hz ses/60 BPM haptik ritim, M1 0-2 yaş emzirme/uyku/bakım ve Faz-2/3 M2-M7 Yaşam Ağacı / Green Edge AI Ev Asistanı / 18 Yaş Kariyer Pusulası*) atlamadan; **şiirsellikten uzak, kurumsal, gerçekçi, marka felsefesini koruyan** ve **karakter sınırlarına %100 uyumlu** şekilde hazırlanmıştır.
 
@@ -214,7 +214,7 @@ Hayır, aynı iş fikri ile geçmişte herhangi bir yarışmaya, destek mekanizm
 
 ### 28. İş fikri ve/veya çıktısı üzerinde Fikri Sinai Mülkiyet hakları açısından hak iddia edebilecek kişi veya kurum var mıdır? Varsa, hakkında bilgi veriniz. *(418 / 1000 karakter)*
 ```text
-Hayır, iş fikri ve/veya çıktısı üzerinde Fikri ve Sınai Mülkiyet hakları açısından hak iddia edebilecek herhangi bir üçüncü kişi, kurum veya kuruluş bulunmamaktadır. Projenin tüm kavramsal tasarımı, veri bilimi algoritmaları, kaynak kodları (4.300+ satır prototip) ve marka mimarisi tamamen proje yürütücüsü Buse Nur Ürem Baltacıoğlu tarafından bağımsız olarak geliştirilmiş olup tüm hakları proje yürütücüsüne aittir.
+Hayır, iş fikri ve/veya çıktısı üzerinde Fikri ve Sınai Mülkiyet hakları açısından hak iddia edebilecek herhangi bir üçüncü kişi, kurum veya kuruluş bulunmamaktadır. Projenin tüm kavramsal tasarımı, veri bilimi algoritmaları, kaynak kodları (4.300+ satır prototip) ve marka mimarisi tamamen proje yürütücüsü Buse Nur Ürem tarafından bağımsız olarak geliştirilmiş olup tüm hakları proje yürütücüsüne aittir.
 ```
 * **👨‍⚖️ Proje Jüri Üyesi Analizi (10/10):** Yatırımcı (TÜBİTAK BİGG Fonu %3 hisse yatırımı yapacağı için) fikri mülkiyetin %100 temiz (*clean IP*) olmasını şart koşar. Bu metin, çalıştığınız kurumun veya başka bir kişinin proje üzerinde hiçbir hak iddiası olmadığını net bir hukuki dille güvence altına alır.
 
