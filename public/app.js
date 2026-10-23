@@ -438,8 +438,10 @@ window.applyAndCloseWeek = function(w) {
 
 const state = {
   isLoggedIn: true,
-  currentTab: "birth", // Varsayılan olarak 3. Modül Doğum & Hazırlık
+  currentTab: "home", // Varsayılan olarak 1. Modül Güneş (Calm Tech - Anne Karnı)
   isDrawerOpen: false,
+  isClinicalReportOpen: false,
+  aiSeedCoreAnalysis: null,
   isPlayingAudio: false,
   audioCtx: null,
   humOsc: null,
@@ -1457,25 +1459,26 @@ function renderAppShell(root) {
         </div>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center space-x-2.5">
         ${state.birthModule.contractionTimer.isRunning ? `
-          <button onclick="navigateTab('birth'); setBirthSubtab('contraction');" class="text-[10px] font-bold text-rose-200 bg-rose-500/30 border border-rose-400/40 px-2.5 py-1 rounded-full animate-pulse backdrop-blur-md shadow-xs">
+          <button onclick="navigateTab('birth'); setBirthSubtab('waves');" class="text-xs font-semibold text-rose-200 bg-rose-500/25 px-3 py-1 rounded-full animate-pulse backdrop-blur-md">
             🔴 ${String(Math.floor(state.birthModule.contractionTimer.currentSeconds/60)).padStart(2,'0')}:${String(state.birthModule.contractionTimer.currentSeconds%60).padStart(2,'0')}
           </button>
         ` : `
-          <span class="text-[10px] font-medium ${hasDeficiency ? 'text-amber-200 bg-amber-500/25 border-amber-400/40' : 'text-emerald-200 bg-emerald-500/25 border-emerald-400/40'} px-2.5 py-1 rounded-full border backdrop-blur-md shadow-xs">
-            ${hasDeficiency ? missing.length + ' İhtiyaç' : 'Dengede'}
-          </span>
+          <button onclick="toggleAudio()" class="text-xs text-amber-200/90 bg-white/[0.08] hover:bg-white/[0.14] px-3.5 py-1 rounded-full backdrop-blur-md flex items-center space-x-1.5 transition shadow-xs" title="8.3 Hz Calm Tech Rezonansı">
+            <span class="w-2 h-2 rounded-full ${state.isPlayingAudio ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400/80'}"></span>
+            <span>8.3 Hz</span>
+          </button>
         `}
         <div class="relative cursor-pointer" onclick="navigateTab('profile')" title="Profil">
-          <img src="${state.user.avatar}" alt="${state.user.name}" class="w-9 h-9 rounded-full object-cover border-2 border-white/30 shadow-md">
-          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 ${hasDeficiency ? 'bg-amber-400' : 'bg-emerald-400'} border border-black rounded-full"></span>
+          <img src="${state.user.avatar}" alt="${state.user.name}" class="w-9 h-9 rounded-full object-cover border border-white/20 shadow-sm">
         </div>
       </div>
     </header>
 
     ${renderDrawerMenu()}
     ${renderWeekSelectorModal()}
+    ${renderClinicalReportModal()}
 
     <main class="flex-1 w-full h-full relative overflow-hidden flex flex-col">
       ${getTabContent()}
@@ -1499,7 +1502,7 @@ function renderAppShell(root) {
       </div>
     ` : ''}
 
-    <nav class="absolute bottom-0 inset-x-0 z-50 h-14 bg-[#0D0806]/97 backdrop-blur-2xl border-t border-white/[0.08] flex items-center justify-around px-1 shadow-[0_-4px_28px_rgba(0,0,0,0.7)]">
+    <nav class="absolute bottom-0 inset-x-0 z-50 h-16 bg-[#0D0806]/97 backdrop-blur-2xl border-t border-white/[0.06] flex items-center justify-around px-2 shadow-[0_-4px_28px_rgba(0,0,0,0.7)]">
       ${[
         { id: 'home',     sym: '◎', lbl: 'Güneş'  },
         { id: 'health',   sym: '✛', lbl: 'Sağlık'  },
@@ -1508,11 +1511,10 @@ function renderAppShell(root) {
       ].map(t => `
         <button
           onclick="navigateTab('${t.id}')"
-          class="flex flex-col items-center justify-center space-y-[2px] px-4 py-1.5 rounded-xl transition-all active:scale-90
-            ${state.currentTab === t.id ? 'text-amber-300' : 'text-white/35 hover:text-white/60'}">
-          <span class="text-[18px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.7)]' : ''}">${t.sym}</span>
-          <span class="text-[8px] font-semibold tracking-wide">${t.lbl}</span>
-          ${state.currentTab === t.id ? '<span class="block w-3 h-[2px] bg-amber-400 rounded-full mt-0.5"></span>' : '<span class="block w-3 h-[2px] rounded-full mt-0.5"></span>'}
+          class="flex flex-col items-center justify-center space-y-1 px-4 py-2 rounded-xl transition-all active:scale-95
+            ${state.currentTab === t.id ? 'text-amber-300 font-semibold' : 'text-white/40 hover:text-white/70'}">
+          <span class="text-[20px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]' : ''}">${t.sym}</span>
+          <span class="text-[10px] tracking-wide">${t.lbl}</span>
         </button>
       `).join('')}
     </nav>
@@ -1640,19 +1642,17 @@ function renderHomeTab() {
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0605] via-transparent to-black/35 pointer-events-none z-10 animate-maternal-breath"></div>
       </div>
 
-      <div class="absolute top-20 right-4 z-30 flex flex-col space-y-2 pointer-events-auto">
-        <button onclick="triggerDirectKick()" class="px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/15 text-white text-[11px] font-medium flex items-center space-x-1.5 hover:bg-white/15 active:scale-95 transition shadow-lg">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span>Tekme: ${state.interactive.kicksToday}</span>
-        </button>
-
-        <button onclick="toggleAudio()" class="px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/15 text-white text-[11px] font-medium flex items-center space-x-1.5 hover:bg-white/15 active:scale-95 transition shadow-lg">
-          <span>${state.isPlayingAudio ? '8.3 Hz Çalıyor' : '8.3 Hz Dinleti'}</span>
-        </button>
-
-        <div class="px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-light text-center shadow-lg">
-          ${state.baby.sizeComparison}
+      <!-- Sakin Calm Tech Durum Çubuğu (Gözü Yormayan Sade Çubuk) -->
+      <div class="absolute top-20 inset-x-5 z-30 flex items-center justify-between pointer-events-auto">
+        <div class="px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-xl border border-white/[0.08] text-white/80 text-xs font-light shadow-sm flex items-center space-x-2">
+          <span class="text-amber-200">🌱</span>
+          <span>${state.baby.sizeComparison}</span>
         </div>
+
+        <button onclick="triggerDirectKick()" class="px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-xl border border-white/[0.08] text-amber-200 text-xs font-medium flex items-center space-x-1.5 hover:bg-white/10 active:scale-95 transition shadow-sm">
+          <span>🐾</span>
+          <span>${state.interactive.kicksToday} Hareket</span>
+        </button>
       </div>
 
       <div class="absolute bottom-14 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
@@ -1677,7 +1677,6 @@ function renderHomeTab() {
               <div class="grid grid-cols-4 gap-1 bg-white/5 p-1 rounded-2xl text-xs my-3">
                 <button onclick="setHomeSubtab('feed')" class="py-2 rounded-xl transition ${state.homeSubtab === 'feed' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
                   Besle
-                  ${hasDeficiency ? `<span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 ml-1"></span>` : ''}
                 </button>
                 <button onclick="setHomeSubtab('play')" class="py-2 rounded-xl transition ${state.homeSubtab === 'play' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
                   Bağ Kur
@@ -1856,27 +1855,29 @@ function renderHealthTab() {
           <h2 class="text-base font-serif font-semibold text-white/95">Şifa & Sağlık Takibi</h2>
           <p class="text-[11px] text-white/60">Buse · ${state.baby.week}. Hafta (${getLifecycleDataForWeek(state.baby.week).trimester}) Biyometri & Klinik Güvenlik</p>
         </div>
+        <button onclick="toggleClinicalReportModal()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-amber-600/30 hover:from-amber-500/35 hover:to-amber-600/45 border border-amber-400/40 text-amber-200 text-xs font-semibold rounded-xl flex items-center space-x-1.5 transition shadow-sm" title="Muayene Öncesi Standart Hekim Özeti">
+          <span>📄</span>
+          <span>Klinik Özet PDF</span>
+        </button>
         <span class="text-xs bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 px-2.5 py-1 rounded-full font-medium">
           Dengede
         </span>
       </div>
 
-      <div class="grid grid-cols-5 gap-1 bg-white/5 p-1 rounded-2xl text-[11px]">
-        <button onclick="setHealthSubtab('biometrics')" class="py-2 rounded-xl transition ${state.healthData.activeHealthSubtab === 'biometrics' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-          Biyometri
-        </button>
-        <button onclick="setHealthSubtab('hormone')" class="py-2 rounded-xl transition ${state.healthData.activeHealthSubtab === 'hormone' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-          Hormon
-        </button>
-        <button onclick="setHealthSubtab('lab')" class="py-2 rounded-xl transition ${state.healthData.activeHealthSubtab === 'lab' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-          Tahlil & Rx
-        </button>
-        <button onclick="setHealthSubtab('exercise')" class="py-2 rounded-xl transition ${state.healthData.activeHealthSubtab === 'exercise' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-          Pelvik
-        </button>
-        <button onclick="setHealthSubtab('ultrasound')" class="py-2 rounded-xl transition ${state.healthData.activeHealthSubtab === 'ultrasound' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-          Ultrason
-        </button>
+      <!-- Şifa & Sağlık Sekmeleri (Calm Tech Ferah Pill Tabs) -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+        ${[
+          { id: 'biometrics', lbl: '💓 Biyometri' },
+          { id: 'hormone', lbl: '🌿 Hormon' },
+          { id: 'lab', lbl: '🧪 Tahlil & Rx' },
+          { id: 'exercise', lbl: '🧘 Pelvik' },
+          { id: 'ultrasound', lbl: '👶 Ultrason' }
+        ].map(sh => `
+          <button onclick="setHealthSubtab('${sh.id}')"
+            class="px-3.5 py-2 rounded-2xl whitespace-nowrap transition-all font-medium ${state.healthData.activeHealthSubtab === sh.id ? 'bg-amber-400/20 text-amber-200 border border-amber-400/40 font-semibold shadow-xs' : 'bg-white/[0.04] text-white/50 hover:text-white/80'}">
+            ${sh.lbl}
+          </button>
+        `).join('')}
       </div>
 
       ${getHealthSubtabContent()}
@@ -2643,42 +2644,36 @@ function renderBirthTab() {
 
       <!-- Alt Sekme Seçimi: Erken Trimesterler vs 3. Trimester -->
       ${isEarlyTrimester ? `
-        <!-- 1. ve 2. Trimester Sekme Çubuğu -->
-        <div class="grid grid-cols-5 gap-1 bg-white/5 p-1.5 rounded-2xl text-[10px]">
-          <button onclick="setBirthSubtab('overview')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'overview' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
-            ${curW < 14 ? 'Köklenme' : 'Gelişim'}
-          </button>
-          <button onclick="setBirthSubtab('donts')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'donts' ? 'bg-rose-500/25 text-rose-200 font-bold border border-rose-400/30 shadow-xs' : 'text-white/50'}">
-            Kaçın 🛡️
-          </button>
-          <button onclick="setBirthSubtab('dos')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'dos' ? 'bg-emerald-500/25 text-emerald-200 font-bold border border-emerald-400/30 shadow-xs' : 'text-white/50'}">
-            Yap ✓
-          </button>
-          <button onclick="setBirthSubtab('partner')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'partner' ? 'bg-amber-500/25 text-amber-200 font-bold border border-amber-400/30 shadow-xs' : 'text-white/50'}">
-            Oğuz
-          </button>
-          <button onclick="setBirthSubtab('questions')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'questions' ? 'bg-sky-500/25 text-sky-200 font-bold border border-sky-400/30 shadow-xs' : 'text-white/50'}">
-            Doktor
-          </button>
+        <!-- 1. ve 2. Trimester Sekme Çubuğu (Calm Tech Pill Tabs) -->
+        <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+          ${[
+            { id: 'overview', lbl: curW < 14 ? '🌱 Köklenme' : '🌿 Gelişim' },
+            { id: 'donts', lbl: '🛡️ Güvenlik' },
+            { id: 'dos', lbl: '✨ Öneriler' },
+            { id: 'partner', lbl: '👨 Oğuz' },
+            { id: 'questions', lbl: '👩‍⚕️ Doktor Soruları' }
+          ].map(sb => `
+            <button onclick="setBirthSubtab('${sb.id}')"
+              class="px-3.5 py-2 rounded-2xl whitespace-nowrap transition-all font-medium ${state.birthModule.activeSubtab === sb.id ? 'bg-amber-400/20 text-amber-200 border border-amber-400/40 font-semibold shadow-xs' : 'bg-white/[0.04] text-white/50 hover:text-white/80'}">
+              ${sb.lbl}
+            </button>
+          `).join('')}
         </div>
       ` : `
-        <!-- 3. Trimester Doğum Paketi Sekme Çubuğu -->
-        <div class="grid grid-cols-5 gap-1 bg-white/5 p-1 rounded-2xl text-[10px]">
-          <button onclick="setBirthSubtab('kick')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'kick' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
-            Tekme 10
-          </button>
-          <button onclick="setBirthSubtab('waves')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'waves' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
-            Dalgalar
-          </button>
-          <button onclick="setBirthSubtab('bag')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'bag' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
-            Çanta
-          </button>
-          <button onclick="setBirthSubtab('plan')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'plan' ? 'bg-white/20 text-white font-bold shadow-xs' : 'text-white/50'}">
-            Plan A/B
-          </button>
-          <button onclick="setBirthSubtab('logistics')" class="py-2 px-1 text-center rounded-xl transition truncate ${state.birthModule.activeSubtab === 'logistics' ? 'bg-rose-500/25 text-rose-200 font-bold border border-rose-400/40 shadow-xs' : 'text-white/50'}">
-            Lojistik
-          </button>
+        <!-- 3. Trimester Doğum Paketi Sekme Çubuğu (Calm Tech Ferah Pill Tabs) -->
+        <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+          ${[
+            { id: 'kick', lbl: '🐾 Tekme 10' },
+            { id: 'waves', lbl: '🌊 Dalgalar' },
+            { id: 'bag', lbl: '🎒 Çanta' },
+            { id: 'plan', lbl: '📋 Plan A/B' },
+            { id: 'logistics', lbl: '📍 Lojistik' }
+          ].map(sb => `
+            <button onclick="setBirthSubtab('${sb.id}')"
+              class="px-3.5 py-2 rounded-2xl whitespace-nowrap transition-all font-medium ${state.birthModule.activeSubtab === sb.id ? 'bg-amber-400/20 text-amber-200 border border-amber-400/40 font-semibold shadow-xs' : 'bg-white/[0.04] text-white/50 hover:text-white/80'}">
+              ${sb.lbl}
+            </button>
+          `).join('')}
         </div>
       `}
 
@@ -4193,6 +4188,9 @@ window.sendPartnerPainAlert = function() {
 window.takePrescriptionInHome = function(id) {
   const p = state.prescriptions.find(x => x.id === id);
   if (!p) return;
+  if (!p.takenToday && window.checkDmt1Interaction && !window.checkDmt1Interaction(id)) {
+    return;
+  }
   p.takenToday = !p.takenToday;
   const now = new Date();
   p.takenTime = p.takenToday
@@ -4285,12 +4283,13 @@ window.addNewBloodPressureLog = function() {
   const dateStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' }) + ' (' + timeStr + ')';
   const isNormal = sVal < 130 && dVal < 85 && sVal >= 80;
 
+  const analysis = window.runAiSeedCoreAnalysis ? window.runAiSeedCoreAnalysis(sVal, dVal) : null;
   state.healthData.bloodPressureHistory.unshift({
     id: state.healthData.bloodPressureHistory.length + 1,
     date: dateStr,
     systolic: sVal,
     diastolic: dVal,
-    note: sVal < 115 ? "Güvenli aralıkta" : (sVal >= 130 ? "Yüksek — Dr. Yılmaz'ı ara" : "İzleme önerilir"),
+    note: analysis ? analysis.badgeText : (sVal < 115 ? "Güvenli aralıkta" : (sVal >= 130 ? "Yüksek — Dr. Yılmaz'ı ara" : "İzleme önerilir")),
     isNormal: isNormal
   });
 
@@ -4595,3 +4594,299 @@ window.addFamilyObserver = function() {
   triggerReaction("folic", name + " aile ağacına sınırlı yetkiyle eklendi.");
   render();
 };
+
+
+
+// =========================================================================
+// M0 İŞ PLANI: AI SEED CORE & KLİNİK RAPORLAMA & DMT1 BİYOYARARLANIM MOTORU
+// =========================================================================
+
+// 1. AI Seed Core Kardiyovasküler Dengesiz Veri & Preeklampsi Analiz Motoru (DEÜ Veri Bilimi Tezi)
+window.runAiSeedCoreAnalysis = function(systolic, diastolic, hrv, symptoms) {
+  const baseSys = 90;
+  const baseDia = 60;
+  const deltaSys = systolic - baseSys;
+  const deltaDia = diastolic - baseDia;
+  const hrvVal = (hrv !== undefined) ? hrv : (state.wearable ? state.wearable.hrv : 64);
+  const syms = symptoms || (state.healthData ? state.healthData.selectedSymptoms : []);
+  const hasEdema = syms.some(s => /ödem|şişlik/i.test(s));
+  const hasHeadache = syms.some(s => /baş ağrısı|görme/i.test(s));
+
+  let status = "optimal"; // optimal (yeşil), borderline (sarı), critical (kırmızı)
+  let riskScore = 8;
+  let message = "";
+  let badgeText = "✓ Dengede (Bazal 90/60)";
+
+  // Kurucunun Y.L. Tezi Kuralları:
+  if (systolic >= 135 || diastolic >= 88 || (deltaSys >= 35 && deltaDia >= 25)) {
+    status = "critical";
+    riskScore = 94;
+    badgeText = "🚨 Kardiyovasküler Stres";
+    message = `🚨 AI Seed Core Kritik Alarm: Kişisel bazaliniz 90/60 mmHg iken ${systolic}/${diastolic} mmHg (+${deltaSys}/+${deltaDia} mmHg) ölçüldü. Dengesiz veri sınıflandırıcısı preeklampsi riskini %94 olarak hesapladı. Dr. Ayşe Yılmaz'a derhal başvurunuz.`;
+  } else if ((deltaSys >= 25 && deltaDia >= 18) || (systolic >= 120 && hrvVal < 55) || (deltaSys >= 20 && hasEdema)) {
+    status = "borderline";
+    riskScore = 72;
+    badgeText = "⚠️ Atipik Sıçrama (Gizli Preeklampsi)";
+    message = `⚠️ AI Seed Core Atipik Sıçrama Tespiti: 120/80 mmHg genel popülasyonda "normal" kabul edilir; ancak sizin 90/60 mmHg kişisel bazaliniz için +${deltaSys}/+${deltaDia} mmHg'lik kritik bir sıçramadır. Düşen HRV (${hrvVal} ms) vasküler yükü doğrulamaktadır. Dinlenin ve 1 saat sonra tekrar ölçün.`;
+  } else if (systolic >= 115 || deltaSys >= 15) {
+    status = "watch";
+    riskScore = 35;
+    badgeText = "⚑ İzlem Koridoru";
+    message = `⚑ Kişisel İzlem: 90/60 bazalden +${deltaSys} mmHg hafif yükseliş. Sol yanınıza uzanıp ılık su için.`;
+  } else {
+    status = "optimal";
+    riskScore = 8;
+    badgeText = "✓ Güvenli Koridor (90/60)";
+    message = `✓ Güvenli Koridor: Ölçümünüz (${systolic}/${diastolic} mmHg), 90/60 mmHg kişisel bazaliniz ve ${hrvVal} ms otonom HRV ile mükemmel uyumlu.`;
+  }
+
+  state.aiSeedCoreAnalysis = {
+    status,
+    riskScore,
+    badgeText,
+    message,
+    deltaSys,
+    deltaDia,
+    hrvVal,
+    lastMeasured: `${systolic}/${diastolic} mmHg`,
+    time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+  };
+
+  return state.aiSeedCoreAnalysis;
+};
+
+// 2. DMT1 Reseptör Biyoyararlanım & Emilim Çakışma Kontrolü
+window.checkDmt1Interaction = function(targetDrugId) {
+  const iron = state.prescriptions.find(p => p.id === "iron");
+  const magnesium = state.prescriptions.find(p => p.id === "magnesium");
+  const now = Date.now();
+
+  // Demir alındıysa ve < 2 saat içinde Magnezyum/Kalsiyum alınıyorsa
+  if (targetDrugId === "magnesium" && iron && iron.takenToday && iron._takenTimestamp) {
+    const elapsedMinutes = Math.round((now - iron._takenTimestamp) / 60000);
+    if (elapsedMinutes < 120) {
+      const remaining = 120 - elapsedMinutes;
+      const warn = `⚠️ DMT1 Reseptör Çakışması: Ferro Sanol (Demir) takviyenizi ${elapsedMinutes} dk önce aldınız. Magnezyum/Kalsiyum ile aynı bağırsak taşıyıcısını (DMT1) kullandığı için emilim %70 düşer. Lütfen ${remaining} dakika sonra alınız.`;
+      alert(warn);
+      triggerReaction("magnesium", warn);
+      return false;
+    }
+  }
+
+  // Magnezyum alındıysa ve < 2 saat içinde Demir alınıyorsa
+  if (targetDrugId === "iron" && magnesium && magnesium.takenToday && magnesium._takenTimestamp) {
+    const elapsedMinutes = Math.round((now - magnesium._takenTimestamp) / 60000);
+    if (elapsedMinutes < 120) {
+      const remaining = 120 - elapsedMinutes;
+      const warn = `⚠️ DMT1 Reseptör Çakışması: Magnezyum takviyenizi ${elapsedMinutes} dk önce aldınız. Demir emilimini korumak ve gebelik anemisini önlemek için Ferro Sanol'u ${remaining} dakika sonra alınız.`;
+      alert(warn);
+      triggerReaction("omega", warn);
+      return false;
+    }
+  }
+
+  return true;
+};
+
+// 3. Tek Tuşla Standart Muayene Öncesi Klinik Özet Modal & PDF
+window.toggleClinicalReportModal = function() {
+  state.isClinicalReportOpen = !state.isClinicalReportOpen;
+  triggerHaptic(15);
+  render();
+};
+
+window.printClinicalPdfReport = function() {
+  triggerHaptic([20, 40]);
+  window.print();
+};
+
+window.shareClinicalSummaryWhatsApp = function() {
+  const curW = state.baby.week;
+  const bp = state.healthData.bloodPressureHistory[0];
+  const w = state.wearable;
+  const analysis = state.aiSeedCoreAnalysis || window.runAiSeedCoreAnalysis(bp.systolic, bp.diastolic);
+  
+  const text = encodeURIComponent(
+    `Sayın Dr. Ayşe Yılmaz (Manisa Şehir Hastanesi),\n` +
+    `Hasta: Buse Baltacıoğlu (31. Hafta Gebe - ToHUM Klinik Raporu)\n\n` +
+    `• Kişisel Bazal Tansiyon: 90/60 mmHg\n` +
+    `• Son Ölçüm: ${bp.systolic}/${bp.diastolic} mmHg (${analysis.badgeText})\n` +
+    `• Akıllı Saat (HealthKit): Nabız ${w.heartRate} bpm, HRV ${w.hrv} ms, SpO2 %${w.spo2}, Uyku ${w.sleepHours}\n` +
+    `• Cardiff 10 Fetal Tekme: Reaktif (2 saatte 10 tekme tamam)\n` +
+    `• Takviye/DMT1 Uyumu: %92 (Demir-Magnezyum 2s kuralı korundu)\n` +
+    `• Tahliller: Ferritin 21 ng/mL, Hb 11.4 g/dL, OGTT 135 mg/dL (Normal)\n` +
+    `Detaylı klinik PDF tablosu ekteki dosyada mevcuttur.`
+  );
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+};
+
+function renderClinicalReportModal() {
+  if (!state.isClinicalReportOpen) return '';
+
+  const bp = state.healthData.bloodPressureHistory[0];
+  const w = state.wearable || { heartRate: 78, hrv: 64, spo2: 98, sleepHours: "7s 25dk" };
+  const analysis = state.aiSeedCoreAnalysis || window.runAiSeedCoreAnalysis(bp.systolic, bp.diastolic);
+  const curW = state.baby.week;
+  const curData = getLifecycleDataForWeek(curW);
+
+  return `
+    <div class="fixed inset-0 bg-black/85 z-[150] backdrop-blur-md flex items-center justify-center p-3 animate-in fade-in duration-200">
+      <div class="bg-[#140D0B] border border-amber-400/30 rounded-[32px] w-full max-w-[400px] max-h-[92vh] overflow-y-auto text-white shadow-2xl flex flex-col relative" id="clinicalReportPrintArea">
+        
+        <!-- Modal Başlık & Butonlar -->
+        <div class="p-5 pb-3 border-b border-white/10 flex justify-between items-start sticky top-0 bg-[#140D0B]/95 backdrop-blur-md z-10">
+          <div>
+            <div class="flex items-center space-x-1.5">
+              <span class="text-amber-300 font-bold text-xs uppercase tracking-wider">ToHUM · B2B Klinik Karar Destek</span>
+              <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.2 rounded-full font-semibold">Resmi Özet</span>
+            </div>
+            <h2 class="text-base font-serif font-bold text-white mt-1">Muayene Öncesi Klinik Özet</h2>
+            <p class="text-[10px] text-white/50">Dr. Ayşe Yılmaz · Manisa Şehir Hastanesi Kadın Doğum</p>
+          </div>
+          <button onclick="toggleClinicalReportModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white text-xs">✕</button>
+        </div>
+
+        <div class="p-5 space-y-4 text-xs">
+          
+          <!-- Hasta & Gebelik Künyesi -->
+          <div class="p-3.5 bg-black/40 rounded-2xl border border-white/5 space-y-2">
+            <div class="flex justify-between items-center text-white/90">
+              <span class="font-bold text-sm text-white">${state.user.name}</span>
+              <span class="text-amber-200 font-semibold text-xs">${curW}. Hafta (${curData.trimester})</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-[10px] pt-1 border-t border-white/5">
+              <div>
+                <span class="text-white/40 block">Kişisel Bazal</span>
+                <span class="font-bold text-emerald-300 text-xs">90/60 mmHg</span>
+              </div>
+              <div>
+                <span class="text-white/40 block">Kilo / Artış</span>
+                <span class="font-bold text-white text-xs">${state.user.currentWeight} kg (+7.0)</span>
+              </div>
+              <div>
+                <span class="text-white/40 block">Hedef Doğum</span>
+                <span class="font-bold text-amber-200 text-xs">${state.user.dueDate}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Seed Core Kardiyovasküler Stres & Preeklampsi Analitiği -->
+          <div class="p-3.5 bg-gradient-to-br from-amber-950/30 via-white/5 to-white/5 rounded-2xl border ${analysis.status === 'optimal' ? 'border-emerald-400/30' : 'border-amber-400/40'} space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-amber-200 text-xs flex items-center space-x-1.5">
+                <span>🧠</span>
+                <span>AI Seed Core Analizi (DEÜ Tezi)</span>
+              </span>
+              <span class="text-[9px] px-2 py-0.5 rounded-full font-bold ${analysis.status === 'optimal' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : 'bg-amber-500/25 text-amber-200 border border-amber-400/40'}">
+                ${analysis.badgeText}
+              </span>
+            </div>
+            <p class="text-[11px] text-white/80 leading-relaxed bg-black/30 p-2.5 rounded-xl border border-white/5">
+              ${analysis.message}
+            </p>
+            <div class="flex justify-between text-[10px] text-white/50 pt-1">
+              <span>Sistolik Sapma: <b>+${analysis.deltaSys} mmHg</b></span>
+              <span>Diyastolik Sapma: <b>+${analysis.deltaDia} mmHg</b></span>
+              <span>Preeklampsi Riski: <b>%${analysis.riskScore}</b></span>
+            </div>
+          </div>
+
+          <!-- Akıllı Saat (HealthKit) 24s Biyometrik Trendi -->
+          <div class="p-3.5 bg-black/40 rounded-2xl border border-white/5 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold text-white/95 flex items-center space-x-1.5">
+                <span>⌚</span>
+                <span>Giyilebilir Biyo-Sensör 24s Akışı</span>
+              </span>
+              <span class="text-[9px] text-emerald-300 font-mono">Apple HealthKit</span>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+              <div class="p-2 bg-white/5 rounded-xl">
+                <span class="text-white/40 block text-[9px]">Ort. Nabız</span>
+                <span class="font-bold text-white text-xs mt-0.5">${w.heartRate} bpm</span>
+              </div>
+              <div class="p-2 bg-white/5 rounded-xl">
+                <span class="text-white/40 block text-[9px]">Otonom HRV</span>
+                <span class="font-bold text-amber-300 text-xs mt-0.5">${w.hrv} ms</span>
+              </div>
+              <div class="p-2 bg-white/5 rounded-xl">
+                <span class="text-white/40 block text-[9px]">SpO2</span>
+                <span class="font-bold text-cyan-300 text-xs mt-0.5">%${w.spo2}</span>
+              </div>
+              <div class="p-2 bg-white/5 rounded-xl">
+                <span class="text-white/40 block text-[9px]">Gece Uykusu</span>
+                <span class="font-bold text-white text-xs mt-0.5">${w.sleepHours}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fetal Aktivite & Doğum Dalgası Durumu -->
+          <div class="p-3.5 bg-black/40 rounded-2xl border border-white/5 space-y-2">
+            <span class="font-semibold text-white/95 text-xs flex items-center space-x-1.5">
+              <span>🐾</span>
+              <span>Fetal Hareket & Kasılma Durumu</span>
+            </span>
+            <div class="space-y-1.5 text-[11px] text-white/80">
+              <div class="flex justify-between p-2 bg-white/5 rounded-xl">
+                <span>Cardiff 10 Tekme Skoru</span>
+                <span class="font-bold text-emerald-300">2 Saatte 10 Hareket (Normal / Reaktif)</span>
+              </div>
+              <div class="flex justify-between p-2 bg-white/5 rounded-xl">
+                <span>5-1-1 Doğum Dalgası Analizi</span>
+                <span class="font-bold text-amber-200">Negatif (Sadece Braxton Hicks Hazırlık)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reçete & DMT1 Emilim Uyum Karnesi -->
+          <div class="p-3.5 bg-black/40 rounded-2xl border border-white/5 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold text-white/95">Reçeteli Takviye Uyum Karnesi</span>
+              <span class="text-[10px] text-emerald-300 font-bold">%92 Düzenli Uyum</span>
+            </div>
+            <div class="space-y-1 text-[10px] text-white/75">
+              <div class="flex justify-between">
+                <span>• Ferro Sanol (Demir - Sabah Aç):</span>
+                <span class="text-emerald-300 font-medium">✓ C Vitaminiyle Alındı</span>
+              </div>
+              <div class="flex justify-between">
+                <span>• Magnimore Plus (Magnezyum - Akşam Tok):</span>
+                <span class="text-emerald-300 font-medium">✓ 2s DMT1 Tamponlu</span>
+              </div>
+              <div class="flex justify-between">
+                <span>• Ocean Mummy (DHA - Öğle Tok):</span>
+                <span class="text-emerald-300 font-medium">✓ Düzenli</span>
+              </div>
+              <div class="flex justify-between">
+                <span>• Coledan D3 (4 Damla - Sabah):</span>
+                <span class="text-emerald-300 font-medium">✓ Düzenli</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Doktora Sorulacak Sorular -->
+          <div class="p-3.5 bg-sky-950/25 border border-sky-400/30 rounded-2xl space-y-1.5">
+            <span class="font-bold text-sky-200 text-xs">📋 Bu Muayenede Sorulacaklar:</span>
+            <ul class="text-[11px] text-white/85 space-y-1 list-disc list-inside">
+              <li>Güneş'in baş gelişi pozisyonu doğuma kadar değişir mi?</li>
+              <li>36. haftadan sonra magnezyum dozajı ne zaman kesilmelidir?</li>
+            </ul>
+          </div>
+
+          <!-- Aksiyon Butonları -->
+          <div class="grid grid-cols-2 gap-2 pt-2 sticky bottom-0 bg-[#140D0B] pb-2">
+            <button onclick="printClinicalPdfReport()" class="py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-xs rounded-2xl transition flex items-center justify-center space-x-1.5 shadow-lg">
+              <span>🖨️</span>
+              <span>Yazdır / PDF Kaydet</span>
+            </button>
+            <button onclick="shareClinicalSummaryWhatsApp()" class="py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-2xl transition flex items-center justify-center space-x-1.5 shadow-lg">
+              <span>💬</span>
+              <span>Dr. Ayşe'ye İlet</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+}

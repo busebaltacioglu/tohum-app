@@ -1,4 +1,4 @@
-node_modules/
+﻿node_modules/
 .expo/
 .vscode/
 .idea/
@@ -9,5 +9,5 @@ yarn-error.*
 *.docx
 *.doc
 *.pdf
-DEPARK_137_BASVURU_DOKUMANI_CEVAPLARI.md
-
+*.pptx
+DEPARK_*.md

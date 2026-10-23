@@ -38,3 +38,40 @@ body {
 .animate-breath {
   animation: pulseSlow 8s ease-in-out infinite;
 }
+
+/* Calm Tech Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+/* Media Print for Clinical PDF Report */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  header, nav, #cinematicTouchStage, .no-print {
+    display: none !important;
+  }
+  #clinicalReportPrintArea {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  #clinicalReportPrintArea * {
+    color: #111827 !important;
+    background: transparent !important;
+    border-color: #d1d5db !important;
+  }
+}
