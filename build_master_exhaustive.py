@@ -32,7 +32,7 @@ html_content = '''<!DOCTYPE html>
       <div>
         <div class="flex items-center gap-2.5">
           <h1 class="text-sm font-semibold tracking-tight text-[#1c1a18]">ToHUM A.Ş.</h1>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ebe7df] text-[#544f47]">Master İcra, Bütçe & Taahhüt Masası</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ebe7df] text-[#544f47]">Master İcra & Taahhüt Masası</span>
         </div>
         <p class="text-xs text-[#736d65] mt-0.5">Buse Nur Baltacıoğlu & AI Yönetici Ortak (Antigravity)</p>
       </div>
@@ -58,14 +58,21 @@ html_content = '''<!DOCTYPE html>
       <!-- Top Filter & Progress Summary Bar -->
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[#e5e2da] pb-3">
         <div class="flex items-center gap-2 overflow-x-auto text-xs">
-          <button onclick="setFilter('all')" id="btn-all" class="filter-btn px-3 py-1.5 rounded-lg font-medium text-[#1c1a18] bg-[#ebe7df]">Tümü (40 Adım)</button>
+          <button onclick="setFilter('all')" id="btn-all" class="filter-btn px-3 py-1.5 rounded-lg font-medium text-[#1c1a18] bg-[#ebe7df]">Tümü</button>
           <button onclick="setFilter('F0')" id="btn-F0" class="filter-btn px-3 py-1.5 rounded-lg text-[#736d65] hover:text-[#1c1a18] hover:bg-[#ebe7df]/60">Faz 0: Şirketsiz (Şu An)</button>
           <button onclick="setFilter('F1')" id="btn-F1" class="filter-btn px-3 py-1.5 rounded-lg text-[#736d65] hover:text-[#1c1a18] hover:bg-[#ebe7df]/60">BiGG Ay 1–3 (İP-1)</button>
           <button onclick="setFilter('F2')" id="btn-F2" class="filter-btn px-3 py-1.5 rounded-lg text-[#736d65] hover:text-[#1c1a18] hover:bg-[#ebe7df]/60">BiGG Ay 4–6 (İP-2 & İP-3)</button>
           <button onclick="setFilter('F3')" id="btn-F3" class="filter-btn px-3 py-1.5 rounded-lg text-[#736d65] hover:text-[#1c1a18] hover:bg-[#ebe7df]/60">BiGG Ay 7–9 (İP-4 & 1507)</button>
           <button onclick="setFilter('F4')" id="btn-F4" class="filter-btn px-3 py-1.5 rounded-lg text-[#736d65] hover:text-[#1c1a18] hover:bg-[#ebe7df]/60">BiGG Ay 10–12 (İP-5 & Kapanış)</button>
         </div>
-        <span id="progressSummary" class="text-xs font-medium text-[#4a5c4e]">0 / 40 Tamamlandı (%0)</span>
+
+        <div class="flex items-center gap-3">
+          <span id="progressSummary" class="text-xs font-medium text-[#4a5c4e]">0 / 0 Tamamlandı (%0)</span>
+          <button onclick="addNewTaskPrompt()" class="px-3 py-1.5 bg-[#4a5c4e] hover:bg-[#3d4d40] text-white rounded-lg text-xs font-medium transition shadow-xs flex items-center gap-1.5">
+            <span class="text-sm font-bold leading-none">+</span>
+            <span>Adım Ekle</span>
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -76,7 +83,50 @@ html_content = '''<!DOCTYPE html>
         <!-- Right Side: Bütçe, İP & Teşvik Tablosu + Notlar (4 Cols) -->
         <div class="lg:col-span-4 space-y-6 sticky top-20">
           
-          <!-- BiGG 1812 Resmi İş Paketleri & Bütçe Dağılımı (Ek Belge) -->
+          <!-- Çalışma Notları / Karar Defteri (Üstte ve Açık Kaydet Butonlu) -->
+          <div class="bg-white rounded-xl border border-[#e5e2da] p-5 space-y-3 shadow-xs">
+            <div class="flex items-center justify-between">
+              <h2 class="text-xs font-semibold text-[#1c1a18] uppercase tracking-wider">Çalışma Notları</h2>
+              <span id="saveStatus" class="text-[10px] text-[#736d65]">Kayıtlı</span>
+            </div>
+            
+            <textarea id="notesArea" oninput="saveNotes()" rows="8" 
+              placeholder="Toplantı notları, aklına gelenler veya anlık kararlar..."
+              class="w-full text-xs text-[#2b2825] placeholder-[#a6a096] bg-[#faf9f6] border border-[#e5e2da] rounded-lg p-3 focus:outline-none focus:border-[#736d65] resize-y leading-relaxed font-sans"></textarea>
+            
+            <div class="flex items-center justify-between pt-1">
+              <button onclick="clearNotes()" class="text-[11px] text-[#8c857b] hover:text-red-700 hover:underline">Temizle</button>
+              <button onclick="saveNotesExplicit()" class="px-4 py-1.5 bg-[#4a5c4e] hover:bg-[#3d4d40] text-white rounded-lg text-xs font-semibold transition shadow-xs flex items-center gap-1">
+                <span>💾</span>
+                <span>Kaydet</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Kovan Mahremiyet & Çift Oturum Mimarisi Özeti -->
+          <div class="bg-white rounded-xl border border-[#e5e2da] p-5 space-y-3 shadow-xs">
+            <h2 class="text-xs font-semibold text-[#1c1a18] uppercase tracking-wider">Kovan & Çift Oturum Mimarisi</h2>
+            <div class="space-y-2 text-xs divide-y divide-[#f0ede6]">
+              <div class="pt-2 first:pt-0">
+                <span class="font-medium text-pink-900 block">🌸 Anneler Çemberi (Kadın-Kadına)</span>
+                <p class="text-[11px] text-[#736d65] mt-0.5">Sadece kadınlar! Lohusalık, emzirme, pelvik taban ve mahrem kadın sağlığı paylaşımları.</p>
+              </div>
+              <div class="pt-2">
+                <span class="font-medium text-blue-900 block">🛡️ Babalar Çemberi (Erkek-Erkeğe)</span>
+                <p class="text-[11px] text-[#736d65] mt-0.5">Sadece erkekler! Babalık kaygıları, lojistik hazırlık, eşe doğru destek tüyoları.</p>
+              </div>
+              <div class="pt-2">
+                <span class="font-medium text-emerald-900 block">📦 Ortak Sıfır Atık İmece Pazarı</span>
+                <p class="text-[11px] text-[#736d65] mt-0.5">Tüm ailelerin ortak eriştiği, sadece bebek eşyası takas ve bağış vitrini.</p>
+              </div>
+              <div class="pt-2">
+                <span class="font-medium text-[#1c1a18] block">🔑 Ortak Aile Kodu (Tek Abonelik)</span>
+                <p class="text-[11px] text-[#736d65] mt-0.5">Ortak soyadı/kod ile eşleşilir; Anneye gebelik/biyometri, Babaya gizli destek görevleri yüklenir.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BiGG 1812 Resmi İş Paketleri & Bütçe Dağılımı -->
           <div class="bg-white rounded-xl border border-[#e5e2da] p-5 space-y-3 shadow-xs">
             <div class="flex items-center justify-between border-b border-[#f0ede6] pb-2">
               <h2 class="text-xs font-semibold text-[#1c1a18] uppercase tracking-wider">BiGG İş Paketleri (1.35M ₺)</h2>
@@ -144,17 +194,6 @@ html_content = '''<!DOCTYPE html>
                 <p class="text-[11px] text-[#736d65]">300K - 500K $ tohum yatırım hedefi</p>
               </div>
             </div>
-          </div>
-
-          <!-- Çalışma Notları / Karar Defteri -->
-          <div class="bg-white rounded-xl border border-[#e5e2da] p-5 space-y-3 shadow-xs">
-            <div class="flex items-center justify-between">
-              <h2 class="text-xs font-semibold text-[#1c1a18] uppercase tracking-wider">Çalışma Notları</h2>
-              <span id="saveStatus" class="text-[10px] text-[#736d65]">Kayıtlı</span>
-            </div>
-            <textarea id="notesArea" oninput="saveNotes()" rows="7" 
-              placeholder="Toplantı notları, aklına gelenler veya anlık kararlar..."
-              class="w-full text-xs text-[#2b2825] placeholder-[#a6a096] bg-[#faf9f6] border border-[#e5e2da] rounded-lg p-3 focus:outline-none focus:border-[#736d65] resize-y leading-relaxed font-sans"></textarea>
           </div>
 
         </div>
@@ -382,7 +421,7 @@ html_content = '''<!DOCTYPE html>
   </main>
 
   <script>
-    // TOHUM MASTER İCRA PLANI: TÜM BAŞVURU TAAHHÜTLERİ, İŞ PAKETLERİ VE BÜTÇELER (EKSİKSİZ 40 ADIM)
+    // TOHUM MASTER İCRA PLANI: CİNSİYET AYRIŞIMLI KOVAN, ÇİFT OTURUM VE GOOGLE PLAY DAHİL EKSİKSİZ 44 ADIM
     const MASTER_TASKS_EXHAUSTIVE = [
       // =========================================================================
       // FAZ 0: ŞİRKETSİZ ÖN HAZIRLIK & JÜRİ SAVUNMASI (Kasım 2026 – Nisan 2027)
@@ -399,73 +438,77 @@ html_content = '''<!DOCTYPE html>
       { id: "T-06", f: "F0", section: "2. Anne Tansiyon & Biyometri Hattı (2021 Tezi)", title: "Bağımsız Test Kümesinde F1 ≥ %90 ve Recall (%96.4) Doğrulama Raporu", desc: "54 yüksek riskli gebeden 48'inin yakalandığı karmaşıklık matrisinin teknik dokümana işlenmesi.", done: false },
       { id: "T-07", f: "F0", section: "2. Anne Tansiyon & Biyometri Hattı (2021 Tezi)", title: "14 Günlük Kişisel Bazal Kalibrasyon Algoritması (Z-Skor Formülasyonu)", desc: "Standart 140/90 mmHg yerine gebenin kendi bazal ortalamasına (örn: 90/60) göre +20/+30 mmHg sıçrama koridorunun modellenmesi.", done: false },
 
-      // Blok 3: Baba Destek & Semptom Özellik Seçimi Hattı (2024 Tezi)
-      { id: "T-08", f: "F0", section: "3. Baba Destek & Özellik Seçimi Hattı (2024 Tezi)", title: "Gebelikte Günlük Semptom & Duygu Durumu Veri Havuzunun Taranması", desc: "Bel ağrısı, ödem, bulantı, uykusuzluk, yorgunluk ve stres değişkenlerinin veri formatının belirlenmesi.", done: false },
-      { id: "T-09", f: "F0", section: "3. Baba Destek & Özellik Seçimi Hattı (2024 Tezi)", title: "Özellik Seçimi (SFS / ReliefF) ile En Kritik 2 Semptomun İzolasyonu", desc: "2024 İstatistik tezindeki yöntemlerle anneyi yormadan en yüksek bilgi kazancı (Information Gain) sağlayan ayırt edici semptomların seçilmesi.", done: false },
-      { id: "T-10", f: "F0", section: "3. Baba Destek & Özellik Seçimi Hattı (2024 Tezi)", title: "İzole Edilen Semptoma Göre Babaya Tetiklenecek 'Gizli Görev' Kural Motoru", desc: "Anneye sezdirmeden babanın ekranına düşecek uygulanabilir mikro-destek görevlerinin (örn: su getirme, masaj) haritalanması.", done: false },
+      // Blok 3: Çift Oturumlu Aile Mimarisi (Anne & Baba Farklı Menü Tasarımı)
+      { id: "T-08", f: "F0", section: "3. Çift Oturumlu Aile Mimarisi (Ortak Soyadı / Aile Kodu)", title: "Ortak Aile Kodu & Soyadı ile Çift Oturum Akış Şeması Tasarımı", desc: "Tek abonelik altında 6 haneli aile eşleşme kodu ile Anne ve Babanın farklı arayüzlerle bağlanma mimarisi.", done: false },
+      { id: "T-09", f: "F0", section: "3. Çift Oturumlu Aile Mimarisi (Ortak Soyadı / Aile Kodu)", title: "Anne Arayüzü Menü Ağacı: Gebelik, Tansiyon, Tahlil, Ultrason & Doğum Planı", desc: "Annenin günlük semptom, su, kilo, biyometri ve doğum tercihlerini gireceği özelleşmiş menü navigasyonu.", done: false },
+      { id: "T-10", f: "F0", section: "3. Çift Oturumlu Aile Mimarisi (Ortak Soyadı / Aile Kodu)", title: "Baba Arayüzü Menü Ağacı: Gizli Görevler, Doğum Çantası & Acil Lojistik", desc: "Babanın ekranda göreceği proaktif görevler (su götür, masaj yap), çanta kontrolü, hastane navigasyonu ve acil alarm menüsü.", done: false },
+      { id: "T-11", f: "F0", section: "3. Çift Oturumlu Aile Mimarisi (Ortak Soyadı / Aile Kodu)", title: "Özellik Seçimi (SFS / ReliefF) ile Annenin Semptomundan Babaya Görev Üretimi", desc: "2024 İstatistik tezindeki yöntemlerle günün en kritik 2 semptomunun izole edilip babaya sezdirmeden mikro-görev atanması.", done: false },
 
-      // Blok 4: M0 Klinik Rehber, Sayaçlar & Doğum Lojistiği
-      { id: "T-11", f: "F0", section: "4. M0 Klinik Rehber & Doğum Lojistiği", title: "5-1-1 Doğum Dalgası & Cardiff 10 Fetal Tekme Algoritmaları", desc: "Kasılma süre/sıklık analizi (gerçek sancı vs Braxton Hicks) ve 2 saatte 10 fetal hareket kuralının doğrulanması.", done: false },
-      { id: "T-12", f: "F0", section: "4. M0 Klinik Rehber & Doğum Lojistiği", title: "Biyoyararlanım Kuralları: Demir-Kalsiyum Çakışma Motoru", desc: "'Demir süt ürünleriyle alınmamalı, C vitamini emilimi artırır' kural motorunun takviye çekmecesine işlenmesi.", done: false },
-      { id: "T-13", f: "F0", section: "4. M0 Klinik Rehber & Doğum Lojistiği", title: "Doğum Lojistiği: Plan A/B, Doğum Çantası & Evcil Hayvan Emanet Planı", desc: "Doğum anında acil hastane rotası ve evcil hayvan emanet koordinasyonunun şablonlarının çıkarılması.", done: false },
+      // Blok 4: Kovan Cinsiyet Ayrışımlı Sosyal Ağ & Doğum Lojistiği
+      { id: "T-12", f: "F0", section: "4. Kovan İmece Ağı & Doğum Lojistiği", title: "Kovan: Sıfır Atık Bebek Eşyası Takası & Ortak İmece Vitrini", desc: "Az kullanılan bebek eşyalarının aileler arasında döngüsel ekonomi prensibiyle el değiştireceği güvenli imece şeması.", done: false },
+      { id: "T-13", f: "F0", section: "4. Kovan İmece Ağı & Doğum Lojistiği", title: "Kovan: Cinsiyet Ayrışımlı İletişim (Anneler Çemberi & Babalar Çemberi)", desc: "Kadınlar kadınlarla (lohusalık/emzirme), erkekler erkeklerle (lojistik/babalık) izole ve güvenli sohbet odaları.", done: false },
+      { id: "T-14", f: "F0", section: "4. Kovan İmece Ağı & Doğum Lojistiği", title: "5-1-1 Doğum Dalgası & Cardiff 10 Fetal Tekme Algoritmaları", desc: "Kasılma süre/sıklık analizi (gerçek sancı vs Braxton Hicks) ve 2 saatte 10 fetal hareket kuralının doğrulanması.", done: false },
+      { id: "T-15", f: "F0", section: "4. Kovan İmece Ağı & Doğum Lojistiği", title: "Biyoyararlanım Kuralları: Demir-Kalsiyum Çakışma Motoru", desc: "'Demir süt ürünleriyle alınmamalı, C vitamini emilimi artırır' kural motorunun takviye çekmecesine işlenmesi.", done: false },
+      { id: "T-16", f: "F0", section: "4. Kovan İmece Ağı & Doğum Lojistiği", title: "Doğum Lojistiği: Plan A/B, Doğum Çantası & Evcil Hayvan Emanet Planı", desc: "Doğum anında acil hastane rotası ve evcil hayvan emanet koordinasyonunun şablonlarının çıkarılması.", done: false },
 
       // Blok 5: Regülasyon Kalkanı & Jüri Provası
-      { id: "T-14", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "MDR Kalkanı: 'Tıbbi Teşhis Değil, Trend Analitiği' Yasal Sınır Beyanı", desc: "Sağlık Bakanlığı ve CE MDR tıbbi cihaz engelini aşan regülasyon beyanının konuşma kartlarına eklenmesi.", done: false },
-      { id: "T-15", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "Jüri Savunma Stratejisi: 'Model Eğitildi, İP-3'te Uygulamaya Bağlanacak'", desc: "Jüriye prototipin arayüz doğrulaması olduğu, eğitilmiş Python modelinin BiGG bütçesiyle (İP-3) API ile bağlanacağı netleştirildi.", done: false },
-      { id: "T-16", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "DEPARK Jüri Sunum Provamız: 10 Kritik Soru-Cevap Kartı", desc: "Jürinin soracağı en zor sorular (tıbbi risk, F1 skoru, pazar, rakip analizi, ekip) için prova kartlarının hazırlanması.", done: false },
-      { id: "T-17", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "1 Kadın Doğum Uzmanı ile Gayriresmi Ön Görüşme (Klinik Geri Bildirim)", desc: "124 mmHg sistolik bulgumuzun bir kadın doğum uzmanına gösterilerek görüşünün jüri sunumuna not edilmesi.", done: false },
+      { id: "T-17", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "MDR Kalkanı: 'Tıbbi Teşhis Değil, Trend Analitiği' Yasal Sınır Beyanı", desc: "Sağlık Bakanlığı ve CE MDR tıbbi cihaz engelini aşan regülasyon beyanının konuşma kartlarına eklenmesi.", done: false },
+      { id: "T-18", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "Jüri Savunma Stratejisi: 'Model Eğitildi, İP-3'te Uygulamaya Bağlanacak'", desc: "Jüriye prototipin arayüz doğrulaması olduğu, eğitilmiş Python modelinin BiGG bütçesiyle (İP-3) API ile bağlanacağı netleştirildi.", done: false },
+      { id: "T-19", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "DEPARK Jüri Sunum Provamız: 10 Kritik Soru-Cevap Kartı", desc: "Jürinin soracağı en zor sorular (tıbbi risk, F1 skoru, pazar, rakip analizi, ekip) için prova kartlarının hazırlanması.", done: false },
+      { id: "T-20", f: "F0", section: "5. Regülasyon Kalkanı & Jüri Hazırlığı", title: "1 Kadın Doğum Uzmanı ile Gayriresmi Ön Görüşme (Klinik Geri Bildirim)", desc: "124 mmHg sistolik bulgumuzun bir kadın doğum uzmanına gösterilerek görüşünün jüri sunumuna not edilmesi.", done: false },
 
       // Blok 6: Şirketsiz Teşvikler & Mühür Onayı
-      { id: "T-18", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "Microsoft Founders Hub Başvurusu (25.000 $ Bulut Kredisi)", desc: "Aralık 2026: Şirket olmadan başvuru yapılarak ilk yıl sunucu ve OpenAI API giderinin sıfırlanması.", done: false },
-      { id: "T-19", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "Kuveyt Türk Lonca & Arya Women Başvuruları", desc: "Şubat 2027: Şirketsiz yarışmalarla hissesiz ön nakit ödülü başvurusu.", done: false },
-      { id: "T-20", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "TÜBİTAK 1812 2. Aşama Panel Değerlendirmesi & Mükemmeliyet Mührü", desc: "Nisan 2027: TÜBİTAK Mükemmeliyet Mührü ile 1.350.000 TL şirketleşme çağrısı alınması.", done: false },
+      { id: "T-21", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "Microsoft Founders Hub Başvurusu (25.000 $ Bulut Kredisi)", desc: "Aralık 2026: Şirket olmadan başvuru yapılarak ilk yıl sunucu ve OpenAI API giderinin sıfırlanması.", done: false },
+      { id: "T-22", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "Kuveyt Türk Lonca & Arya Women Başvuruları", desc: "Şubat 2027: Şirketsiz yarışmalarla hissesiz ön nakit ödülü başvurusu.", done: false },
+      { id: "T-23", f: "F0", section: "6. Şirketsiz Teşvikler & Mühür", title: "TÜBİTAK 1812 2. Aşama Panel Değerlendirmesi & Mükemmeliyet Mührü", desc: "Nisan 2027: TÜBİTAK Mükemmeliyet Mührü ile 1.350.000 TL şirketleşme çağrısı alınması.", done: false },
 
       // =========================================================================
       // FAZ 1: BİGG AY 1–3 · ŞİRKETLEŞME, ÇİFT FON & İP-1 (Mayıs – Temmuz 2027)
       // Bütçe: 200.000 TL (%14.8)
       // =========================================================================
-      { id: "T-21", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "Mevcut İşten İhbar Süresiyle Resmi Ayrılış (SGK 4a Çıkışı)", desc: "Mühür kesinleşince kurallara tam uyumlu şekilde istifa ve devir.", done: false },
-      { id: "T-22", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "DEPARK Teknopark'ta Tohum Bilişim A.Ş. Resmi Kuruluşu", desc: "Teknopark vergi/SGK muafiyetli A.Ş. tescili (%97 Buse Nur, %3 BiGG Fonu).", done: false },
-      { id: "T-23", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "TÜBİTAK BiGG 1.350.000 TL Sermaye Girişi & Resmi Proje Başlangıcı", desc: "BiGG sözleşmesi imzalandı ve resmi 12 aylık proje süresi başladı.", done: false },
-      { id: "T-24", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "KOSGEB Kadın Girişimci (1.685.000 TL) Başvurusu (Ertesi Gün)", desc: "35.000 TL kuruluş hibesi + 1.650.000 TL faizsiz kredi başvurusu (Kasadaki toplam: 3.035.000 TL).", done: false },
-      { id: "T-25", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "1 Tam Zamanlı Kıdemli Full-Stack/Mobil Yazılımcı İstihdamı", desc: "İş şartnamesi hazır olan kıdemli yazılımcı BiGG bütçesinden bordrolu işe alındı.", done: false },
-      { id: "T-26", f: "F1", section: "8. İP-1 Mühendislik Çıktıları (200.000 ₺)", title: "İP-1: PostgreSQL ve TimescaleDB Zaman Serisi Bulut Altyapısı", desc: "Anne tansiyon, şeker ve bebek gelişim verilerini saklayacak KVKK uyumlu veritabanı kurulumu.", done: false },
-      { id: "T-27", f: "F1", section: "8. İP-1 Mühendislik Çıktıları (200.000 ₺)", title: "İP-1: Rol Tabanlı Aile Ağacı & Kutsal Mahremiyet ('Kendime Alan')", desc: "Anne-Baba (Yönetici), Gözlemci Aile Üyesi ve Acil Destek rol yetkilendirme motorunun %100 doğrulanması.", done: false },
+      { id: "T-24", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "Mevcut İşten İhbar Süresiyle Resmi Ayrılış (SGK 4a Çıkışı)", desc: "Mühür kesinleşince kurallara tam uyumlu şekilde istifa ve devir.", done: false },
+      { id: "T-25", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "DEPARK Teknopark'ta Tohum Bilişim A.Ş. Resmi Kuruluşu", desc: "Teknopark vergi/SGK muafiyetli A.Ş. tescili (%97 Buse Nur, %3 BiGG Fonu).", done: false },
+      { id: "T-26", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "TÜBİTAK BiGG 1.350.000 TL Sermaye Girişi & Resmi Proje Başlangıcı", desc: "BiGG sözleşmesi imzalandı ve resmi 12 aylık proje süresi başladı.", done: false },
+      { id: "T-27", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "KOSGEB Kadın Girişimci (1.685.000 TL) Başvurusu (Ertesi Gün)", desc: "35.000 TL kuruluş hibesi + 1.650.000 TL faizsiz kredi başvurusu (Kasadaki toplam: 3.035.000 TL).", done: false },
+      { id: "T-28", f: "F1", section: "7. Şirketleşme & Çift Fon Girişi", title: "1 Tam Zamanlı Kıdemli Full-Stack/Mobil Yazılımcı İstihdamı", desc: "İş şartnamesi hazır olan kıdemli yazılımcı BiGG bütçesinden bordrolu işe alındı.", done: false },
+      { id: "T-29", f: "F1", section: "8. İP-1 Mühendislik Çıktıları (200.000 ₺)", title: "İP-1: PostgreSQL ve TimescaleDB Zaman Serisi Bulut Altyapısı", desc: "Anne tansiyon, şeker ve bebek gelişim verilerini saklayacak KVKK uyumlu veritabanı kurulumu.", done: false },
+      { id: "T-30", f: "F1", section: "8. İP-1 Mühendislik Çıktıları (200.000 ₺)", title: "İP-1: Rol Tabanlı Aile Ağacı & Kutsal Mahremiyet ('Kendime Alan')", desc: "Anne-Baba (Yönetici), Gözlemci Aile Üyesi ve Acil Destek rol yetkilendirme motorunun %100 doğrulanması.", done: false },
 
       // =========================================================================
       // FAZ 2: BİGG AY 4–6 · KLİNİK PAKT, İP-2 & İP-3 (Ağustos – Ekim 2027)
-      // Bütçe: 630.000 TL (İP-2: 270K ₺ + İP-3: 360K ₺)
+      // Bütçe: 630.000 TL (İP-2: 270.000 ₺ + İP-3: 360.000 ₺)
       // =========================================================================
-      { id: "T-28", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "DEÜ Tıp Perinatoloji 3 Uzman Hekimle Klinik Protokol İmzası", desc: "F1 ≥ %90 raporumuz sunularak hekim danışma kurulu oluşturulması (İP-2 gereksinimi).", done: false },
-      { id: "T-29", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "İP-2: Akıllı Saat (Apple HealthKit / Google Health Connect) API", desc: "BPM, HRV, uyku evreleri, SpO2 ve adım verilerinin akıllı saatten otomatik çekilmesi.", done: false },
-      { id: "T-30", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "İP-2: Akıllı Saat Verilerinin Anne Tansiyonu ile Senkronizasyonu", desc: "HRV düşüşü ve nabız artışının tansiyon sıçramalarıyla korelasyon analitiği.", done: false },
-      { id: "T-31", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "İP-3: Eğitilmiş Python Modelinin FastAPI ile Uygulamaya Bağlanması", desc: "Makine öğrenimi motorunun mobil uygulamadan gelen canlı ölçümlere anlık anomali skoru üretmesi.", done: false },
-      { id: "T-32", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "İP-3: M1 Denver II / ASQ-3 & Prematüre Düzeltilmiş Yaş Algoritması", desc: "Bebeğin duyusal bağlanma oyunları ve prematüre düzeltilmiş persentil motorunun entegrasyonu.", done: false },
-      { id: "T-33", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "BiGG 1. Dönem İlerleme Raporu (AGY312) Teslimi", desc: "TÜBİTAK izleyicisine 6. ay teknik ve mali rapor sunumu.", done: false },
+      { id: "T-31", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "DEÜ Tıp Perinatoloji 3 Uzman Hekimle Klinik Protokol İmzası", desc: "F1 ≥ %90 raporumuz sunularak hekim danışma kurulu oluşturulması (İP-2 gereksinimi).", done: false },
+      { id: "T-32", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "İP-2: Akıllı Saat (Apple HealthKit / Google Health Connect) API", desc: "BPM, HRV, uyku evreleri, SpO2 ve adım verilerinin akıllı saatten otomatik çekilmesi.", done: false },
+      { id: "T-33", f: "F2", section: "9. Klinik Protokol & İP-2 Biyometrik API", title: "İP-2: Akıllı Saat Verilerinin Anne Tansiyonu ile Senkronizasyonu", desc: "HRV düşüşü ve nabız artışının tansiyon sıçramalarıyla korelasyon analitiği.", done: false },
+      { id: "T-34", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "İP-3: Eğitilmiş Python Modelinin FastAPI ile Uygulamaya Bağlanması", desc: "Makine öğrenimi motorunun mobil uygulamadan gelen canlı ölçümlere anlık anomali skoru üretmesi.", done: false },
+      { id: "T-35", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "İP-3: M1 Denver II / ASQ-3 & Prematüre Düzeltilmiş Yaş Algoritması", desc: "Bebeğin duyusal bağlanma oyunları ve prematüre düzeltilmiş persentil motorunun entegrasyonu.", done: false },
+      { id: "T-36", f: "F2", section: "10. İP-3 Yapay Zekâ Motoru (360.000 ₺)", title: "BiGG 1. Dönem İlerleme Raporu (AGY312) Teslimi", desc: "TÜBİTAK izleyicisine 6. ay teknik ve mali rapor sunumu.", done: false },
 
       // =========================================================================
       // FAZ 3: BİGG AY 7–9 · İP-4 & TÜBİTAK 1507 KÖPRÜSÜ (Kasım 2027 – Ocak 2028)
       // Bütçe: 340.000 TL (%25.2)
       // =========================================================================
-      { id: "T-34", f: "F3", section: "11. İP-4 Mobil Derleme & Lansman", title: "İP-4: React Native M0/M1 Çift Oturumlu Mobil Uygulama Derlemesi", desc: "Anne & Baba çift oturumlu, haptik titreşimli stabil mobil uygulamanın tamamlanması.", done: false },
-      { id: "T-35", f: "F3", section: "11. İP-4 Mobil Derleme & Lansman", title: "İP-4: 8.3 Hz Sesli AI Asistan & Kovan Sıfır Atık İmece Ağı", desc: "Duyusal regülasyon ses motoru ve aileler arası bebek eşyası takas ağının açılması.", done: false },
-      { id: "T-36", f: "F3", section: "11. İP-4 Mobil Derleme & Lansman", title: "100 Gebe ve Yeni Anne ile Kapalı Beta Testleri & Mağaza Lansmanı", desc: "TestFlight/Play Store testleri ve ToHUM v1.0 resmi genel indirmeye açılışı.", done: false },
-      { id: "T-37", f: "F3", section: "12. 1507 Hibe Köprüsü (Ölüm Vadisi Kalkanı)", title: "⚠️ KRİTİK: TÜBİTAK 1507 KOBİ Ar-Ge (2.4 Milyon TL) Başvurusu", desc: "BiGG'in 9. ayında başvuru yapılır. Amaç: BiGG bittiği gün 1507 fonu açılır; şirket sıfır nakit açığı yaşar.", done: false },
+      { id: "T-37", f: "F3", section: "11. İP-4 Mobil Derleme & Kovan Entegrasyonu", title: "İP-4: React Native Anne ve Baba Ayrı Menü Yığınlarının (Stack Navigator) Kodlanması", desc: "Tek login sonrası role göre Anne arayüzü veya Baba arayüzünün dinamik yüklenmesi.", done: false },
+      { id: "T-38", f: "F3", section: "11. İP-4 Mobil Derleme & Kovan Entegrasyonu", title: "İP-4: Kovan Modülü Cinsiyet Ayrışımlı Sohbet Odaları & Eşya Takası", desc: "Anneler Çemberi (Kadın-Kadına) ve Babalar Çemberi (Erkek-Erkeğe) izole sohbet kanallarının kodlanması.", done: false },
+      { id: "T-39", f: "F3", section: "11. İP-4 Mobil Derleme & Kovan Entegrasyonu", title: "İP-4: 8.3 Hz Sesli AI Asistan (Duyusal Regülasyon) Entegrasyonu", desc: "Sabah, öğle, akşam ve gece konuşan duyusal biyo-rezonans motorunun tamamlanması.", done: false },
+      { id: "T-40", f: "F3", section: "12. 1507 Hibe Köprüsü (Ölüm Vadisi Kalkanı)", title: "⚠️ KRİTİK: TÜBİTAK 1507 KOBİ Ar-Ge (2.4 Milyon TL) Başvurusu", desc: "BiGG'in 9. ayında başvuru yapılır. Amaç: BiGG bittiği gün 1507 fonu açılır; şirket sıfır nakit açığı yaşar.", done: false },
 
       // =========================================================================
-      // FAZ 4: BİGG AY 10–12 · İP-5, TİCARİ GELİRLER & HİBE KAPANIŞI (Şubat – Mayıs 2028)
+      // FAZ 4: BİGG AY 10–12 · İP-5, MAĞAZA YAYINI & KAPANIŞ (Şubat – Mayıs 2028)
       // Bütçe: 180.000 TL (%13.3)
       // =========================================================================
-      { id: "T-38", f: "F4", section: "13. İP-5 Güvenlik & Hibe Kapanışı", title: "İP-5: AES-256 Sızma Testleri & 250 Ailelik Pilot Doğrulama (SUS ≥ 75)", desc: "Siber güvenlik testlerinin sıfır açıkla geçilmesi ve ilk 5.000 organik kullanıcıya ulaşılması.", done: false },
-      { id: "T-39", f: "F4", section: "14. Ticari Gelirler & Melek Yatırım", title: "İzmir Özel Hastaneleri B2B Doğum Paketi & B2C Aile Paketi Gelirleri", desc: "Hastanelere kurumsal lisans ve aylık 199 TL B2C aboneliklerle düzenli nakit akışı oluşturulması.", done: false },
-      { id: "T-40", f: "F4", section: "14. Ticari Gelirler & Melek Yatırım", title: "BiGG 12. Ay Sonuç Raporu (AGY350) Kapanışı & TÜBİTAK 1507 Başlangıcı", desc: "BiGG %100 başarıyla kapatılır; 2.4M TL bütçeli 1507 sözleşmesi imzalanarak 2. yıl Ar-Ge'si başlar.", done: false }
+      { id: "T-41", f: "F4", section: "13. İP-5 Google Play & App Store Canlı Lansman Hattı", title: "Google Play Console & Apple Developer Kurumsal Hesaplarının Açılması", desc: "A.Ş. adına D-U-N-S numarası ile kurumsal mağaza hesaplarının açılması ve KVKK/GDPR gizlilik sözleşmelerinin yüklenmesi.", done: false },
+      { id: "T-42", f: "F4", section: "13. İP-5 Google Play & App Store Canlı Lansman Hattı", title: "Google Play 20 Test Kullanıcısı (14 Gün Kapalı Test Kuralı) & Apple TestFlight", desc: "250 ailelik pilot grupta SUS ≥ 75 kullanılabilirlik puanı ve sızma testlerinin sıfır açıkla tamamlanması.", done: false },
+      { id: "T-43", f: "F4", section: "13. İP-5 Google Play & App Store Canlı Lansman Hattı", title: "App Store & Google Play Store Resmi Canlı Lansmanı (v1.0 Yayında)", desc: "ToHUM'un genel indirmeye açılması; aylık 199 ₺ B2C Aile Paketi ve B2B hastane doğum paketi satışları.", done: false },
+      { id: "T-44", f: "F4", section: "14. Hibe Kapanışı & Melek Yatırım", title: "BiGG 12. Ay Sonuç Raporu (AGY350) Kapanışı & TÜBİTAK 1507 Başlangıcı", desc: "BiGG %100 başarıyla kapatılır; 2.4M TL bütçeli 1507 sözleşmesi imzalanarak 2. yıl Ar-Ge'si başlar.", done: false }
     ];
 
     let tasks = [];
     let currentFilter = 'all';
 
     function init() {
-      const savedTasks = localStorage.getItem('tohum_tasks_master_v6');
+      const savedTasks = localStorage.getItem('tohum_tasks_master_v9');
       if (savedTasks) {
         try {
           tasks = JSON.parse(savedTasks);
@@ -476,7 +519,7 @@ html_content = '''<!DOCTYPE html>
         tasks = JSON.parse(JSON.stringify(MASTER_TASKS_EXHAUSTIVE));
       }
 
-      const savedNotes = localStorage.getItem('tohum_notes_master_v6');
+      const savedNotes = localStorage.getItem('tohum_notes_master_v9');
       if (savedNotes) {
         document.getElementById('notesArea').value = savedNotes;
       }
@@ -486,7 +529,7 @@ html_content = '''<!DOCTYPE html>
     }
 
     function saveState() {
-      localStorage.setItem('tohum_tasks_master_v6', JSON.stringify(tasks));
+      localStorage.setItem('tohum_tasks_master_v9', JSON.stringify(tasks));
       render();
     }
 
@@ -540,11 +583,11 @@ html_content = '''<!DOCTYPE html>
       }
 
       const phases = [
-        { id: "F0", title: "Faz 0: Şirketsiz Ön Hazırlık · Kasım 2026 – Nisan 2027 (Jüri, M0 Doğrulaması & Mühür)" },
+        { id: "F0", title: "Faz 0: Şirketsiz Ön Hazırlık · Kasım 2026 – Nisan 2027 (Jüri, M0 Doğrulaması & Çift Oturum Tasarımı)" },
         { id: "F1", title: "Faz 1: BiGG 1–3. Ay · Mayıs – Temmuz 2027 (İP-1: Bulut Veritabanı & 3 Milyon TL Çift Fon)" },
         { id: "F2", title: "Faz 2: BiGG 4–6. Ay · Ağustos – Ekim 2027 (İP-2: Akıllı Saat API & İP-3: AI Seed Core)" },
-        { id: "F3", title: "Faz 3: BiGG 7–9. Ay · Kasım 2027 – Ocak 2028 (İP-4: Mobil Derleme & TÜBİTAK 1507 Başvurusu)" },
-        { id: "F4", title: "Faz 4: BiGG 10–12. Ay · Şubat – Mayıs 2028 (İP-5: Siber Güvenlik, Ticari Satış & Kapanış)" }
+        { id: "F3", title: "Faz 3: BiGG 7–9. Ay · Kasım 2027 – Ocak 2028 (İP-4: React Native Çift Menü, Kovan & TÜBİTAK 1507)" },
+        { id: "F4", title: "Faz 4: BiGG 10–12. Ay · Şubat – Mayıs 2028 (İP-5: Google Play / App Store Canlı Lansman & Kapanış)" }
       ];
 
       phases.forEach(p => {
@@ -608,10 +651,46 @@ html_content = '''<!DOCTYPE html>
 
     function saveNotes() {
       const val = document.getElementById('notesArea').value;
-      localStorage.setItem('tohum_notes_master_v6', val);
+      localStorage.setItem('tohum_notes_master_v9', val);
       const st = document.getElementById('saveStatus');
-      st.innerText = 'Kaydedildi';
-      setTimeout(() => { st.innerText = 'Kayıtlı'; }, 1500);
+      st.innerText = 'Kayıtlı';
+    }
+
+    function saveNotesExplicit() {
+      saveNotes();
+      const st = document.getElementById('saveStatus');
+      st.innerText = 'Başarıyla Kaydedildi! ✓';
+      st.className = 'text-[10px] text-[#4a5c4e] font-semibold';
+      setTimeout(() => {
+        st.innerText = 'Kayıtlı';
+        st.className = 'text-[10px] text-[#736d65]';
+      }, 2000);
+    }
+
+    function clearNotes() {
+      if (confirm('Tüm notları temizlemek istediğinizden emin misiniz?')) {
+        document.getElementById('notesArea').value = '';
+        localStorage.removeItem('tohum_notes_master_v9');
+        document.getElementById('saveStatus').innerText = 'Temizlendi';
+      }
+    }
+
+    function addNewTaskPrompt() {
+      const title = prompt('Yeni eylem / adım başlığı:');
+      if (!title || !title.trim()) return;
+      const desc = prompt('Kısa açıklama / not:', '');
+      const phase = prompt('Hangi Faz? (F0: Şu An, F1: Ay 1-3, F2: Ay 4-6, F3: Ay 7-9, F4: Ay 10-12):', currentFilter === 'all' ? 'F0' : currentFilter);
+      const section = prompt('Hangi Bölüm? (Örn: Anne Biyometrisi, Baba Destek, Kovan, İdari):', 'Özel Eklenen Görevler');
+
+      tasks.push({
+        id: "T-" + Date.now(),
+        f: (phase || 'F0').toUpperCase(),
+        section: section || 'Özel Eklenen Görevler',
+        title: title.trim(),
+        desc: (desc || '').trim(),
+        done: false
+      });
+      saveState();
     }
 
     // SIMULATION ENGINE (BASED ON TRAINED RANDOM FOREST ENSEMBLE WEIGHTS)
@@ -674,4 +753,4 @@ html_content = '''<!DOCTYPE html>
 with open(out_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("Generated exhaustive master checklist with 40 atomic steps!")
+print("Added + Adım Ekle button and explicit Kaydet button for notes!")
