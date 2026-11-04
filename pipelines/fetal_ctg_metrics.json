@@ -1,0 +1,108 @@
+{
+  "dataset": "UCI Cardiotocography / Fetal Health Prediction",
+  "n_samples": 2126,
+  "normal_count": 1655,
+  "suspect_count": 295,
+  "pathologic_count": 176,
+  "test_accuracy": 95.1,
+  "test_recall": 92.6,
+  "cv_mean_recall": 91.3,
+  "test_f1": 0.892,
+  "test_roc_auc": 0.99,
+  "confusion_matrix": {
+    "tn": 318,
+    "fp": 14,
+    "fn": 7,
+    "tp": 87
+  },
+  "group_stats": {
+    "LB": {
+      "desc": "Fetal Bazal Kalp Hızı (BPM)",
+      "mean_all": 133.3,
+      "mean_norm": 131.98,
+      "mean_path": 131.69,
+      "delta": -0.29,
+      "t_stat": 0.39,
+      "p_val": 0.6943292018869847
+    },
+    "AC": {
+      "desc": "Hızlanma / Akselerasyon Sayısı",
+      "mean_all": 2.72,
+      "mean_norm": 3.42,
+      "mean_path": 0.33,
+      "delta": -3.09,
+      "t_stat": 27.23,
+      "p_val": 5.930787450678241e-124
+    },
+    "UC": {
+      "desc": "Uterus Kasılma Sayısı",
+      "mean_all": 3.66,
+      "mean_norm": 3.98,
+      "mean_path": 3.26,
+      "delta": -0.72,
+      "t_stat": 2.73,
+      "p_val": 0.006966595895377353
+    },
+    "ASTV": {
+      "desc": "Anormal Kısa Süreli Değişkenlik (%)",
+      "mean_all": 46.99,
+      "mean_norm": 42.47,
+      "mean_path": 64.54,
+      "delta": 22.07,
+      "t_stat": -19.13,
+      "p_val": 1.0872187913732648e-48
+    },
+    "ALTV": {
+      "desc": "Anormal Uzun Süreli Değişkenlik (%)",
+      "mean_all": 9.85,
+      "mean_norm": 5.04,
+      "mean_path": 22.85,
+      "delta": 17.8,
+      "t_stat": -6.9,
+      "p_val": 8.400006897776733e-11
+    },
+    "DP": {
+      "desc": "Uzamış Deselerasyon Sayısı (Prolonged)",
+      "mean_all": 0.13,
+      "mean_norm": 0.04,
+      "mean_path": 1.02,
+      "delta": 0.98,
+      "t_stat": -11.86,
+      "p_val": 3.0893789546429427e-24
+    }
+  },
+  "top_features": [
+    {
+      "feature": "ASTV",
+      "importance": 16.4
+    },
+    {
+      "feature": "AC",
+      "importance": 13.7
+    },
+    {
+      "feature": "MSTV",
+      "importance": 10.6
+    },
+    {
+      "feature": "Mean",
+      "importance": 8.5
+    },
+    {
+      "feature": "ALTV",
+      "importance": 8.1
+    },
+    {
+      "feature": "Mode",
+      "importance": 5.3
+    },
+    {
+      "feature": "Median",
+      "importance": 4.9
+    },
+    {
+      "feature": "Variance",
+      "importance": 4.6
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "sample_size": 1080,
+  "caesarean_count": 551,
+  "caesarean_rate": 51.0,
+  "vaginal_count": 529,
+  "vaginal_rate": 49.0,
+  "stats_summary": {
+    "prior_cs": {
+      "or": 15.67,
+      "ci_lower": 9.71,
+      "ci_upper": 25.3,
+      "p_value": 9.855563611671423e-43,
+      "chi2": 187.75,
+      "tp": 210,
+      "fp": 341,
+      "tn": 509,
+      "fn": 20
+    },
+    "breech": {
+      "or": 10.26,
+      "ci_lower": 4.9,
+      "ci_upper": 21.5,
+      "p_value": 2.0069260106723332e-13,
+      "chi2": 54.0,
+      "tp": 75,
+      "fp": 476,
+      "tn": 521,
+      "fn": 8
+    },
+    "high_bp": {
+      "or": 2.17,
+      "ci_lower": 1.53,
+      "ci_upper": 3.08,
+      "p_value": 1.6413808940491002e-05,
+      "chi2": 18.57,
+      "tp": 109,
+      "fp": 442,
+      "tn": 475,
+      "fn": 54
+    },
+    "heart_prob": {
+      "or": 3.06,
+      "ci_lower": 2.1,
+      "ci_upper": 4.46,
+      "p_value": 2.8348016417615353e-09,
+      "chi2": 35.29,
+      "tp": 115,
+      "fp": 436,
+      "tn": 487,
+      "fn": 42
+    },
+    "premature": {
+      "or": 2.05,
+      "ci_lower": 1.41,
+      "ci_upper": 2.99,
+      "p_value": 0.00022375854698937763,
+      "chi2": 13.62,
+      "tp": 90,
+      "fp": 461,
+      "tn": 483,
+      "fn": 46
+    },
+    "age_ge_35": {
+      "or": 1.82,
+      "ci_lower": 1.3,
+      "ci_upper": 2.55,
+      "p_value": 0.0005575402980112692,
+      "chi2": 11.91,
+      "tp": 109,
+      "fp": 442,
+      "tn": 466,
+      "fn": 63
+    },
+    "age_ttest": {
+      "mean_cs": 29.4,
+      "std_cs": 5.7,
+      "mean_vag": 28.4,
+      "std_vag": 5.4,
+      "t_stat": 2.74,
+      "p_value": 0.006316024266193103
+    }
+  },
+  "vif_data": [
+    {
+      "feature": "Age",
+      "vif": 1.02,
+      "tolerance": 0.985,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Delivery_Number",
+      "vif": 1.19,
+      "tolerance": 0.837,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Delivery_Time",
+      "vif": 1.01,
+      "tolerance": 0.994,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Blood_Pressure",
+      "vif": 1.02,
+      "tolerance": 0.976,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Heart_Problem",
+      "vif": 1.02,
+      "tolerance": 0.981,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Prior_Caesarean",
+      "vif": 1.19,
+      "tolerance": 0.839,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "Breech_Presentation",
+      "vif": 1.01,
+      "tolerance": 0.99,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_results": {
+    "Logistic Regression": {
+      "accuracy_mean": 0.7454,
+      "accuracy_std": 0.0404,
+      "precision_mean": 0.8006,
+      "recall_mean": 0.6659,
+      "f1_mean": 0.7261,
+      "roc_auc_mean": 0.8137
+    },
+    "Random Forest": {
+      "accuracy_mean": 0.7528,
+      "accuracy_std": 0.0334,
+      "precision_mean": 0.8216,
+      "recall_mean": 0.6587,
+      "f1_mean": 0.7305,
+      "roc_auc_mean": 0.812
+    },
+    "Gradient Boosting (XGB/GBM)": {
+      "accuracy_mean": 0.7343,
+      "accuracy_std": 0.0329,
+      "precision_mean": 0.7892,
+      "recall_mean": 0.655,
+      "f1_mean": 0.7149,
+      "roc_auc_mean": 0.7914
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.7454,
+    "precision": 0.7778,
+    "recall": 0.7,
+    "f1_score": 0.7368,
+    "roc_auc": 0.7738,
+    "confusion_matrix": {
+      "tn": 84,
+      "fp": 22,
+      "fn": 33,
+      "tp": 77
+    }
+  },
+  "feature_importances": [
+    {
+      "feature": "Prior_Caesarean",
+      "importance": 0.3838
+    },
+    {
+      "feature": "Age",
+      "importance": 0.1923
+    },
+    {
+      "feature": "Breech_Presentation",
+      "importance": 0.11
+    },
+    {
+      "feature": "Heart_Problem",
+      "importance": 0.102
+    },
+    {
+      "feature": "Delivery_Time",
+      "importance": 0.0877
+    },
+    {
+      "feature": "Delivery_Number",
+      "importance": 0.0653
+    },
+    {
+      "feature": "Blood_Pressure",
+      "importance": 0.0589
+    }
+  ]
+}

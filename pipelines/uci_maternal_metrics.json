@@ -1,0 +1,102 @@
+{
+  "pipeline_script": "pipelines/pipeline_uci_maternal.py",
+  "n_samples": 1014,
+  "temperature_unit": "Celsius (°C)",
+  "variables_summary": {
+    "SystolicBP": {
+      "label": "Büyük Tansiyon (mmHg)",
+      "mean_overall": 113.2,
+      "std_overall": 18.4,
+      "min": 70.0,
+      "max": 160.0,
+      "mean_low": 105.87,
+      "mean_high": 124.19,
+      "delta": 18.33,
+      "t_stat": 12.57,
+      "p_value": 1.4435605796111342e-31
+    },
+    "DiastolicBP": {
+      "label": "Küçük Tansiyon (mmHg)",
+      "mean_overall": 76.46,
+      "std_overall": 13.89,
+      "min": 49.0,
+      "max": 100.0,
+      "mean_low": 72.53,
+      "mean_high": 85.07,
+      "delta": 12.54,
+      "t_stat": 11.68,
+      "p_value": 2.543674532364219e-28
+    },
+    "BS": {
+      "label": "Açlık Şekeri (mmol/L)",
+      "mean_overall": 8.73,
+      "std_overall": 3.29,
+      "min": 6.0,
+      "max": 19.0,
+      "mean_low": 7.22,
+      "mean_high": 12.12,
+      "delta": 4.9,
+      "t_stat": 19.22,
+      "p_value": 4.674392922397725e-53
+    },
+    "BodyTemp_C": {
+      "label": "Vücut Sıcaklığı (°C)",
+      "mean_overall": 37.04,
+      "std_overall": 0.76,
+      "min": 36.67,
+      "max": 39.44,
+      "mean_low": 36.87,
+      "mean_high": 37.17,
+      "delta": 0.29,
+      "t_stat": 4.85,
+      "p_value": 1.7119648103116602e-06
+    },
+    "HeartRate": {
+      "label": "İstirahat Nabzı (BPM)",
+      "mean_overall": 74.44,
+      "std_overall": 7.51,
+      "min": 60.0,
+      "max": 90.0,
+      "mean_low": 73.11,
+      "mean_high": 76.74,
+      "delta": 3.63,
+      "t_stat": 5.78,
+      "p_value": 1.33071703146091e-08
+    },
+    "Age": {
+      "label": "Anne Yaşı (Yıl)",
+      "mean_overall": 29.87,
+      "std_overall": 13.47,
+      "min": 10.0,
+      "max": 70.0,
+      "mean_low": 26.87,
+      "mean_high": 36.22,
+      "delta": 9.35,
+      "t_stat": 9.13,
+      "p_value": 1.1214154736654682e-18
+    }
+  },
+  "accuracy": 0.9458,
+  "recall": 0.8889,
+  "precision": 0.9057,
+  "f1_score": 0.8972,
+  "roc_auc": 0.9668,
+  "confusion_matrix": {
+    "tn": 144,
+    "fp": 5,
+    "fn": 6,
+    "tp": 48
+  },
+  "cv_recall_mean": 0.9521,
+  "cv_roc_auc_mean": 0.982,
+  "feature_importances": {
+    "BS": 0.342,
+    "SystolicBP": 0.1486,
+    "MAP": 0.1323,
+    "Age": 0.1192,
+    "DiastolicBP": 0.0809,
+    "HeartRate": 0.0734,
+    "BodyTemp_C": 0.0645,
+    "PP": 0.0391
+  }
+}

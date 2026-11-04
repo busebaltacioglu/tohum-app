@@ -1,0 +1,75 @@
+{
+  "dataset": "Parent & Baby Sleep Survey 2026 (71,149 parents)",
+  "n_samples": 71149,
+  "pct_sleep_under_6h": 82.5,
+  "pct_exhausted_or_drained": 75.5,
+  "peak_wakings_age_7_9m": 71.7,
+  "pct_fed_to_sleep": 64.9,
+  "pct_independent_sleep": 1.4,
+  "test_accuracy": 96.3,
+  "test_recall": 96.2,
+  "test_precision": 98.4,
+  "test_f1": 0.973,
+  "test_roc_auc": 0.995,
+  "cv_mean_roc_auc": 0.995,
+  "confusion_matrix": {
+    "tn": 4140,
+    "fp": 155,
+    "fn": 374,
+    "tp": 9561
+  },
+  "hypothesis_tests": {
+    "block_less_3h_burnout": 8.88,
+    "block_ge_3h_burnout": 5.14,
+    "t_stat_block": 339.98,
+    "p_val_block": 0.0,
+    "solo_mother_burnout_rate": 96.4,
+    "partner_shift_burnout_rate": 10.6,
+    "relative_risk_reduction_pct": 89.0,
+    "t_stat_partner": 251.59,
+    "p_val_partner": 0.0
+  },
+  "correlations": {
+    "unbroken_block_burnout": -0.93,
+    "total_sleep_burnout": -0.898,
+    "night_wakings_burnout": 0.533
+  },
+  "top_features": [
+    {
+      "feature": "longest_sleep_block",
+      "importance": 48.1
+    },
+    {
+      "feature": "parent_sleep_hours",
+      "importance": 24.1
+    },
+    {
+      "feature": "partner_support_level",
+      "importance": 16.9
+    },
+    {
+      "feature": "relationship_strain",
+      "importance": 5.0
+    },
+    {
+      "feature": "night_wakings",
+      "importance": 3.8
+    },
+    {
+      "feature": "infant_age_months",
+      "importance": 1.6
+    },
+    {
+      "feature": "rocked_to_sleep",
+      "importance": 0.2
+    },
+    {
+      "feature": "fed_to_sleep",
+      "importance": 0.2
+    },
+    {
+      "feature": "independent_sleep",
+      "importance": 0.0
+    }
+  ]
+}
