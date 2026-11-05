@@ -1,0 +1,279 @@
+{
+  "sample_size": 1500,
+  "ppd_count": 388,
+  "ppd_rate": 25.9,
+  "blues_count": 285,
+  "blues_rate": 19.0,
+  "normal_count": 827,
+  "normal_rate": 55.1,
+  "stats_summary": {
+    "low_social_support": {
+      "or": 5.16,
+      "ci_lower": 3.94,
+      "ci_upper": 6.75,
+      "p_value": 6.193770758765351e-36,
+      "chi2": 156.62,
+      "tp": 163,
+      "fp": 225,
+      "tn": 975,
+      "fn": 137
+    },
+    "sleep_distress_q7": {
+      "or": 7.5,
+      "ci_lower": 5.79,
+      "ci_upper": 9.72,
+      "p_value": 3.818899159716113e-59,
+      "chi2": 262.99,
+      "tp": 279,
+      "fp": 109,
+      "tn": 829,
+      "fn": 283
+    },
+    "nicu_history": {
+      "or": 3.54,
+      "ci_lower": 2.55,
+      "ci_upper": 4.9,
+      "p_value": 4.438764118235515e-15,
+      "chi2": 61.49,
+      "tp": 87,
+      "fp": 301,
+      "tn": 1028,
+      "fn": 84
+    },
+    "infant_colic": {
+      "or": 3.31,
+      "ci_lower": 2.57,
+      "ci_upper": 4.28,
+      "p_value": 6.5322033712991216e-21,
+      "chi2": 88.0,
+      "tp": 158,
+      "fp": 230,
+      "tn": 921,
+      "fn": 191
+    },
+    "caesarean": {
+      "or": 2.31,
+      "ci_lower": 1.81,
+      "ci_upper": 2.93,
+      "p_value": 8.697824471898517e-12,
+      "chi2": 46.6,
+      "tp": 256,
+      "fp": 132,
+      "tn": 604,
+      "fn": 508
+    },
+    "sleep_lt_5h": {
+      "or": 1.76,
+      "ci_lower": 1.38,
+      "ci_upper": 2.24,
+      "p_value": 6.924019326359472e-06,
+      "chi2": 20.21,
+      "tp": 151,
+      "fp": 237,
+      "tn": 816,
+      "fn": 296
+    },
+    "sleep_ttest": {
+      "mean_noppd": 5.8,
+      "std_noppd": 1.4,
+      "mean_ppd": 5.5,
+      "std_ppd": 1.5,
+      "diff_hours": 0.3,
+      "t_stat": 3.63,
+      "p_value": 0.000290588624864477
+    }
+  },
+  "vif_data": [
+    {
+      "feature": "age",
+      "vif": 1.01,
+      "tolerance": 0.988,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "delivery_type",
+      "vif": 1.09,
+      "tolerance": 0.915,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "nicu_history",
+      "vif": 1.08,
+      "tolerance": 0.93,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "social_support",
+      "vif": 1.24,
+      "tolerance": 0.809,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "infant_colic",
+      "vif": 1.16,
+      "tolerance": 0.866,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "sleep_hours",
+      "vif": 1.03,
+      "tolerance": 0.975,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q1_anhedonia",
+      "vif": 1.12,
+      "tolerance": 0.896,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q2_pessimism",
+      "vif": 1.12,
+      "tolerance": 0.893,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q3_guilt",
+      "vif": 1.14,
+      "tolerance": 0.875,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q4_anxious",
+      "vif": 1.21,
+      "tolerance": 0.83,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q5_panicky",
+      "vif": 1.13,
+      "tolerance": 0.883,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q6_overwhelmed",
+      "vif": 1.11,
+      "tolerance": 0.901,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q7_sleep_distress",
+      "vif": 1.23,
+      "tolerance": 0.812,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q8_sadness",
+      "vif": 1.17,
+      "tolerance": 0.857,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "q9_crying",
+      "vif": 1.14,
+      "tolerance": 0.879,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_results": {
+    "Logistic Regression": {
+      "accuracy_mean": 1.0,
+      "accuracy_std": 0.0,
+      "precision_mean": 1.0,
+      "recall_mean": 1.0,
+      "f1_mean": 1.0,
+      "roc_auc_mean": 1.0
+    },
+    "Random Forest": {
+      "accuracy_mean": 0.9247,
+      "accuracy_std": 0.0177,
+      "precision_mean": 0.981,
+      "recall_mean": 0.7237,
+      "f1_mean": 0.8298,
+      "roc_auc_mean": 0.9895
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.9487,
+      "accuracy_std": 0.0177,
+      "precision_mean": 0.9396,
+      "recall_mean": 0.8581,
+      "f1_mean": 0.8963,
+      "roc_auc_mean": 0.9911
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.9467,
+    "precision": 0.9429,
+    "recall": 0.8462,
+    "f1_score": 0.8919,
+    "roc_auc": 0.9897,
+    "confusion_matrix": {
+      "tn": 218,
+      "fp": 4,
+      "fn": 12,
+      "tp": 66
+    }
+  },
+  "feature_importances": [
+    {
+      "feature": "q4_anxious",
+      "importance": 0.1851
+    },
+    {
+      "feature": "q2_pessimism",
+      "importance": 0.131
+    },
+    {
+      "feature": "q7_sleep_distress",
+      "importance": 0.1279
+    },
+    {
+      "feature": "q3_guilt",
+      "importance": 0.1134
+    },
+    {
+      "feature": "q8_sadness",
+      "importance": 0.1091
+    },
+    {
+      "feature": "q6_overwhelmed",
+      "importance": 0.082
+    },
+    {
+      "feature": "q5_panicky",
+      "importance": 0.0775
+    },
+    {
+      "feature": "q1_anhedonia",
+      "importance": 0.0755
+    },
+    {
+      "feature": "q9_crying",
+      "importance": 0.0613
+    },
+    {
+      "feature": "sleep_hours",
+      "importance": 0.0146
+    },
+    {
+      "feature": "age",
+      "importance": 0.0121
+    },
+    {
+      "feature": "social_support",
+      "importance": 0.0052
+    },
+    {
+      "feature": "nicu_history",
+      "importance": 0.0027
+    },
+    {
+      "feature": "infant_colic",
+      "importance": 0.0018
+    },
+    {
+      "feature": "delivery_type",
+      "importance": 0.0009
+    }
+  ]
+}

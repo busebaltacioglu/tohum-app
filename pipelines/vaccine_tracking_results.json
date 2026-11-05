@@ -1,0 +1,159 @@
+{
+  "sample_size": 1050,
+  "delay_cases": 345,
+  "delay_pct": 32.86,
+  "fever_cases": 140,
+  "fever_pct": 13.33,
+  "odds_ratios": {
+    "no_reminder_on_delay": {
+      "or": 23.05,
+      "ci_lower": 16.45,
+      "ci_upper": 32.31,
+      "p_value": 1.2570701022363945e-93,
+      "chi2": 421.32,
+      "table": {
+        "tp": 280,
+        "fp": 111,
+        "fn": 65,
+        "tn": 594
+      }
+    },
+    "hesitancy_on_delay": {
+      "or": 5.61,
+      "ci_lower": 3.89,
+      "ci_upper": 8.09,
+      "p_value": 7.892975872259988e-23,
+      "chi2": 96.74,
+      "table": {
+        "tp": 105,
+        "fp": 51,
+        "fn": 240,
+        "tn": 654
+      }
+    }
+  },
+  "ttest_reminder_delay": {
+    "mean_no_reminder": 24.2,
+    "std_no_reminder": 7.4,
+    "mean_reminder": 7.1,
+    "std_reminder": 6.2,
+    "diff": 17.1,
+    "t_stat": 38.52,
+    "p_value": 4.3785081608204e-176
+  },
+  "vif_table": [
+    {
+      "feature": "infant_age_months",
+      "vif": 1.01,
+      "tolerance": 0.991,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "vaccine_dose_type",
+      "vif": 1.01,
+      "tolerance": 0.994,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "pre_vaccine_temp",
+      "vif": 1.01,
+      "tolerance": 0.988,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "hesitancy_score",
+      "vif": 1.01,
+      "tolerance": 0.995,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "reminder_active",
+      "vif": 1.01,
+      "tolerance": 0.989,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "previous_fever_history",
+      "vif": 1.02,
+      "tolerance": 0.983,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "is_preterm",
+      "vif": 1.01,
+      "tolerance": 0.99,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.8298,
+      "precision_mean": 0.6989,
+      "recall_mean": 0.855,
+      "f1_mean": 0.7676,
+      "roc_auc_mean": 0.9036
+    },
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.825,
+      "precision_mean": 0.6925,
+      "recall_mean": 0.8552,
+      "f1_mean": 0.7627,
+      "roc_auc_mean": 0.9036
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.8048,
+      "precision_mean": 0.7017,
+      "recall_mean": 0.7179,
+      "f1_mean": 0.7044,
+      "roc_auc_mean": 0.8875
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.8095,
+    "precision": 0.6706,
+    "recall": 0.8261,
+    "f1_score": 0.7403,
+    "roc_auc": 0.8996,
+    "confusion_matrix": {
+      "tn": 113,
+      "fp": 28,
+      "fn": 12,
+      "tp": 57
+    }
+  },
+  "regression_metrics": {
+    "target": "delay_days",
+    "mae_days": 3.45,
+    "r2_score": 0.826
+  },
+  "sfs_ranking": [
+    {
+      "feature": "reminder_active",
+      "importance_pct": 54.88
+    },
+    {
+      "feature": "hesitancy_score",
+      "importance_pct": 15.99
+    },
+    {
+      "feature": "pre_vaccine_temp",
+      "importance_pct": 10.96
+    },
+    {
+      "feature": "infant_age_months",
+      "importance_pct": 10.93
+    },
+    {
+      "feature": "is_preterm",
+      "importance_pct": 4.62
+    },
+    {
+      "feature": "vaccine_dose_type",
+      "importance_pct": 1.99
+    },
+    {
+      "feature": "previous_fever_history",
+      "importance_pct": 0.63
+    }
+  ]
+}

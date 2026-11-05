@@ -1,0 +1,173 @@
+{
+  "sample_size": 1050,
+  "success_count": 462,
+  "success_rate": 44.0,
+  "stats_summary": {
+    "stai_paired_ttest": {
+      "mean_pre": 54.2,
+      "std_pre": 9.7,
+      "mean_post": 45.8,
+      "std_post": 9.4,
+      "mean_drop": 8.4,
+      "t_stat": 59.95,
+      "p_value": 0.0
+    },
+    "hr_paired_ttest": {
+      "mean_pre": 84.7,
+      "std_pre": 8.8,
+      "mean_post": 79.8,
+      "std_post": 9.1,
+      "mean_drop": 4.8,
+      "t_stat": 59.42,
+      "p_value": 0.0
+    },
+    "or_alpha_8hz": {
+      "or": 32.05,
+      "ci_lower": 22.63,
+      "ci_upper": 45.38,
+      "p_value": 3.9298975572632717e-110,
+      "chi2": 497.17,
+      "tp": 361,
+      "fp": 101,
+      "tn": 529,
+      "fn": 59
+    },
+    "or_session_ge_15": {
+      "or": 3.25,
+      "ci_lower": 2.31,
+      "ci_upper": 4.57,
+      "p_value": 4.508305992778392e-12,
+      "chi2": 47.89,
+      "tp": 411,
+      "fp": 51,
+      "tn": 169,
+      "fn": 419
+    },
+    "or_high_baseline": {
+      "or": 0.86,
+      "ci_lower": 0.66,
+      "ci_upper": 1.1,
+      "p_value": 0.2569961765509682,
+      "chi2": 1.28,
+      "tp": 294,
+      "fp": 168,
+      "tn": 193,
+      "fn": 395
+    },
+    "or_third_trimester": {
+      "or": 0.78,
+      "ci_lower": 0.61,
+      "ci_upper": 1.01,
+      "p_value": 0.07017858192343633,
+      "chi2": 3.28,
+      "tp": 154,
+      "fp": 308,
+      "tn": 359,
+      "fn": 229
+    }
+  },
+  "vif_data": [
+    {
+      "feature": "maternal_age",
+      "vif": 1.01,
+      "tolerance": 0.99,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "gestational_stage",
+      "vif": 1.1,
+      "tolerance": 0.91,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "baseline_stai",
+      "vif": 1.21,
+      "tolerance": 0.827,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "baseline_hr",
+      "vif": 1.13,
+      "tolerance": 0.886,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "frequency_mode",
+      "vif": 1.0,
+      "tolerance": 0.997,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "session_minutes",
+      "vif": 1.01,
+      "tolerance": 0.995,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "regression_metrics": {
+    "mae_pts": 1.8,
+    "r2_score": 0.7287
+  },
+  "cv_results": {
+    "Logistic Regression": {
+      "accuracy_mean": 0.8467,
+      "precision_mean": 0.8278,
+      "recall_mean": 0.8248,
+      "f1_mean": 0.8258,
+      "roc_auc_mean": 0.9347
+    },
+    "Random Forest": {
+      "accuracy_mean": 0.8381,
+      "precision_mean": 0.8696,
+      "recall_mean": 0.7469,
+      "f1_mean": 0.8018,
+      "roc_auc_mean": 0.9287
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.8371,
+      "precision_mean": 0.8428,
+      "recall_mean": 0.775,
+      "f1_mean": 0.807,
+      "roc_auc_mean": 0.9232
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.8476,
+    "precision": 0.8659,
+    "recall": 0.7717,
+    "f1_score": 0.8161,
+    "roc_auc": 0.9338,
+    "confusion_matrix": {
+      "tn": 107,
+      "fp": 11,
+      "fn": 21,
+      "tp": 71
+    }
+  },
+  "feature_importances": [
+    {
+      "feature": "frequency_mode",
+      "importance": 0.6595
+    },
+    {
+      "feature": "session_minutes",
+      "importance": 0.1088
+    },
+    {
+      "feature": "baseline_stai",
+      "importance": 0.0951
+    },
+    {
+      "feature": "baseline_hr",
+      "importance": 0.085
+    },
+    {
+      "feature": "maternal_age",
+      "importance": 0.0434
+    },
+    {
+      "feature": "gestational_stage",
+      "importance": 0.0082
+    }
+  ]
+}

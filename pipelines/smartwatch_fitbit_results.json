@@ -1,0 +1,176 @@
+{
+  "sample_size": 1050,
+  "anomaly_cases": 192,
+  "anomaly_pct": 18.29,
+  "odds_ratios": {
+    "low_hrv_on_anomaly": {
+      "or": 48.64,
+      "ci_lower": 31.55,
+      "ci_upper": 74.99,
+      "p_value": 7.177545147004625e-110,
+      "chi2": 495.96,
+      "table": {
+        "tp": 147,
+        "fp": 54,
+        "fn": 45,
+        "tn": 804
+      }
+    },
+    "high_rhr_on_anomaly": {
+      "or": 35.63,
+      "ci_lower": 23.28,
+      "ci_upper": 54.53,
+      "p_value": 1.4355889872639563e-93,
+      "chi2": 421.06,
+      "table": {
+        "tp": 158,
+        "fp": 99,
+        "fn": 34,
+        "tn": 759
+      }
+    }
+  },
+  "ttest_rmssd": {
+    "mean_normal": 47.2,
+    "std_normal": 11.9,
+    "mean_anomaly": 22.3,
+    "std_anomaly": 10.8,
+    "diff": 25.0,
+    "t_stat": 28.5,
+    "p_value": 7.346388409959145e-88
+  },
+  "ttest_rhr": {
+    "mean_anomaly": 86.9,
+    "std_anomaly": 5.5,
+    "mean_normal": 74.5,
+    "std_normal": 6.3,
+    "diff": 12.4,
+    "t_stat": 27.41,
+    "p_value": 5.695891747902637e-85
+  },
+  "vif_table": [
+    {
+      "feature": "maternal_age",
+      "vif": 1.01,
+      "tolerance": 0.988,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "gestational_stage",
+      "vif": 1.36,
+      "tolerance": 0.735,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "daily_step_count",
+      "vif": 1.07,
+      "tolerance": 0.935,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "resting_heart_rate",
+      "vif": 1.56,
+      "tolerance": 0.64,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "hrv_rmssd",
+      "vif": 1.73,
+      "tolerance": 0.577,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "skin_temp_deviation",
+      "vif": 1.18,
+      "tolerance": 0.849,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "sleep_efficiency_pct",
+      "vif": 1.4,
+      "tolerance": 0.716,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "deep_sleep_ratio",
+      "vif": 1.25,
+      "tolerance": 0.8,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.9714,
+      "precision_mean": 0.8924,
+      "recall_mean": 0.9671,
+      "f1_mean": 0.9262,
+      "roc_auc_mean": 0.9961
+    },
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.9738,
+      "precision_mean": 0.9093,
+      "recall_mean": 0.9537,
+      "f1_mean": 0.9301,
+      "roc_auc_mean": 0.9976
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.9726,
+      "precision_mean": 0.9356,
+      "recall_mean": 0.9146,
+      "f1_mean": 0.9232,
+      "roc_auc_mean": 0.9945
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.9619,
+    "precision": 0.8947,
+    "recall": 0.8947,
+    "f1_score": 0.8947,
+    "roc_auc": 0.9922,
+    "confusion_matrix": {
+      "tn": 168,
+      "fp": 4,
+      "fn": 4,
+      "tp": 34
+    }
+  },
+  "regression_metrics": {
+    "target": "autonomic_resilience_score",
+    "mae_points": 2.83,
+    "r2_score": 0.9407
+  },
+  "sfs_ranking": [
+    {
+      "feature": "hrv_rmssd",
+      "importance_pct": 60.54
+    },
+    {
+      "feature": "sleep_efficiency_pct",
+      "importance_pct": 14.77
+    },
+    {
+      "feature": "resting_heart_rate",
+      "importance_pct": 12.21
+    },
+    {
+      "feature": "skin_temp_deviation",
+      "importance_pct": 9.56
+    },
+    {
+      "feature": "deep_sleep_ratio",
+      "importance_pct": 2.19
+    },
+    {
+      "feature": "maternal_age",
+      "importance_pct": 0.44
+    },
+    {
+      "feature": "daily_step_count",
+      "importance_pct": 0.24
+    },
+    {
+      "feature": "gestational_stage",
+      "importance_pct": 0.06
+    }
+  ]
+}
