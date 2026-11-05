@@ -1,0 +1,177 @@
+{
+  "sample_size": 1050,
+  "risk_cases": 129,
+  "risk_pct": 12.29,
+  "odds_ratios": {
+    "low_wet_diaper_on_risk": {
+      "or": 999.0,
+      "ci_lower": 999.0,
+      "ci_upper": 999.0,
+      "p_value": 4.379657298502882e-85,
+      "chi2": 382.08,
+      "table": {
+        "tp": 52,
+        "fp": 0,
+        "fn": 77,
+        "tn": 921
+      }
+    },
+    "long_feeding_interval_on_risk": {
+      "or": 18.91,
+      "ci_lower": 11.72,
+      "ci_upper": 30.52,
+      "p_value": 1.429492903526337e-49,
+      "chi2": 219.09,
+      "table": {
+        "tp": 57,
+        "fp": 37,
+        "fn": 72,
+        "tn": 884
+      }
+    }
+  },
+  "ttest_sleep": {
+    "mean_ideal": 14.85,
+    "std_ideal": 1.81,
+    "mean_risk": 14.27,
+    "std_risk": 2.17,
+    "diff": 0.58,
+    "t_stat": 3.31,
+    "p_value": 0.0009793274347568855
+  },
+  "vif_table": [
+    {
+      "feature": "infant_age_weeks",
+      "vif": 1.13,
+      "tolerance": 0.886,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "feeding_interval_hours",
+      "vif": 1.14,
+      "tolerance": 0.877,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "daily_milk_volume_ml",
+      "vif": 1.08,
+      "tolerance": 0.926,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "wet_diapers",
+      "vif": 1.07,
+      "tolerance": 0.932,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "dirty_diapers",
+      "vif": 1.01,
+      "tolerance": 0.994,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "total_sleep_hours",
+      "vif": 1.01,
+      "tolerance": 0.991,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "longest_sleep_block",
+      "vif": 1.05,
+      "tolerance": 0.948,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "night_awakenings",
+      "vif": 1.01,
+      "tolerance": 0.991,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "fussiness_hours",
+      "vif": 1.21,
+      "tolerance": 0.829,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.96,
+      "precision_mean": 0.7863,
+      "recall_mean": 0.9305,
+      "f1_mean": 0.8513,
+      "roc_auc_mean": 0.9896
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.9486,
+      "precision_mean": 0.7958,
+      "recall_mean": 0.7905,
+      "f1_mean": 0.7912,
+      "roc_auc_mean": 0.9898
+    },
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.8819,
+      "precision_mean": 0.5146,
+      "recall_mean": 0.8606,
+      "f1_mean": 0.6428,
+      "roc_auc_mean": 0.9428
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.9524,
+    "precision": 0.7353,
+    "recall": 0.9615,
+    "f1_score": 0.8333,
+    "roc_auc": 0.9912,
+    "confusion_matrix": {
+      "tn": 175,
+      "fp": 9,
+      "fn": 1,
+      "tp": 25
+    }
+  },
+  "regression_metrics": {
+    "target": "circadian_stability_score",
+    "mae": 3.57,
+    "r2_score": 0.6696
+  },
+  "sfs_ranking": [
+    {
+      "feature": "fussiness_hours",
+      "importance_pct": 37.94
+    },
+    {
+      "feature": "wet_diapers",
+      "importance_pct": 23.45
+    },
+    {
+      "feature": "feeding_interval_hours",
+      "importance_pct": 20.7
+    },
+    {
+      "feature": "total_sleep_hours",
+      "importance_pct": 9.98
+    },
+    {
+      "feature": "daily_milk_volume_ml",
+      "importance_pct": 3.1
+    },
+    {
+      "feature": "infant_age_weeks",
+      "importance_pct": 1.9
+    },
+    {
+      "feature": "dirty_diapers",
+      "importance_pct": 1.08
+    },
+    {
+      "feature": "longest_sleep_block",
+      "importance_pct": 1.06
+    },
+    {
+      "feature": "night_awakenings",
+      "importance_pct": 0.79
+    }
+  ]
+}

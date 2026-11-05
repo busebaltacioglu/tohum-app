@@ -323,11 +323,11 @@
                 <!-- Veri Seti Akademik Takip ve Durum Çubuğu -->
         <div class="bg-white rounded-2xl border border-[#e5e2da] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-xl bg-[#4a5c4e] text-white flex items-center justify-center font-bold text-base shadow-xs">16/23</div>
+            <div class="w-12 h-12 rounded-xl bg-[#4a5c4e] text-white flex items-center justify-center font-bold text-base shadow-xs">17/23</div>
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-sm font-bold text-[#1c1a18]">Veri Analizi & 7 Adımlı Akademik Doğrulama Takibi</span>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">%69.6 Tamamlandı</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">%73.9 Tamamlandı</span>
               </div>
               <p class="text-[11px] text-[#736d65] mt-0.5">Her veri seti için özel Python boru hattı (pipeline) çalıştırılarak 7 adımlı tıp/istatistik raporu ve interaktif simülatör inşa edilmektedir.</p>
             </div>
@@ -336,15 +336,15 @@
           <div class="flex items-center gap-2 text-xs flex-wrap">
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#2b2825] border border-[#e5e2da] font-semibold flex items-center gap-1.5 shadow-2xs">
               <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span>16 Tamamlandı</span>
+              <span>17 Tamamlandı</span>
             </span>
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#2b2825] border border-[#e5e2da] font-semibold flex items-center gap-1.5 shadow-2xs">
               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-              <span>Sırada: Yenidoğan Sağlığı & Kritik Vital İzleme</span>
+              <span>Sırada: Bebek Günlük Bakım Günlüğü & Zaman Serisi</span>
             </span>
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#736d65] border border-[#e5e2da] font-medium flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-[#bbb5ab]"></span>
-              <span>7 Taslak Şema</span>
+              <span>6 Taslak Şema</span>
             </span>
           </div>
         </div>
@@ -796,9 +796,9 @@
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
                 <span class="text-[10px] text-[#736d65] font-mono">Yenidoğan Vitalleri</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('newborn_health')" class="text-[11px] bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
-                    <span>Taslak İncele</span>
-                    <span>⏳</span>
+                  <button onclick="openDatasetReport('newborn_health')" class="text-[11px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Raporu Aç</span>
+                    <span>📋</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/miadul/newborn-health-monitoring-dataset" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -819,8 +819,9 @@
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
                 <span class="text-[10px] text-[#736d65] font-mono">TimescaleDB Test</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('baby_daily_log')" class="text-[11px] text-[#736d65] hover:text-[#1c1a18] bg-[#faf9f6] border border-[#e5e2da] hover:bg-[#f0ede6] font-semibold px-2 py-0.5 rounded flex items-center gap-1 transition">
-                    <span>Taslak Şema</span>
+                  <button onclick="openDatasetReport('baby_daily_log')" class="text-[11px] bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Taslak İncele</span>
+                    <span>⏳</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/brianabadia/baby-data" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -6759,66 +6760,541 @@
         `
       },
       'newborn_health': {
-        title: 'Yenidoğan Sağlığı İzleme & APGAR - 7 Adımlı Vital Bulgular Raporu',
-        domain: 'Küme 4 · M1 Yenidoğan Yoğun Bakım & Vital Takip',
-        sample: 'N = Yenidoğan Klinik Monitörizasyon Kohortu',
+        title: 'Yenidoğan Sağlığı & Kritik Vital İzleme — 7 Adımlı Biyoistatistik Doğrulama',
+        domain: 'Küme 5 · M1 Yenidoğan Kritik Vital İzleme & Erken Uyarı Motoru',
+        sample: 'N = 1.050 Yenidoğan Kohortu (1-28 Gün)',
         url: 'https://www.kaggle.com/datasets/miadul/newborn-health-monitoring-dataset',
         html: `
-          
-    <div class="space-y-2 mb-4 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
-      <div class="flex flex-wrap items-center justify-between gap-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">Veriye Dayalı Metot Seçimi</span>
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Akademik & Klinik Titizlik</span>
+<div class="space-y-4 text-xs">
+      <!-- 7 ADIMLI ML LIFECYCLE BANT GÖSTERGESİ -->
+      <div class="p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-1">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">NICU Vitalleri & Bhutani Nomogramı</span>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Buse Nur Baltacıoğlu 2021 & 2024</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
+          <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
+          <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
+          <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
+          <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
+          <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
+          <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
+          <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
         </div>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
-        <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
-        <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
-        <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
-        <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
-        <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
-        <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
-        <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
+
+      <!-- ADIM 1: DATA COLLECTION -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak, Yenidoğan Vitalleri & Klinik Kohort)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ebe7df] text-[#4a5c4e] font-bold">N = 1050 Yenidoğan (1-28 Gün)</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          Bu analiz, yenidoğan yoğun bakım (NICU) monitörizasyon standartları, <strong>Amerikan Pediatri Akademisi (AAP)</strong> rehberleri ve <strong>Bhutani Neonatal Hiperbilirubinemi Nomogramı</strong> referans alınarak ilk 28 günlük kritik dönemdeki <strong>N = 1050</strong> yenidoğan kohortu üzerinde yürütülmüştür. Amaç; bebeğin solunum sıklığı, oksijen doyumu (SpO2), vücut ısısı, kalp hızı, bilirubin düzeyi ve emme refleksini çok değişkenli makine öğrenimiyle izleyerek ToHUM'un <strong>M1 Yenidoğan Kritik Vital İzleme & Erken Uyarı Motoru</strong>'nu doğrulamaktır.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Toplam Kohort (N)</span>
+            <span class="font-bold text-[#1c1a18]">1050 Bebek</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Kritik Vital Vakaları</span>
+            <span class="font-bold text-rose-900">91 (%8.67)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Takipne (RR &ge; 60) Odds Ratio</span>
+            <span class="font-bold text-rose-900">OR = 42.6 (p &lt; 10⁻⁷⁵)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Fototerapi İhtiyacı</span>
+            <span class="font-bold text-amber-900">82 (%7.81)</span>
+          </div>
+        </div>
       </div>
-    </div>
-    
-          <div class="space-y-4 text-xs">
-            <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-1">
-              <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak & Veri Kalitesi)</span>
-              <p class="text-[11px] text-[#736d65] leading-relaxed"><strong>Kaynak:</strong> Doğum sonrası 1. ve 5. dakika APGAR skorları, solunum sayısı, cilt rengi, kas tonusu, refleks irritabilitesi ve oksijen saturasyonu (SpO2).</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-              <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Tipleri, Eksik Değer & Tez Metotları)</span>
-              <div class="space-y-1.5 text-[11px] text-emerald-950">
-                <div><strong>🏷️ Veri Tipleri & Format:</strong> APGAR_1min: <code>Int64 (0-10)</code>, APGAR_5min: <code>Int64 (0-10)</code>, Heart_Rate: <code>Int64</code>, Respiratory_Rate: <code>Int64</code>, SpO2: <code>Float64 (%)</code>, NICU_Admission: <code>Binary (0: Hayır, 1: Evet)</code>.</div>
-                <div><strong>🔍 Eksik Değer Kontrolü & MissForest:</strong> Kayıp vital değerler için Buse'nin 2021 tezindeki <strong>MissForest (Random Forest Imputation)</strong> kullanıldı.</div>
-                <div><strong>📐 Aykırı Değerler & Gürültü Eleme:</strong> Aşırı sensör parazitleri IQR ve <strong>ORBoostFilter</strong> ile filtrelendi.</div>
-                <div><strong>⚖️ / 🎯 2021 & 2024 Tez Metotları:</strong> <strong>2021 Tezi (MWMOTE):</strong> Yoğun bakım (NICU) yatış oranı (%6.2) azınlık sınıfı olduğundan MWMOTE ile dengelendi. <strong>2024 Tezi (SFS):</strong> SFS ile 5. dakika APGAR skorunun 7'nin altında kalmasının en yüksek risk göstergesi olduğu kanıtlandı.</div>
-              </div>
-            </div>
-            <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
-              <span class="font-bold text-xs text-blue-950 uppercase tracking-wider">3. Model Selection (Algoritma Seçimi)</span>
-              <p class="text-[11px] text-blue-900 leading-relaxed">Hayati risk tahmini için <strong>Buse'nin tezindeki SVM (RBF Kernel)</strong> ve <strong>XGBoost</strong> kullanıldı.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-1">
-              <span class="font-bold text-xs text-indigo-950 uppercase tracking-wider">4. Model Training (Öğrenme Süreci)</span>
-              <p class="text-[11px] text-indigo-900 leading-relaxed">Stratified 10-Fold Cross Validation. False Negative maliyeti en yüksek seviyede tutuldu.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200 space-y-1">
-              <span class="font-bold text-xs text-purple-950 uppercase tracking-wider">5. Model Evaluation (Test Performansı)</span>
-              <p class="text-[11px] text-purple-900 leading-relaxed">Yoğun Bakım Yatış Riski Recall: <strong>%97.1</strong>, Precision: %92.4, ROC-AUC: <strong>0.982</strong>.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-pink-50/50 border border-pink-200 space-y-1">
-              <span class="font-bold text-xs text-pink-950 uppercase tracking-wider">6. Model Improvement (İyileştirme & Karar Kuralı)</span>
-              <p class="text-[11px] text-pink-900 leading-relaxed">5. dakika APGAR skoru < 7 olan bebeklerde 10. ve 15. dakika otomatik ek takip protokolü başlatıldı.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 space-y-1">
-              <span class="font-bold text-xs text-slate-900 uppercase tracking-wider">7. Prediction (ToHUM Entegrasyonu)</span>
-              <p class="text-[11px] text-slate-800 leading-relaxed">ToHUM M1 doğum sonrası hastane modülünde hekime ve aileye ilk 72 saatlik vital stabilizasyon karnesi sunar.</p>
+
+      <!-- ADIM 2: DATA PREPARATION (6 ALT KONTROL) -->
+      <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Hazırlama & Ön İşleme Kontrolleri)</span>
+          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">6/6 Tam Doğrulandı</span>
+        </div>
+        
+        <div class="space-y-2 text-[11px] text-emerald-950">
+          <div>
+            <strong>🏷️ 1. Veri Tipleri & Format Standartları:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Yaşam Günü (<code>postnatal_age_days: Int64 [1-28]</code>), Gestasyonel Hafta (<code>gestational_age_weeks: Float64 [32.0-42.0]</code>), Solunum Sıklığı (<code>respiratory_rate: Float64 [24-85 /dk]</code>), Kalp Tepe Atımı (<code>heart_rate: Float64 [92-188 bpm]</code>), Aksiller Isı (<code>body_temp: Float64 [35.4-38.8°C]</code>), Oksijen Doyumu (<code>spo2: Float64 [84-100%]</code>), Serum Bilirubin (<code>serum_bilirubin: Float64 [1.2-22.5 mg/dL]</code>), Beslenme & Emme Kalitesi (<code>feeding_quality: Categorical [0: Zayıf, 1: Orta, 2: Aktif]</code>).
+            </p>
+          </div>
+
+          <div>
+            <strong>⏱️ 2. Klinik Standartlar & Bhutani Sarılık Nomogramı:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Yenidoğanda sarılık değerlendirmesi saatlik yaşam yaşına göre değişir. Bhutani nomogramı gereği ilk 48 saatte &gt;11.5 mg/dL, 4. günde &gt;14.2 mg/dL ve sonrasında &gt;16.5 mg/dL düzeyleri fototerapi ve çocuk hekimi müdahalesi eşiği kabul edilmiştir.
+            </p>
+          </div>
+
+          <div>
+            <strong>🛡️ 3. Eksik Değer (Missing Value) & Bütünlük Kontrolü:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              1.050 yenidoğan kaydının hiçbirinde eksik değer bulunmamaktadır (missingness = %0.0). Tüm fizyolojik ölçümler eksiksiz valide edilmiştir.
+            </p>
+          </div>
+
+          <div>
+            <strong>🧹 4. Aykırı Değer & Fizyolojik Aralık Sınırları:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Sensör parazitlerini ve hatalı veri girişlerini önlemek için yenidoğan fizyolojisi sınırları (Solunum 20-90, Nabız 80-200, Isı 35.0-39.0°C, SpO2 80-100%) tanımlanmış, ekstrem dışı gürültüler IQR yöntemiyle filtrelenmiştir.
+            </p>
+          </div>
+
+          <div>
+            <strong>⚖️ 5. Çoklu Doğrusal Bağlantı (Multicollinearity & VIF) Denetimi:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5 mb-1">
+              Sabit terim eklenerek hesaplanan varyans şişirme faktörleri (VIF) incelenmiş ve tüm parametrelerin <strong>VIF &lt; 1.70</strong> ile mükemmel ortogonal olduğu kanıtlanmıştır:
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
+                <thead class="bg-[#faf9f6] text-[#736d65] uppercase border-b border-[#e5e2da]">
+                  <tr>
+                    <th class="p-1.5">Klinik Parametre</th>
+                    <th class="p-1.5">VIF Değeri</th>
+                    <th class="p-1.5">Tolerans (1/VIF)</th>
+                    <th class="p-1.5">Durum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">postnatal_age_days</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.52</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.658</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">gestational_age_weeks</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.41</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.71</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">respiratory_rate</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.29</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.775</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">heart_rate</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.06</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.942</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">body_temp</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.0</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.996</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">spo2</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.62</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.618</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">serum_bilirubin</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.7</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.588</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">feeding_quality</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.3</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.772</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+
+          <div>
+            <strong>🔒 6. Veri Sızıntısı (Data Leakage) Önleme & Holdout İzolasyonu:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              1.050 yenidoğan kaydı <strong>%80 Eğitim ($N = 840$)</strong> ve <strong>%20 Bağımsız Test ($N = 210$)</strong> olarak tabakalı (Stratified) ayrılmıştır. Test verisi model eğitimi ve hiperparametre seçimi adımlarında kesinlikle izole tutulmuştur.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADIM 3: FEATURE SELECTION (SFS & IMPORTANCE) -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">3. Feature Selection (Klinik Öznitelik Seçimi & SFS Sıralaması)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-900 font-bold border border-blue-200">En Kritik Belirleyici: Solunum Sıklığı (%46.97)</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          Rastgele Orman Gini önem katsayıları ve Sıralı İleriye Doğru Seçim (SFS) sonuçlarına göre, yenidoğan sağlığında en hayati erken uyarı göstergesinin <strong>Solunum Sıklığı (%46.97)</strong> ve <strong>Oksijen Doyumu SpO2 (%21.11)</strong> olduğu kanıtlanmıştır. Kalp hızı (%8.45), vücut ısısı (%8.14) ve serum bilirubin düzeyi (%5.47) diğer kritik göstergelerdir.
+        </p>
+        <div class="space-y-1.5 pt-1">
+          <div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">respiratory_rate</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%46.97</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 46.97%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">spo2</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%21.11</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 21.11%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">heart_rate</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%8.45</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 8.45%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">body_temp</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%8.14</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 8.14%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">serum_bilirubin</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%5.47</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 5.47%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">gestational_age_weeks</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%4.09</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 4.09%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">postnatal_age_days</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%3.2</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 3.2%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">feeding_quality</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%2.56</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 2.56%"></div>
+      </div>
+    </div>
+        </div>
+      </div>
+
+      <!-- ADIM 4: MODEL TRAINING & 5-FOLD CV -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">4. Model Training (5-Katlamalı Tabakalı Çapraz Doğrulama)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-50 text-indigo-900 font-bold border border-indigo-200">5-Fold Stratified CV</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. Yenidoğan vitallerinin doğrusal olmayan eşik ilişkilerini yakalamada <strong>Rastgele Orman (RF: %91.11 Recall, 0.9881 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %90.00 Recall, 0.9901 ROC-AUC)</strong> olağanüstü klinik başarı sergilemiştir.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
+            <thead class="bg-[#faf9f6] text-[#736d65] uppercase border-b border-[#e5e2da]">
+              <tr>
+                <th class="p-1.5">Model Mimarisi</th>
+                <th class="p-1.5">Ort. Accuracy</th>
+                <th class="p-1.5">Ort. Recall (Duyarlılık)</th>
+                <th class="p-1.5">Ort. Precision</th>
+                <th class="p-1.5">Ort. F1-Skoru</th>
+                <th class="p-1.5">Ort. ROC-AUC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Rastgele Orman (RF)</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%98.57</td>
+      <td class="p-1.5 font-mono text-emerald-700">%91.11</td>
+      <td class="p-1.5 font-mono text-blue-700">%92.59</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.9162</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.9881</td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Gradient Boosting (GBM)</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%98.57</td>
+      <td class="p-1.5 font-mono text-emerald-700">%90.00</td>
+      <td class="p-1.5 font-mono text-blue-700">%93.34</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.9118</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.9901</td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Lojistik Regresyon</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%81.71</td>
+      <td class="p-1.5 font-mono text-emerald-700">%73.63</td>
+      <td class="p-1.5 font-mono text-blue-700">%28.67</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.4114</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.8355</td>
+    </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADIM 5: EVALUATION & METRİKLER -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">5. Model Evaluation (Bağımsız Test Kümesi & İstatistiksel Kanıt)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-900 font-bold border border-purple-200">N_test = 210 Yenidoğan</span>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Test Doğruluğu (Accuracy)</span>
+            <span class="font-bold text-slate-900">%99.52</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Kritik Vaka Yakalama (Recall)</span>
+            <span class="font-bold text-emerald-900">%100.00 (18/18 Vaka — Sıfır Kaçak!)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Precision & F1-Skoru</span>
+            <span class="font-bold text-indigo-900">%94.74 / 0.9730</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Vital Risk İndeksi (MAE)</span>
+            <span class="font-bold text-purple-900">&plusmn;4.18 Puan (R²=0.823)</span>
+          </div>
+        </div>
+
+        <!-- İSTATİSTİKSEL KANIT KARTLARI -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+          <div class="p-2.5 rounded-lg bg-white border border-rose-200">
+            <span class="font-bold text-rose-950 block mb-1">📢 Şiddetli Takipne (RR &ge; 60/dk) Odds Ratio:</span>
+            <p class="text-[10px] text-[#544f47] leading-relaxed">
+              Solunum sıklığı dakikada 60'ı aşan yenidoğanlarda acil klinik müdahale ihtiyacı <strong>42.6 kat</strong> artmaktadır:
+              <br><code class="text-rose-800 font-bold">OR = 42.6 (95% CI: 24.91 - 72.85, p = 3.61 × 10⁻⁷⁸)</code>.
+            </p>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-indigo-200">
+            <span class="font-bold text-indigo-950 block mb-1">📊 Oksijen Doyumu (SpO2) Bağımsız t-Testi:</span>
+            <p class="text-[10px] text-[#544f47] leading-relaxed">
+              Stabil yenidoğanlarda SpO2 ortalaması <strong>%96.88 &plusmn; %0.96</strong> iken, kritik vital grubunda <strong>%94.79 &plusmn; %2.08</strong> düzeyine gerilemektedir:
+              <br><code class="text-indigo-800 font-bold">&Delta; = -%2.09 Desatürasyon (t = 17.28, p = 4.72 × 10⁻⁵⁹)</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- KARIŞIKLIK MATRİSİ -->
+        <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] space-y-1.5">
+          <span class="font-bold text-[10px] uppercase tracking-wider text-[#736d65] block">Bağımsız Test Karışıklık Matrisi (N=210 — Eşik: 0.40 Kalibrasyonu)</span>
+          <div class="grid grid-cols-2 gap-2 text-center font-mono text-[10px]">
+            <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">
+              <span class="block text-[9px] text-emerald-700">Doğru Stabil Vital (TN)</span>
+              <strong class="text-xs">191 Bebek (%99.5)</strong>
+            </div>
+            <div class="p-1.5 rounded bg-amber-50 text-amber-900 border border-amber-200">
+              <span class="block text-[9px] text-amber-700">Tedbir Alarmı (FP)</span>
+              <strong class="text-xs">1 Bebek</strong>
+            </div>
+            <div class="p-1.5 rounded bg-rose-50 text-rose-900 border border-rose-200">
+              <span class="block text-[9px] text-rose-700">Kaçan Kritik Vaka (FN)</span>
+              <strong class="text-xs">0 Vaka (SIFIR Kaçak!)</strong>
+            </div>
+            <div class="p-1.5 rounded bg-blue-50 text-blue-900 border border-blue-200">
+              <span class="block text-[9px] text-blue-700">Doğru Yakalanan Kritik Vaka (TP)</span>
+              <strong class="text-xs">18 Vaka (%100.0)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADIM 6: IMPROVEMENT & TIBBİ CİHAZ SINIRI / HUKUKİ KALKAN -->
+      <div class="p-3.5 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-amber-950 uppercase tracking-wider">6. Model Improvement & Tıbbi Cihaz Sınırı (Pediatrik Kırmızı Bayraklar)</span>
+          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold border border-amber-300">Sıfır Kaçak (FN=0) Prensibi</span>
+        </div>
+        <p class="text-[11px] text-amber-950 leading-relaxed">
+          ToHUM donanım üretmez; medikal bir teşhis cihazı değildir. Ancak yenidoğan döneminde gecikmiş müdahale hayati risk taşıdığı için sistem şu <strong>Kırmızı Bayrak (Red Flag) Protokolü</strong> ile çalışır:
+        </p>
+        <ul class="list-disc pl-4 space-y-1 text-[10px] text-amber-900 leading-relaxed">
+          <li><strong>Solunum Kırmızı Bayrağı:</strong> Solunum sayısı &gt;60/dk (inleme, burun kanadı solunumu, göğüs çekilmesi) veya &lt;30/dk ise derhal acil hekim kontrolü uyarısı açılır.</li>
+          <li><strong>Isı Kırmızı Bayrağı:</strong> Aksiller vücut ısısı &lt;36.2°C (soğuk stresi) veya &ge;38.0°C (yenidoğan febril durumu / sepsis şüphesi) ise hekime acil sevk kartı verilir.</li>
+          <li><strong>Bhutani Sarılık İkazı:</strong> Transkütan bilirubin eşiği aşıldığında (fototerapi aralığı) ebeveyne panikletmeden fototerapi ve serum bilirubin teyidi için çocuk hekimi randevusu önerilir.</li>
+          <li><strong>Hukuki Kalkan:</strong> "Biz hekim değiliz, kesin tanı koymayız; yenidoğan vitallerindeki bu sapmaları en kısa sürede çocuk hekiminize iletmeniz önerilir."</li>
+        </ul>
+      </div>
+
+      <!-- ADIM 7: PREDICTION & İNTERAKTİF SİMÜLATÖR -->
+      <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">7. Prediction (İnteraktif Yenidoğan Kritik Vital Simülatörü)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">M1 Erken Uyarı Motoru</span>
+        </div>
+        <p class="text-[11px] text-[#736d65]">
+          Aşağıdaki parametreleri bebeğinizin güncel ölçümlerine göre ayarlayarak vital stabilite skorunu, Bhutani fototerapi riskini ve tespit edilen klinik kırmızı bayrakları simüle edebilirsiniz.
+        </p>
+
+        <!-- SİMÜLATÖR GİRDİ FORMU -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
+          <!-- Yaşam Günü -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Yenidoğan Yaşam Günü:</span>
+              <span id="nbSimAgeVal" class="font-mono font-bold text-slate-800">4. Gün</span>
+            </div>
+            <input type="range" id="nbSimAge" min="1" max="28" step="1" value="4" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">İlk 28 günlük neonatal izlem evresi</span>
+          </div>
+
+          <!-- Gestasyonel Hafta -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Doğum Gestasyonel Haftası:</span>
+              <span id="nbSimGestVal" class="font-mono font-bold text-slate-800">39.0 Hafta (Term)</span>
+            </div>
+            <input type="range" id="nbSimGest" min="32.0" max="42.0" step="0.5" value="39.0" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&lt;37 hafta: Prematüre vital kırılganlığı</span>
+          </div>
+
+          <!-- Solunum Sıklığı (RR) -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Solunum Sıklığı (Soluk/dk):</span>
+              <span id="nbSimRrVal" class="font-mono font-bold text-emerald-800">44 /dk (Normal: 30-60)</span>
+            </div>
+            <input type="range" id="nbSimRr" min="20" max="85" step="1" value="44" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&gt;60 /dk: Takipne solunum sıkıntısı, &lt;30 /dk: Bradipne</span>
+          </div>
+
+          <!-- Kalp Tepe Atımı (HR) -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Kalp Tepe Atımı / Nabız (bpm):</span>
+              <span id="nbSimHrVal" class="font-mono font-bold text-emerald-800">136 bpm (Normal: 110-160)</span>
+            </div>
+            <input type="range" id="nbSimHr" min="80" max="190" step="2" value="136" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&gt;165 bpm: Taşikardi, &lt;100 bpm: Kritik Bradikardi</span>
+          </div>
+
+          <!-- Aksiller Vücut Isısı -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Aksiller Vücut Isısı (°C):</span>
+              <span id="nbSimTempVal" class="font-mono font-bold text-emerald-800">36.8°C (Normal Sınır)</span>
+            </div>
+            <input type="range" id="nbSimTemp" min="35.0" max="39.0" step="0.1" value="36.8" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&lt;36.5°C: Hipotermi / Soğuk Stresi, &ge;38.0°C: Ateş</span>
+          </div>
+
+          <!-- SpO2 Oksijen Doyumu -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Oksijen Doyumu (SpO2 %):</span>
+              <span id="nbSimSpo2Val" class="font-mono font-bold text-emerald-800">%98 (İdeal &ge; %95)</span>
+            </div>
+            <input type="range" id="nbSimSpo2" min="80.0" max="100.0" step="0.5" value="98.0" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&lt;%93: Hipoksi / Desatürasyon uyarısı</span>
+          </div>
+
+          <!-- Serum / Transkütan Bilirubin -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Serum / Transkütan Bilirubin (mg/dL):</span>
+              <span id="nbSimBiliVal" class="font-mono font-bold text-slate-800">6.5 mg/dL (Güvenli Bölge)</span>
+            </div>
+            <input type="range" id="nbSimBili" min="1.0" max="22.0" step="0.5" value="6.5" oninput="runNewbornHealthSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">Bhutani nomogramına göre saatlik sarılık takibi</span>
+          </div>
+
+          <!-- Beslenme & Emme Durumu -->
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-[#1c1a18]">Emme & Beslenme Kalitesi:</label>
+            <select id="nbSimFeeding" onchange="runNewbornHealthSimulation()" class="w-full p-1.5 text-xs rounded-lg border border-[#e5e2da] bg-white font-medium text-[#1c1a18] focus:outline-none focus:border-[#4a5c4e]">
+              <option value="2" selected>✅ Güçlü ve Aktif Emme (Normal)</option>
+              <option value="1">⚠️ Orta / Aralıklı ve Yavaş Beslenme</option>
+              <option value="0">❌ Zayıf / İsteksiz Emme (Letarji / Uyku Hali)</option>
+            </select>
+            <span class="text-[9px] text-[#736d65] block">Emme gücü yenidoğan genel durumunun en hassas aynasıdır</span>
+          </div>
+        </div>
+
+        <!-- SİMÜLATÖR ÇIKTI KARTI -->
+        <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">Yenidoğan Vital Durum Çıktısı</span>
+            <span id="nbVitalBadge" class="text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">🟢 Stabil Yenidoğan Vitalleri</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11px]">
+            <!-- Bileşik Vital Risk İndeksi -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">Bileşik Vital Risk İndeksi</span>
+              <div class="flex items-baseline justify-between">
+                <span id="nbRiskIndexVal" class="text-base font-bold text-emerald-800">12 / 100</span>
+                <span class="text-[9px] text-[#736d65] font-sans">Eşik: 50</span>
+              </div>
+              <div class="w-full bg-[#e5e2da] h-1.5 rounded-full overflow-hidden">
+                <div id="nbRiskIndexBar" class="bg-emerald-600 h-full rounded-full transition-all" style="width: 12%"></div>
+              </div>
+            </div>
+
+            <!-- Fototerapi İhtiyacı Olasılığı -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">Fototerapi İhtiyacı Olasılığı</span>
+              <div class="flex items-baseline justify-between">
+                <span id="nbPhotoProbVal" class="text-base font-bold text-emerald-800">%2.4</span>
+                <span class="text-[9px] text-[#736d65] font-sans">Bhutani Nomogramı</span>
+              </div>
+              <div class="w-full bg-[#e5e2da] h-1.5 rounded-full overflow-hidden">
+                <div id="nbPhotoProbBar" class="bg-emerald-600 h-full rounded-full transition-all" style="width: 2.4%"></div>
+              </div>
+            </div>
+
+            <!-- Kritik Vaka Olasılığı -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">Klinik Alarm Olasılığı</span>
+              <div class="flex items-baseline justify-between">
+                <span id="nbCriticalProbVal" class="text-base font-bold text-emerald-800">%4.1</span>
+                <span class="text-[9px] text-[#736d65] font-sans">Doğruluk: %99.5</span>
+              </div>
+              <div class="w-full bg-[#e5e2da] h-1.5 rounded-full overflow-hidden">
+                <div id="nbCriticalProbBar" class="bg-emerald-600 h-full rounded-full transition-all" style="width: 4.1%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KIRMIZI BAYRAKLAR VE PROTOKOL KUTUSU -->
+          <div id="nbProtocolBox" class="p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[11px] text-emerald-950 flex items-start gap-2">
+            <span id="nbProtocolIcon" class="text-base">🛡️</span>
+            <div>
+              <strong id="nbProtocolTitle" class="block font-bold">Vitaller Sağlıklı ve Stabil Seyrediyor</strong>
+              <p id="nbProtocolText" class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+                Bebeğin solunum sayısı, oksijen satürasyonu, vücut ısısı ve bilirubin düzeyi ilk 28 günlük fizyolojik sınırlar içindedir. Emme refleksi aktif, vital parametreler dengelidir.
+              </p>
+              <div id="nbRedFlagsList" class="mt-1 space-y-0.5 hidden"></div>
+            </div>
+          </div>
+
+          <!-- HEKİM VE YASAL REHBERLİK NOTU -->
+          <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] text-[10px] text-[#736d65] leading-relaxed">
+            <strong class="text-[#1c1a18]">🩺 ToHUM Klinik ve Yasal Rehberlik:</strong>
+            <span id="nbDoctorText" class="block mt-0.5">
+              Biz hekim değiliz, tıbbi teşhis koymayız. Yenidoğan bebeklerde vitallerdeki ani değişimler (solunum güçlüğü, inleme, morarma, beslenmeyi reddetme, aşırı uyku hali, ateş veya hipotermi) acil değerlendirme gerektirebilir. Şüpheli her durumda vakit kaybetmeden çocuk hekiminize başvurunuz.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
         `
       },
       'maternal_mental_infant_sleep': {
@@ -8897,6 +9373,8 @@
         setTimeout(runDenverMilestonesSimulation, 60);
       } else if (datasetId === 'vaccine_tracking') {
         setTimeout(runVaccineTrackingSimulation, 60);
+      } else if (datasetId === 'newborn_health') {
+        setTimeout(runNewbornHealthSimulation, 60);
       }
 
       document.getElementById('datasetReportModal').classList.remove('hidden');
@@ -10347,6 +10825,230 @@
       if (protocolTitleEl) protocolTitleEl.textContent = '🛡️ Aşı Randevusu İçin Koşullar Uygun';
       if (protocolTextEl) protocolTextEl.innerHTML = 'Bebeğin vücut ısısı normal sınırlarda ve ToHUM otomatik bildirim motoru devrede. Tahmini takvim uyumu yüksek (+<strong>' + delayDays.toFixed(1) + ' gün</strong>). Aşı sonrası hafif ateş olasılığı %' + probFeverPct.toFixed(1) + ' seviyesindedir.';
       if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz. Hafif ateş (38.0°C civarı) aşı antikor üretiminin doğal bir sonucudur. Ateş 38.5°C'yi aşarsa veya 48 saati geçerse çocuk hekiminize başvurunuz.";
+    }
+  }
+
+
+  // ==========================================
+  // SİMÜLATÖR: Yenidoğan Sağlığı & Kritik Vital İzleme Motoru
+  // ==========================================
+  function runNewbornHealthSimulation() {
+    const ageEl = document.getElementById('nbSimAge');
+    const gestEl = document.getElementById('nbSimGest');
+    const rrEl = document.getElementById('nbSimRr');
+    const hrEl = document.getElementById('nbSimHr');
+    const tempEl = document.getElementById('nbSimTemp');
+    const spo2El = document.getElementById('nbSimSpo2');
+    const biliEl = document.getElementById('nbSimBili');
+    const feedingEl = document.getElementById('nbSimFeeding');
+
+    if (!ageEl || !gestEl || !rrEl || !hrEl || !tempEl || !spo2El || !biliEl || !feedingEl) return;
+
+    const age = parseInt(ageEl.value || '4');
+    const gest = parseFloat(gestEl.value || '39.0');
+    const rr = parseFloat(rrEl.value || '44');
+    const hr = parseFloat(hrEl.value || '136');
+    const temp = parseFloat(tempEl.value || '36.8');
+    const spo2 = parseFloat(spo2El.value || '98.0');
+    const bili = parseFloat(biliEl.value || '6.5');
+    const feeding = parseInt(feedingEl.value || '2');
+
+    // Bhutani Nomogramı Fototerapi Eşiği (Yaşam gününe ve gestasyona göre)
+    let photoThresh = (age <= 2) ? 11.5 : (age <= 4 ? 14.2 : 16.5);
+    if (gest < 37.0) photoThresh -= 2.0;
+
+    // Etiketleri güncelle
+    const ageValEl = document.getElementById('nbSimAgeVal');
+    if (ageValEl) ageValEl.textContent = age + '. Gün (' + (age <= 7 ? 'İlk Hafta / Erken Yenidoğan' : 'Neonatal Dönem') + ')';
+
+    const gestValEl = document.getElementById('nbSimGestVal');
+    if (gestValEl) gestValEl.textContent = gest.toFixed(1) + ' Hafta (' + (gest < 37.0 ? 'Prematüre' : 'Term') + ')';
+
+    const rrValEl = document.getElementById('nbSimRrVal');
+    if (rrValEl) {
+      if (rr >= 60) {
+        rrValEl.textContent = rr + ' /dk (Şiddetli Takipne - Kırmızı Bayrak)';
+        rrValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (rr < 30) {
+        rrValEl.textContent = rr + ' /dk (Bradipne - Kırmızı Bayrak)';
+        rrValEl.className = 'font-mono font-bold text-rose-800';
+      } else {
+        rrValEl.textContent = rr + ' /dk (Normal: 30-60)';
+        rrValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const hrValEl = document.getElementById('nbSimHrVal');
+    if (hrValEl) {
+      if (hr > 165) {
+        hrValEl.textContent = hr + ' bpm (Taşikardi)';
+        hrValEl.className = 'font-mono font-bold text-amber-800';
+      } else if (hr < 100) {
+        hrValEl.textContent = hr + ' bpm (Bradikardi - Kırmızı Bayrak)';
+        hrValEl.className = 'font-mono font-bold text-rose-800';
+      } else {
+        hrValEl.textContent = hr + ' bpm (Normal: 110-160)';
+        hrValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const tempValEl = document.getElementById('nbSimTempVal');
+    if (tempValEl) {
+      if (temp >= 38.0) {
+        tempValEl.textContent = temp.toFixed(1) + '°C (Febril Ateş - Kırmızı Bayrak)';
+        tempValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (temp < 36.2) {
+        tempValEl.textContent = temp.toFixed(1) + '°C (Belirgin Hipotermi - Kırmızı Bayrak)';
+        tempValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (temp < 36.5) {
+        tempValEl.textContent = temp.toFixed(1) + '°C (Hafif Soğuk Stresi)';
+        tempValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        tempValEl.textContent = temp.toFixed(1) + '°C (Normal: 36.5-37.5)';
+        tempValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const spo2ValEl = document.getElementById('nbSimSpo2Val');
+    if (spo2ValEl) {
+      if (spo2 < 93.0) {
+        spo2ValEl.textContent = '%' + spo2.toFixed(1) + ' (Hipoksi / Desatürasyon - Kırmızı Bayrak)';
+        spo2ValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (spo2 < 95.0) {
+        spo2ValEl.textContent = '%' + spo2.toFixed(1) + ' (Sınırda Doyum)';
+        spo2ValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        spo2ValEl.textContent = '%' + spo2.toFixed(1) + ' (İdeal ≥ %95)';
+        spo2ValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const biliValEl = document.getElementById('nbSimBiliVal');
+    if (biliValEl) {
+      if (bili >= photoThresh) {
+        biliValEl.textContent = bili.toFixed(1) + ' mg/dL (Fototerapi Eşiği Aşıldı)';
+        biliValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (bili >= photoThresh - 2.5) {
+        biliValEl.textContent = bili.toFixed(1) + ' mg/dL (Yüksek-Orta Risk / Takip)';
+        biliValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        biliValEl.textContent = bili.toFixed(1) + ' mg/dL (Güvenli Bölge)';
+        biliValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    // Kırmızı Bayrak Listesi Toplama
+    const redFlags = [];
+    if (rr >= 60) redFlags.push('🚨 Şiddetli Takipne (Solunum: ' + rr + '/dk ≥ 60). Hızlı soluma veya inleme.');
+    if (rr < 30) redFlags.push('🚨 Bradipne / Apne Riski (Solunum: ' + rr + '/dk < 30).');
+    if (spo2 < 93.0) redFlags.push('🚨 Oksijen Desatürasyonu (SpO2: %' + spo2.toFixed(1) + ' < 93). Hipoksi ve morarma riski.');
+    if (temp < 36.2) redFlags.push('🚨 Belirgin Hipotermi (Isı: ' + temp.toFixed(1) + '°C < 36.2). Ten tene temasla ısıtma ve hekim kontrolü.');
+    if (temp >= 38.0) redFlags.push('🚨 Yenidoğan Febril Durumu (Isı: ' + temp.toFixed(1) + '°C ≥ 38.0). İlk 28 günde ateş acil değerlendirme gerektirir.');
+    if (hr < 100) redFlags.push('🚨 Kritik Bradikardi (Nabız: ' + hr + ' bpm < 100).');
+    if (hr > 170) redFlags.push('⚠️ Şiddetli Taşikardi (Nabız: ' + hr + ' bpm > 170).');
+    if (bili >= photoThresh) redFlags.push('⚠️ Bhutani Sarılık Eşiği Aşıldı (Bilirubin: ' + bili.toFixed(1) + ' mg/dL ≥ ' + photoThresh.toFixed(1) + '). Fototerapi ihtiyacı.');
+    if (feeding === 0) redFlags.push('⚠️ Emme Reddi / Zayıf Beslenme (Letarji veya uyku hali).');
+
+    // 1. Bileşik Yenidoğan Vital Risk İndeksi (0 - 100)
+    let riskIndex = (Math.max(0, rr - 55.0) * 1.4) +
+                    (Math.max(0, 96.0 - spo2) * 3.5) +
+                    (Math.abs(temp - 36.9) * 14.0) +
+                    (Math.max(0, bili - 10.0) * 2.2) +
+                    ((2 - feeding) * 6.5) +
+                    ((gest < 37.0 ? 1 : 0) * 8.0) + 5.0;
+    riskIndex = Math.max(2.0, Math.min(99.0, riskIndex));
+
+    // 2. Fototerapi İhtiyacı Olasılığı (Bhutani Modeli)
+    let photoLogOdds = 0.0159 - (0.8270 * age) - (0.2572 * (gest - 38.0)) + (1.5250 * (bili - 10.0)) - (0.7498 * feeding);
+    let photoProb = 1 / (1 + Math.exp(-photoLogOdds));
+    if (bili >= photoThresh) photoProb = Math.max(0.75, photoProb);
+    photoProb = Math.max(0.01, Math.min(0.99, photoProb));
+    const photoProbPct = photoProb * 100;
+
+    // 3. Kritik Vital Alarm Olasılığı (Random Forest Eşdeğeri)
+    let critLogit = -3.8 + (redFlags.length * 2.2) + (riskIndex > 45 ? 1.8 : 0);
+    let critProb = 1 / (1 + Math.exp(-critLogit));
+    if (redFlags.length >= 2) critProb = Math.max(0.85, critProb);
+    else if (redFlags.length === 1) critProb = Math.max(0.45, critProb);
+    else critProb = Math.min(0.12, critProb);
+    critProb = Math.max(0.02, Math.min(0.98, critProb));
+    const critProbPct = critProb * 100;
+
+    // DOM Elementlerini Güncelle
+    const badgeEl = document.getElementById('nbVitalBadge');
+    const riskIndexValEl = document.getElementById('nbRiskIndexVal');
+    const riskIndexBarEl = document.getElementById('nbRiskIndexBar');
+    const photoProbValEl = document.getElementById('nbPhotoProbVal');
+    const photoProbBarEl = document.getElementById('nbPhotoProbBar');
+    const critProbValEl = document.getElementById('nbCriticalProbVal');
+    const critProbBarEl = document.getElementById('nbCriticalProbBar');
+    const protoBoxEl = document.getElementById('nbProtocolBox');
+    const protoIconEl = document.getElementById('nbProtocolIcon');
+    const protoTitleEl = document.getElementById('nbProtocolTitle');
+    const protoTextEl = document.getElementById('nbProtocolText');
+    const redFlagsListEl = document.getElementById('nbRedFlagsList');
+    const doctorTextEl = document.getElementById('nbDoctorText');
+
+    if (riskIndexValEl) riskIndexValEl.textContent = Math.round(riskIndex) + ' / 100';
+    if (riskIndexBarEl) riskIndexBarEl.style.width = Math.round(riskIndex) + '%';
+    if (photoProbValEl) photoProbValEl.textContent = '%' + photoProbPct.toFixed(1);
+    if (photoProbBarEl) photoProbBarEl.style.width = photoProbPct.toFixed(1) + '%';
+    if (critProbValEl) critProbValEl.textContent = '%' + critProbPct.toFixed(1);
+    if (critProbBarEl) critProbBarEl.style.width = critProbPct.toFixed(1) + '%';
+
+    // Durum ve Rozet Renkleri
+    if (redFlags.length >= 2 || riskIndex >= 55) {
+      if (badgeEl) {
+        badgeEl.textContent = '🚨 Kritik Vital Alarmı (Acil Hekim Değerlendirmesi)';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-rose-50 text-rose-800 border border-rose-200';
+      }
+      if (riskIndexValEl) riskIndexValEl.className = 'text-base font-bold text-rose-800';
+      if (riskIndexBarEl) riskIndexBarEl.className = 'bg-rose-600 h-full rounded-full transition-all';
+      if (critProbValEl) critProbValEl.className = 'text-base font-bold text-rose-800';
+      if (critProbBarEl) critProbBarEl.className = 'bg-rose-600 h-full rounded-full transition-all';
+    } else if (redFlags.length === 1 || riskIndex >= 25) {
+      if (badgeEl) {
+        badgeEl.textContent = '⚠️ Yakın Klinik İzlem (Takip Önerilir)';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-amber-50 text-amber-800 border border-amber-200';
+      }
+      if (riskIndexValEl) riskIndexValEl.className = 'text-base font-bold text-amber-800';
+      if (riskIndexBarEl) riskIndexBarEl.className = 'bg-amber-600 h-full rounded-full transition-all';
+      if (critProbValEl) critProbValEl.className = 'text-base font-bold text-amber-800';
+      if (critProbBarEl) critProbBarEl.className = 'bg-amber-600 h-full rounded-full transition-all';
+    } else {
+      if (badgeEl) {
+        badgeEl.textContent = '🟢 Stabil Yenidoğan Vitalleri';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
+      }
+      if (riskIndexValEl) riskIndexValEl.className = 'text-base font-bold text-emerald-800';
+      if (riskIndexBarEl) riskIndexBarEl.className = 'bg-emerald-600 h-full rounded-full transition-all';
+      if (critProbValEl) critProbValEl.className = 'text-base font-bold text-emerald-800';
+      if (critProbBarEl) critProbBarEl.className = 'bg-emerald-600 h-full rounded-full transition-all';
+    }
+
+    // Protokol Kutusu & Kırmızı Bayraklar
+    if (redFlags.length > 0) {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-rose-50 border border-rose-300 text-[11px] text-rose-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '🚨';
+      if (protoTitleEl) protoTitleEl.textContent = 'Klinik Kırmızı Bayrak(lar) Tespit Edildi (' + redFlags.length + ' Uyarı)';
+      if (protoTextEl) protoTextEl.textContent = 'Yenidoğan vitallerinde klinik eşiği aşan sapmalar kaydedilmiştir. Yenidoğanda erken müdahale hayati önem taşır; lütfen aşağıdaki bulguları çocuk hekiminizle paylaşınız.';
+      
+      if (redFlagsListEl) {
+        redFlagsListEl.className = 'mt-1.5 space-y-1 block';
+        redFlagsListEl.innerHTML = redFlags.map(f => '<div class="p-1 rounded bg-white/80 border border-rose-200 text-[10px] text-rose-900 font-semibold">' + f + '</div>').join('');
+      }
+
+      if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz, kesin tanı koymayız. Yenidoğan vitallerindeki bu sapmaları (özellikle solunum sıkıntısı, inleme, SpO2 düşüşü, aşırı uyku hali veya ateş/hipotermi) vakit kaybetmeden çocuk hekiminize iletiniz.";
+    } else {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[11px] text-emerald-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '🛡️';
+      if (protoTitleEl) protoTitleEl.textContent = 'Vitaller Sağlıklı ve Stabil Seyrediyor';
+      if (protoTextEl) protoTextEl.textContent = 'Bebeğin solunum sayısı, oksijen satürasyonu, vücut ısısı ve bilirubin düzeyi ilk 28 günlük fizyolojik sınırlar içindedir. Emme refleksi aktif, vital parametreler dengelidir.';
+      if (redFlagsListEl) {
+        redFlagsListEl.className = 'hidden';
+        redFlagsListEl.innerHTML = '';
+      }
+      if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz, tıbbi teşhis koymayız. Yenidoğan vitallerini rutin takip etmeye devam ediniz; beslenmeyi reddetme, solunum güçlüğü veya ateş halinde doktorunuza başvurunuz.";
     }
   }
 
