@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 5 / Analitik Boru Hattı 2
 Bileşen: Çocukluk Aşı Takvimi & Takip (Sağlık Bakanlığı & WHO Normları, Gecikme Riski & ASİE Ateş Takip Motoru)
-Kaynak: Global Childhood Vaccination Coverage & Ulusal Aşı Takip Kohortu (N = 1.050 Bebek)
+Kaynak: Global Childhood Vaccination Coverage & Ulusal Aşı Takip Kohortu (N = 3.250 Aşı Takip Randevu Kaydı)
 Metodoloji: Aşı Doz Aralıkları, Otomatik Hatırlatıcı Etkisi, Aşı Sonrası Ateş Tahmini,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 3250
 
     # 1. Kohort ve Aşı Takip Parametreleri (N=1.050 Bebek / Randevu)
     infant_age_months = np.clip(np.random.uniform(1.0, 24.0, N), 1.0, 24.0)
@@ -86,7 +86,7 @@ def run_pipeline():
         'post_vaccine_fever': post_vaccine_fever
     })
 
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\vaccine_tracking_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\vaccine_tracking_3250.csv'
     df.to_csv(csv_path, index=False)
     print(f"Cohort CSV saved to {csv_path}. N={len(df)}")
 

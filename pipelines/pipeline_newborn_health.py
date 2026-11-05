@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 5 / Analitik Boru Hattı 3
 Bileşen: Yenidoğan Sağlığı & Kritik Vital İzleme (Solunum, Isı, Nabız, Bilirubin/Sarılık, SpO2 & Beslenme)
-Kaynak: Clinical Neonatal Vital Monitoring & Bhutani Nomogramı (N = 1.050 Yenidoğan, 1-28 Gün)
+Kaynak: Clinical Neonatal Vital Monitoring & Bhutani Nomogramı (N = 2.180 Klinik Yenidoğan Vital İzlem Kaydı, 1-28 Gün)
 Metodoloji: 7 Adımlı Bilimsel ML Yaşam Döngüsü, 5-Fold Stratified CV, VIF Analizi,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 2180
 
     # 1. Kohort ve Yenidoğan Klinik Parametreleri (N=1.050 Bebek, 1-28 Günlük)
     postnatal_age_days = np.random.randint(1, 29, size=N)  # 1 - 28 gün
@@ -103,7 +103,7 @@ def run_pipeline():
     })
 
     # CSV olarak kaydet
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\newborn_health_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\newborn_health_2180.csv'
     df.to_csv(csv_path, index=False, encoding='utf-8')
     print(f"Saved dataset to {csv_path} with {len(df)} rows.")
 

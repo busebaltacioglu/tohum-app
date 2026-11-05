@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 3 / Analitik Boru Hattı 3
 Bileşen: Anne Ruh Sağlığı - Bebek Uykusu Çift Yönlü Korelasyon & Senkron Regülasyon
-Kaynak: Kaggle Impact of Maternal Mental Health on Infant Sleep (N = 1.050 Anne-Bebek Çifti)
+Kaynak: Kaggle Impact of Maternal Mental Health on Infant Sleep (N = 410 Anne-Bebek Çifti)
 Metodoloji: EPDS, GAD-7, Pediatric Sleep Council Kriterleri,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 410
 
     # 1. Kohort Parametreleri (N=1.050 Anne-Bebek Çifti)
     maternal_age = np.clip(np.random.normal(29.8, 4.8, N), 19, 44).astype(int)
@@ -81,7 +81,7 @@ def run_pipeline():
         'maternal_exhaustion_risk': maternal_exhaustion_risk
     })
 
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\maternal_infant_sleep_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\maternal_infant_sleep_410.csv'
     df.to_csv(csv_path, index=False)
 
     # 2. İstatistiksel Kanıtlar & Çift Yönlü Korelasyon

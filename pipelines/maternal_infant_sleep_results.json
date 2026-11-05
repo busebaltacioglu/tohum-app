@@ -1,173 +1,173 @@
 {
-  "sample_size": 1050,
-  "infant_fragmentation_cases": 187,
-  "infant_fragmentation_pct": 17.81,
-  "maternal_exhaustion_cases": 162,
-  "maternal_exhaustion_pct": 15.43,
+  "sample_size": 410,
+  "infant_fragmentation_cases": 68,
+  "infant_fragmentation_pct": 16.59,
+  "maternal_exhaustion_cases": 60,
+  "maternal_exhaustion_pct": 14.63,
   "correlations": {
     "gad7_infant_awakenings": {
-      "r": 0.514,
-      "p": 9.660975789062943e-72
+      "r": 0.508,
+      "p": 2.8671841784308272e-28
     },
     "epds_infant_stretch": {
-      "r": -0.485,
-      "p": 4.3366756906188735e-63
+      "r": -0.4,
+      "p": 3.290158981951256e-17
     },
     "maternal_infant_sleep": {
-      "r": 0.518,
-      "p": 4.598459747948774e-73
+      "r": 0.476,
+      "p": 1.5113234149606248e-24
     }
   },
   "odds_ratios": {
     "high_anxiety_on_fragmentation": {
-      "or": 5.81,
-      "ci_lower": 4.12,
-      "ci_upper": 8.21,
-      "p_value": 3.0320109736996195e-26,
-      "chi2": 112.33,
+      "or": 3.88,
+      "ci_lower": 2.22,
+      "ci_upper": 6.8,
+      "p_value": 1.646580585703221e-06,
+      "chi2": 22.97,
       "table": {
-        "tp": 91,
-        "fp": 121,
-        "fn": 96,
-        "tn": 742
+        "tp": 29,
+        "fp": 55,
+        "fn": 39,
+        "tn": 287
       }
     },
     "no_partner_support_exhaustion_risk": {
-      "or": 7.57,
-      "ci_lower": 5.15,
-      "ci_upper": 11.13,
-      "p_value": 1.661365907760462e-29,
-      "chi2": 127.22,
+      "or": 8.61,
+      "ci_lower": 4.4,
+      "ci_upper": 16.86,
+      "p_value": 3.682010046879685e-12,
+      "chi2": 48.29,
       "table": {
-        "tp": 122,
-        "fp": 255,
-        "fn": 40,
-        "tn": 633
+        "tp": 48,
+        "fp": 111,
+        "fn": 12,
+        "tn": 239
       }
     }
   },
   "ttest_anxiety_sleep": {
-    "mean_high_anx": 4.52,
-    "std_high_anx": 1.25,
-    "mean_low_anx": 2.72,
-    "std_low_anx": 1.32,
-    "diff": 1.8,
-    "t_stat": 17.65,
-    "p_value": 8.633795492303734e-52
+    "mean_high_anx": 4.31,
+    "std_high_anx": 1.17,
+    "mean_low_anx": 2.78,
+    "std_low_anx": 1.26,
+    "diff": 1.53,
+    "t_stat": 9.98,
+    "p_value": 1.6503532102565384e-18
   },
   "vif_table": [
     {
       "feature": "maternal_age",
       "vif": 1.01,
-      "tolerance": 0.99,
+      "tolerance": 0.993,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "infant_age_months",
-      "vif": 1.0,
-      "tolerance": 0.999,
+      "vif": 1.01,
+      "tolerance": 0.99,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "partner_support",
-      "vif": 2.45,
-      "tolerance": 0.408,
+      "vif": 2.68,
+      "tolerance": 0.373,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "feeding_mode",
-      "vif": 1.0,
-      "tolerance": 0.997,
+      "vif": 1.01,
+      "tolerance": 0.987,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "maternal_gad7",
-      "vif": 2.93,
-      "tolerance": 0.341,
+      "vif": 2.41,
+      "tolerance": 0.415,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "maternal_epds",
-      "vif": 3.47,
-      "tolerance": 0.288,
-      "status": "Kabul Edilebilir (< 5.0)"
+      "vif": 2.96,
+      "tolerance": 0.338,
+      "status": "İdeal (< 3.0)"
     },
     {
       "feature": "maternal_sleep_hours",
-      "vif": 5.1,
-      "tolerance": 0.196,
+      "vif": 4.94,
+      "tolerance": 0.203,
       "status": "Kabul Edilebilir (< 5.0)"
     }
   ],
   "cv_metrics": {
     "Lojistik Regresyon": {
-      "accuracy_mean": 0.8548,
-      "precision_mean": 0.5678,
-      "recall_mean": 0.8933,
-      "f1_mean": 0.6902,
-      "roc_auc_mean": 0.9481
+      "accuracy_mean": 0.8811,
+      "precision_mean": 0.6113,
+      "recall_mean": 0.89,
+      "f1_mean": 0.7142,
+      "roc_auc_mean": 0.9686
     },
     "Rastgele Orman (RF)": {
-      "accuracy_mean": 0.8536,
-      "precision_mean": 0.5706,
-      "recall_mean": 0.82,
-      "f1_mean": 0.6661,
-      "roc_auc_mean": 0.9326
+      "accuracy_mean": 0.8901,
+      "precision_mean": 0.6977,
+      "recall_mean": 0.7867,
+      "f1_mean": 0.6979,
+      "roc_auc_mean": 0.9438
     },
     "Gradient Boosting (GBM)": {
-      "accuracy_mean": 0.8988,
-      "precision_mean": 0.7594,
-      "recall_mean": 0.66,
-      "f1_mean": 0.6936,
-      "roc_auc_mean": 0.9345
+      "accuracy_mean": 0.8933,
+      "precision_mean": 0.7326,
+      "recall_mean": 0.64,
+      "f1_mean": 0.6488,
+      "roc_auc_mean": 0.9228
     }
   },
   "test_metrics": {
-    "accuracy": 0.8571,
-    "precision": 0.6061,
-    "recall": 0.5405,
-    "f1_score": 0.5714,
-    "roc_auc": 0.9253,
+    "accuracy": 0.8415,
+    "precision": 0.5263,
+    "recall": 0.7143,
+    "f1_score": 0.6061,
+    "roc_auc": 0.8645,
     "confusion_matrix": {
-      "tn": 160,
-      "fp": 13,
-      "fn": 17,
-      "tp": 20
+      "tn": 59,
+      "fp": 9,
+      "fn": 4,
+      "tp": 10
     }
   },
   "regression_metrics": {
     "target": "infant_night_awakenings",
-    "mae_awakenings": 0.64,
-    "r2_score": 0.6488
+    "mae_awakenings": 0.69,
+    "r2_score": 0.594
   },
   "sfs_ranking": [
     {
       "feature": "infant_age_months",
-      "importance_pct": 35.35
-    },
-    {
-      "feature": "maternal_sleep_hours",
-      "importance_pct": 27.02
-    },
-    {
-      "feature": "maternal_epds",
-      "importance_pct": 15.75
+      "importance_pct": 38.74
     },
     {
       "feature": "maternal_gad7",
-      "importance_pct": 12.36
+      "importance_pct": 20.94
+    },
+    {
+      "feature": "maternal_sleep_hours",
+      "importance_pct": 10.83
     },
     {
       "feature": "partner_support",
-      "importance_pct": 6.84
+      "importance_pct": 10.28
+    },
+    {
+      "feature": "maternal_epds",
+      "importance_pct": 9.9
     },
     {
       "feature": "maternal_age",
-      "importance_pct": 1.98
+      "importance_pct": 6.61
     },
     {
       "feature": "feeding_mode",
-      "importance_pct": 0.71
+      "importance_pct": 2.7
     }
   ]
 }

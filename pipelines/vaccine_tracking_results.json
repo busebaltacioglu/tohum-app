@@ -1,159 +1,159 @@
 {
-  "sample_size": 1050,
-  "delay_cases": 345,
-  "delay_pct": 32.86,
-  "fever_cases": 140,
-  "fever_pct": 13.33,
+  "sample_size": 3250,
+  "delay_cases": 966,
+  "delay_pct": 29.72,
+  "fever_cases": 462,
+  "fever_pct": 14.22,
   "odds_ratios": {
     "no_reminder_on_delay": {
-      "or": 23.05,
-      "ci_lower": 16.45,
-      "ci_upper": 32.31,
-      "p_value": 1.2570701022363945e-93,
-      "chi2": 421.32,
+      "or": 28.68,
+      "ci_lower": 23.43,
+      "ci_upper": 35.11,
+      "p_value": 2.1281742689219e-309,
+      "chi2": 1413.78,
       "table": {
-        "tp": 280,
-        "fp": 111,
-        "fn": 65,
-        "tn": 594
+        "tp": 785,
+        "fp": 300,
+        "fn": 181,
+        "tn": 1984
       }
     },
     "hesitancy_on_delay": {
-      "or": 5.61,
-      "ci_lower": 3.89,
-      "ci_upper": 8.09,
-      "p_value": 7.892975872259988e-23,
-      "chi2": 96.74,
+      "or": 5.06,
+      "ci_lower": 4.07,
+      "ci_upper": 6.29,
+      "p_value": 1.622485998935806e-54,
+      "chi2": 241.76,
       "table": {
-        "tp": 105,
-        "fp": 51,
-        "fn": 240,
-        "tn": 654
+        "tp": 256,
+        "fp": 152,
+        "fn": 710,
+        "tn": 2132
       }
     }
   },
   "ttest_reminder_delay": {
     "mean_no_reminder": 24.2,
-    "std_no_reminder": 7.4,
-    "mean_reminder": 7.1,
-    "std_reminder": 6.2,
-    "diff": 17.1,
-    "t_stat": 38.52,
-    "p_value": 4.3785081608204e-176
+    "std_no_reminder": 7.5,
+    "mean_reminder": 6.8,
+    "std_reminder": 5.6,
+    "diff": 17.4,
+    "t_stat": 67.89,
+    "p_value": 0.0
   },
   "vif_table": [
     {
       "feature": "infant_age_months",
-      "vif": 1.01,
-      "tolerance": 0.991,
+      "vif": 1.0,
+      "tolerance": 0.999,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "vaccine_dose_type",
-      "vif": 1.01,
-      "tolerance": 0.994,
+      "vif": 1.0,
+      "tolerance": 0.998,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "pre_vaccine_temp",
-      "vif": 1.01,
-      "tolerance": 0.988,
+      "vif": 1.0,
+      "tolerance": 0.999,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "hesitancy_score",
-      "vif": 1.01,
-      "tolerance": 0.995,
+      "vif": 1.0,
+      "tolerance": 0.998,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "reminder_active",
-      "vif": 1.01,
-      "tolerance": 0.989,
+      "vif": 1.0,
+      "tolerance": 0.998,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "previous_fever_history",
-      "vif": 1.02,
-      "tolerance": 0.983,
+      "vif": 1.0,
+      "tolerance": 1.0,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "is_preterm",
-      "vif": 1.01,
-      "tolerance": 0.99,
+      "vif": 1.0,
+      "tolerance": 0.998,
       "status": "İdeal (< 3.0)"
     }
   ],
   "cv_metrics": {
     "Lojistik Regresyon": {
-      "accuracy_mean": 0.8298,
-      "precision_mean": 0.6989,
-      "recall_mean": 0.855,
-      "f1_mean": 0.7676,
-      "roc_auc_mean": 0.9036
+      "accuracy_mean": 0.8562,
+      "precision_mean": 0.7152,
+      "recall_mean": 0.8602,
+      "f1_mean": 0.7807,
+      "roc_auc_mean": 0.9186
     },
     "Rastgele Orman (RF)": {
-      "accuracy_mean": 0.825,
-      "precision_mean": 0.6925,
-      "recall_mean": 0.8552,
-      "f1_mean": 0.7627,
-      "roc_auc_mean": 0.9036
+      "accuracy_mean": 0.855,
+      "precision_mean": 0.6934,
+      "recall_mean": 0.9275,
+      "f1_mean": 0.7927,
+      "roc_auc_mean": 0.9241
     },
     "Gradient Boosting (GBM)": {
-      "accuracy_mean": 0.8048,
-      "precision_mean": 0.7017,
-      "recall_mean": 0.7179,
-      "f1_mean": 0.7044,
-      "roc_auc_mean": 0.8875
+      "accuracy_mean": 0.8565,
+      "precision_mean": 0.7227,
+      "recall_mean": 0.8447,
+      "f1_mean": 0.7778,
+      "roc_auc_mean": 0.921
     }
   },
   "test_metrics": {
-    "accuracy": 0.8095,
-    "precision": 0.6706,
-    "recall": 0.8261,
-    "f1_score": 0.7403,
-    "roc_auc": 0.8996,
+    "accuracy": 0.8338,
+    "precision": 0.6654,
+    "recall": 0.886,
+    "f1_score": 0.76,
+    "roc_auc": 0.9093,
     "confusion_matrix": {
-      "tn": 113,
-      "fp": 28,
-      "fn": 12,
-      "tp": 57
+      "tn": 371,
+      "fp": 86,
+      "fn": 22,
+      "tp": 171
     }
   },
   "regression_metrics": {
     "target": "delay_days",
-    "mae_days": 3.45,
-    "r2_score": 0.826
+    "mae_days": 3.6,
+    "r2_score": 0.7802
   },
   "sfs_ranking": [
     {
       "feature": "reminder_active",
-      "importance_pct": 54.88
+      "importance_pct": 66.38
     },
     {
       "feature": "hesitancy_score",
-      "importance_pct": 15.99
+      "importance_pct": 16.8
     },
     {
       "feature": "pre_vaccine_temp",
-      "importance_pct": 10.96
+      "importance_pct": 5.96
     },
     {
       "feature": "infant_age_months",
-      "importance_pct": 10.93
+      "importance_pct": 5.24
     },
     {
       "feature": "is_preterm",
-      "importance_pct": 4.62
+      "importance_pct": 3.59
     },
     {
       "feature": "vaccine_dose_type",
-      "importance_pct": 1.99
+      "importance_pct": 1.44
     },
     {
       "feature": "previous_fever_history",
-      "importance_pct": 0.63
+      "importance_pct": 0.58
     }
   ]
 }

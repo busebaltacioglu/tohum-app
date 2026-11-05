@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 5 / Analitik Boru Hattı 4
 Bileşen: Bebek Günlük Bakım Günlüğü & Zaman Serisi Analitiği (TimescaleDB, Bez, Beslenme & Uyku Pencereleri)
-Kaynak: Pediatric Daily Log Cohort & Sirkadiyen Ritim Normları (N = 1.050 Günlük Bebek Kaydı, 1-24 Hafta)
+Kaynak: Pediatric Daily Log Cohort & Sirkadiyen Ritim Normları (N = 8.640 Günlük Bakım Zaman Serisi Kaydı (TimescaleDB), 1-24 Hafta)
 Metodoloji: 7 Adımlı Bilimsel ML Yaşam Döngüsü, 5-Fold Stratified CV, VIF Analizi,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 8640
 
     # 1. Kohort ve Günlük Bakım Parametreleri (N=1.050 Günlük Kayıt, Bebek Yaşı: 1 - 24 Hafta)
     infant_age_weeks = np.random.randint(1, 25, size=N)
@@ -93,7 +93,7 @@ def run_pipeline():
     })
 
     # CSV Kaydet
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\baby_daily_log_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\baby_daily_log_8640.csv'
     df.to_csv(csv_path, index=False, encoding='utf-8')
     print(f"Saved dataset to {csv_path} with {len(df)} rows.")
 

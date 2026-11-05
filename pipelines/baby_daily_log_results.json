@@ -1,177 +1,177 @@
 {
-  "sample_size": 1050,
-  "risk_cases": 129,
-  "risk_pct": 12.29,
+  "sample_size": 8640,
+  "risk_cases": 1101,
+  "risk_pct": 12.74,
   "odds_ratios": {
     "low_wet_diaper_on_risk": {
-      "or": 999.0,
-      "ci_lower": 999.0,
-      "ci_upper": 999.0,
-      "p_value": 4.379657298502882e-85,
-      "chi2": 382.08,
+      "or": 727.72,
+      "ci_lower": 323.79,
+      "ci_upper": 1635.55,
+      "p_value": 0.0,
+      "chi2": 2841.17,
       "table": {
-        "tp": 52,
-        "fp": 0,
-        "fn": 77,
-        "tn": 921
+        "tp": 404,
+        "fp": 6,
+        "fn": 697,
+        "tn": 7533
       }
     },
     "long_feeding_interval_on_risk": {
-      "or": 18.91,
-      "ci_lower": 11.72,
-      "ci_upper": 30.52,
-      "p_value": 1.429492903526337e-49,
-      "chi2": 219.09,
+      "or": 33.25,
+      "ci_lower": 27.7,
+      "ci_upper": 39.91,
+      "p_value": 0.0,
+      "chi2": 2537.99,
       "table": {
-        "tp": 57,
-        "fp": 37,
-        "fn": 72,
-        "tn": 884
+        "tp": 529,
+        "fp": 204,
+        "fn": 572,
+        "tn": 7335
       }
     }
   },
   "ttest_sleep": {
-    "mean_ideal": 14.85,
-    "std_ideal": 1.81,
-    "mean_risk": 14.27,
-    "std_risk": 2.17,
-    "diff": 0.58,
-    "t_stat": 3.31,
-    "p_value": 0.0009793274347568855
+    "mean_ideal": 14.87,
+    "std_ideal": 1.77,
+    "mean_risk": 14.46,
+    "std_risk": 2.04,
+    "diff": 0.41,
+    "t_stat": 7.1,
+    "p_value": 1.2994964337018944e-12
   },
   "vif_table": [
     {
       "feature": "infant_age_weeks",
       "vif": 1.13,
-      "tolerance": 0.886,
+      "tolerance": 0.888,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "feeding_interval_hours",
-      "vif": 1.14,
-      "tolerance": 0.877,
+      "vif": 1.1,
+      "tolerance": 0.909,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "daily_milk_volume_ml",
       "vif": 1.08,
-      "tolerance": 0.926,
+      "tolerance": 0.924,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "wet_diapers",
-      "vif": 1.07,
-      "tolerance": 0.932,
+      "vif": 1.02,
+      "tolerance": 0.976,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "dirty_diapers",
-      "vif": 1.01,
-      "tolerance": 0.994,
+      "vif": 1.0,
+      "tolerance": 0.999,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "total_sleep_hours",
-      "vif": 1.01,
-      "tolerance": 0.991,
+      "vif": 1.0,
+      "tolerance": 0.999,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "longest_sleep_block",
-      "vif": 1.05,
-      "tolerance": 0.948,
+      "vif": 1.04,
+      "tolerance": 0.957,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "night_awakenings",
-      "vif": 1.01,
-      "tolerance": 0.991,
+      "vif": 1.0,
+      "tolerance": 0.998,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "fussiness_hours",
-      "vif": 1.21,
-      "tolerance": 0.829,
+      "vif": 1.13,
+      "tolerance": 0.889,
       "status": "İdeal (< 3.0)"
     }
   ],
   "cv_metrics": {
     "Rastgele Orman (RF)": {
-      "accuracy_mean": 0.96,
-      "precision_mean": 0.7863,
-      "recall_mean": 0.9305,
-      "f1_mean": 0.8513,
-      "roc_auc_mean": 0.9896
+      "accuracy_mean": 0.9573,
+      "precision_mean": 0.754,
+      "recall_mean": 0.9882,
+      "f1_mean": 0.8552,
+      "roc_auc_mean": 0.9913
     },
     "Gradient Boosting (GBM)": {
-      "accuracy_mean": 0.9486,
-      "precision_mean": 0.7958,
-      "recall_mean": 0.7905,
-      "f1_mean": 0.7912,
-      "roc_auc_mean": 0.9898
+      "accuracy_mean": 0.9602,
+      "precision_mean": 0.8376,
+      "recall_mean": 0.8547,
+      "f1_mean": 0.8454,
+      "roc_auc_mean": 0.9924
     },
     "Lojistik Regresyon": {
-      "accuracy_mean": 0.8819,
-      "precision_mean": 0.5146,
-      "recall_mean": 0.8606,
-      "f1_mean": 0.6428,
-      "roc_auc_mean": 0.9428
+      "accuracy_mean": 0.8836,
+      "precision_mean": 0.5263,
+      "recall_mean": 0.8738,
+      "f1_mean": 0.6568,
+      "roc_auc_mean": 0.9477
     }
   },
   "test_metrics": {
-    "accuracy": 0.9524,
-    "precision": 0.7353,
-    "recall": 0.9615,
-    "f1_score": 0.8333,
-    "roc_auc": 0.9912,
+    "accuracy": 0.9485,
+    "precision": 0.712,
+    "recall": 1.0,
+    "f1_score": 0.8318,
+    "roc_auc": 0.9913,
     "confusion_matrix": {
-      "tn": 175,
-      "fp": 9,
-      "fn": 1,
-      "tp": 25
+      "tn": 1419,
+      "fp": 89,
+      "fn": 0,
+      "tp": 220
     }
   },
   "regression_metrics": {
     "target": "circadian_stability_score",
-    "mae": 3.57,
-    "r2_score": 0.6696
+    "mae": 3.39,
+    "r2_score": 0.6433
   },
   "sfs_ranking": [
     {
       "feature": "fussiness_hours",
-      "importance_pct": 37.94
-    },
-    {
-      "feature": "wet_diapers",
-      "importance_pct": 23.45
+      "importance_pct": 40.52
     },
     {
       "feature": "feeding_interval_hours",
-      "importance_pct": 20.7
+      "importance_pct": 26.94
+    },
+    {
+      "feature": "wet_diapers",
+      "importance_pct": 24.75
     },
     {
       "feature": "total_sleep_hours",
-      "importance_pct": 9.98
+      "importance_pct": 6.12
     },
     {
       "feature": "daily_milk_volume_ml",
-      "importance_pct": 3.1
+      "importance_pct": 0.65
     },
     {
       "feature": "infant_age_weeks",
-      "importance_pct": 1.9
-    },
-    {
-      "feature": "dirty_diapers",
-      "importance_pct": 1.08
-    },
-    {
-      "feature": "longest_sleep_block",
-      "importance_pct": 1.06
+      "importance_pct": 0.33
     },
     {
       "feature": "night_awakenings",
-      "importance_pct": 0.79
+      "importance_pct": 0.29
+    },
+    {
+      "feature": "longest_sleep_block",
+      "importance_pct": 0.21
+    },
+    {
+      "feature": "dirty_diapers",
+      "importance_pct": 0.2
     }
   ]
 }

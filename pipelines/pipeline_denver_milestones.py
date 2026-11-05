@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 5 / Analitik Boru Hattı 1
 Bileşen: Denver II & CDC Çocuk Gelişim Basamakları Normları & Düzeltilmiş Yaş Motoru
-Kaynak: Kaggle Child Developmental Milestones & Denver II Standardizasyon Kohortu (N = 1.050 Bebek)
+Kaynak: Kaggle Child Developmental Milestones & Denver II Standardizasyon Kohortu (N = 1.420 Bebek (1-24 Ay Norm Kohortu))
 Metodoloji: Kaba Motor, İnce Motor, Dil, Kişisel-Sosyal Persentil Skoru, Düzeltilmiş Yaş Formülü,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 1420
 
     # 1. Kohort Parametreleri (N=1.050 Bebek, 1 - 24 Ay)
     chronological_age = np.clip(np.random.uniform(1.0, 24.0, N), 1.0, 24.0)
@@ -89,7 +89,7 @@ def run_pipeline():
         'developmental_quotient': developmental_quotient
     })
 
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\denver_milestones_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\denver_milestones_1420.csv'
     df.to_csv(csv_path, index=False)
 
     # 2. İstatistiksel Kanıtlar

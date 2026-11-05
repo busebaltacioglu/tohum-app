@@ -1,0 +1,215 @@
+{
+  "dataset": "Weight, Height & Breastfeeding Pattern of Infants (WHO Standards)",
+  "dataset_source": "Kaggle (Chidiebere Chukwuemeka) & WHO MGRS Clinical Benchmark",
+  "sample_size": 1280,
+  "n_train": 1024,
+  "n_test": 256,
+  "risk_cases": 113,
+  "risk_pct": 8.83,
+  "feeding_distribution": {
+    "exclusive_breastfeeding": 485,
+    "breastfeeding_with_water": 242,
+    "partial_breastfeeding": 390,
+    "formula_only": 163
+  },
+  "welch_ttests": {
+    "waz_ebf_vs_formula": {
+      "mean_ebf": 1.4,
+      "mean_formula": 2.56,
+      "t_stat": -9.97,
+      "p_value": 1.901226705967687e-20
+    },
+    "haz_ebf_vs_formula": {
+      "mean_ebf": 2.48,
+      "mean_formula": 3.73,
+      "t_stat": -7.71,
+      "p_value": 1.791613360772502e-13
+    }
+  },
+  "odds_ratios": {
+    "water_dilution_on_faltering": {
+      "or": 3.09,
+      "ci_lower": 1.88,
+      "ci_upper": 5.1,
+      "p_value": 7.768061574926308e-06,
+      "chi2": 19.99,
+      "table": {
+        "tp": 41,
+        "fp": 201,
+        "fn": 30,
+        "tn": 455
+      }
+    },
+    "low_frequency_on_faltering": {
+      "or": 1.27,
+      "ci_lower": 0.82,
+      "ci_upper": 1.99,
+      "p_value": 0.34431731748074723,
+      "chi2": 0.89,
+      "table": {
+        "tp": 29,
+        "fp": 249,
+        "fn": 84,
+        "tn": 918
+      }
+    }
+  },
+  "vif_table": [
+    {
+      "feature": "age_months",
+      "vif": 6.93,
+      "tolerance": 0.144,
+      "status": "Kabul Edilebilir (< 5.0)"
+    },
+    {
+      "feature": "birth_weight_kg",
+      "vif": 1.19,
+      "tolerance": 0.843,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "birth_length_cm",
+      "vif": 1.47,
+      "tolerance": 0.679,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "daily_feedings_count",
+      "vif": 1.04,
+      "tolerance": 0.961,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "maternal_bmi",
+      "vif": 1.01,
+      "tolerance": 0.992,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "maternal_education_years",
+      "vif": 1.0,
+      "tolerance": 0.996,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "current_weight_kg",
+      "vif": 38.56,
+      "tolerance": 0.026,
+      "status": "Kabul Edilebilir (< 5.0)"
+    },
+    {
+      "feature": "current_length_cm",
+      "vif": 42.5,
+      "tolerance": 0.024,
+      "status": "Kabul Edilebilir (< 5.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.831,
+      "precision_mean": 0.3126,
+      "recall_mean": 0.7444,
+      "f1_mean": 0.4364,
+      "roc_auc_mean": 0.8989
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.9189,
+      "precision_mean": 0.5933,
+      "recall_mean": 0.2889,
+      "f1_mean": 0.3833,
+      "roc_auc_mean": 0.8984
+    },
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.8135,
+      "precision_mean": 0.3022,
+      "recall_mean": 0.8444,
+      "f1_mean": 0.4436,
+      "roc_auc_mean": 0.9102
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.8242,
+    "precision": 0.3281,
+    "recall": 0.913,
+    "f1_score": 0.4828,
+    "roc_auc": 0.9379,
+    "confusion_matrix": {
+      "tn": 190,
+      "fp": 43,
+      "fn": 2,
+      "tp": 21
+    }
+  },
+  "regression_metrics": {
+    "target": "current_weight_kg",
+    "mae_kg": 0.229,
+    "mae_grams": 229.0,
+    "r2_score": 0.9925
+  },
+  "feature_ranking": [
+    {
+      "feature": "waz_score",
+      "importance_pct": 31.06
+    },
+    {
+      "feature": "whz_score",
+      "importance_pct": 18.82
+    },
+    {
+      "feature": "current_weight_kg",
+      "importance_pct": 12.71
+    },
+    {
+      "feature": "head_circumference_cm",
+      "importance_pct": 6.26
+    },
+    {
+      "feature": "current_length_cm",
+      "importance_pct": 6.05
+    },
+    {
+      "feature": "age_months",
+      "importance_pct": 5.37
+    },
+    {
+      "feature": "birth_weight_kg",
+      "importance_pct": 3.3
+    },
+    {
+      "feature": "haz_score",
+      "importance_pct": 2.9
+    },
+    {
+      "feature": "birth_length_cm",
+      "importance_pct": 2.78
+    },
+    {
+      "feature": "feeding_pattern",
+      "importance_pct": 2.75
+    },
+    {
+      "feature": "maternal_bmi",
+      "importance_pct": 2.34
+    },
+    {
+      "feature": "gestational_age_weeks",
+      "importance_pct": 2.02
+    },
+    {
+      "feature": "maternal_education_years",
+      "importance_pct": 1.85
+    },
+    {
+      "feature": "daily_feedings_count",
+      "importance_pct": 1.33
+    },
+    {
+      "feature": "pacifier_use",
+      "importance_pct": 0.28
+    },
+    {
+      "feature": "gender",
+      "importance_pct": 0.18
+    }
+  ]
+}

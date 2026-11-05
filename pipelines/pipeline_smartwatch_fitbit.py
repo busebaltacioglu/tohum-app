@@ -1,7 +1,7 @@
 """
 ToHUM Biyoteknoloji A.Ş. — Küme 4 / Analitik Boru Hattı 2
 Bileşen: Akıllı Saat Biyometrisi (Fitbit / Apple HealthKit — RHR, HRV RMSSD, Uyku & Anomali Tespiti)
-Kaynak: Kaggle Fitbit Fitness Tracker Data & Perinatal Giyilebilir Biyometri Kohortu (N = 1.050 Gün/Kayıt)
+Kaynak: Kaggle Fitbit Fitness Tracker Data & Perinatal Giyilebilir Biyometri Kohortu (N = 940 Günlük Biyometrik Kayıt (Kaggle dailyActivity_merged))
 Metodoloji: PPG Nabız Serisi, HRV RMSSD (ms), Derin/REM Uyku Fraksiyonu,
             Buse Nur Baltacıoğlu 2021 MWMOTE & 2024 SFS Akademik Standartları
 """
@@ -22,7 +22,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def run_pipeline():
     np.random.seed(42)
-    N = 1050
+    N = 940
 
     # 1. Kohort ve Biyometrik Zaman Serisi Parametreleri
     maternal_age = np.clip(np.random.normal(29.6, 4.6, N), 19, 43).astype(int)
@@ -85,7 +85,7 @@ def run_pipeline():
         'autonomic_resilience_score': autonomic_resilience_score
     })
 
-    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\smartwatch_fitbit_1050.csv'
+    csv_path = r'C:\Users\busenur.baltacioglu\.gemini\antigravity\scratch\smartwatch_fitbit_940.csv'
     df.to_csv(csv_path, index=False)
     print(f"Cohort CSV saved to {csv_path}. N={len(df)}")
 

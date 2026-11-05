@@ -1,173 +1,141 @@
 {
-  "sample_size": 1050,
-  "success_count": 462,
-  "success_rate": 44.0,
-  "stats_summary": {
-    "stai_paired_ttest": {
-      "mean_pre": 54.2,
-      "std_pre": 9.7,
-      "mean_post": 45.8,
-      "std_post": 9.4,
-      "mean_drop": 8.4,
-      "t_stat": 59.95,
-      "p_value": 0.0
-    },
-    "hr_paired_ttest": {
-      "mean_pre": 84.7,
-      "std_pre": 8.8,
-      "mean_post": 79.8,
-      "std_post": 9.1,
-      "mean_drop": 4.8,
-      "t_stat": 59.42,
-      "p_value": 0.0
-    },
-    "or_alpha_8hz": {
-      "or": 32.05,
-      "ci_lower": 22.63,
-      "ci_upper": 45.38,
-      "p_value": 3.9298975572632717e-110,
-      "chi2": 497.17,
-      "tp": 361,
-      "fp": 101,
-      "tn": 529,
-      "fn": 59
-    },
-    "or_session_ge_15": {
-      "or": 3.25,
-      "ci_lower": 2.31,
-      "ci_upper": 4.57,
-      "p_value": 4.508305992778392e-12,
-      "chi2": 47.89,
-      "tp": 411,
-      "fp": 51,
-      "tn": 169,
-      "fn": 419
-    },
-    "or_high_baseline": {
-      "or": 0.86,
-      "ci_lower": 0.66,
-      "ci_upper": 1.1,
-      "p_value": 0.2569961765509682,
-      "chi2": 1.28,
-      "tp": 294,
-      "fp": 168,
-      "tn": 193,
-      "fn": 395
-    },
-    "or_third_trimester": {
-      "or": 0.78,
-      "ci_lower": 0.61,
-      "ci_upper": 1.01,
-      "p_value": 0.07017858192343633,
-      "chi2": 3.28,
-      "tp": 154,
-      "fp": 308,
-      "tn": 359,
-      "fn": 229
+  "sample_size": 736,
+  "success_cases": 323,
+  "success_pct": 43.89,
+  "odds_ratios": {
+    "alpha_8hz_on_success": {
+      "or": 30.56,
+      "ci_lower": 20.38,
+      "ci_upper": 45.83,
+      "p_value": 1.3029858697950262e-77,
+      "chi2": 347.76,
+      "table": {
+        "tp": 261,
+        "fp": 50,
+        "fn": 62,
+        "tn": 363
+      }
     }
   },
-  "vif_data": [
+  "paired_ttests": {
+    "stai": {
+      "mean_pre": 54.51,
+      "mean_post": 45.9,
+      "mean_drop": 8.61,
+      "t_stat": 49.76,
+      "p_value": 1.5817209935045728e-237
+    },
+    "heart_rate": {
+      "mean_pre": 85.1,
+      "mean_post": 80.17,
+      "mean_drop": 4.92,
+      "t_stat": 51.61,
+      "p_value": 1.2790520017809911e-246
+    }
+  },
+  "vif_table": [
     {
       "feature": "maternal_age",
       "vif": 1.01,
-      "tolerance": 0.99,
+      "tolerance": 0.988,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "gestational_stage",
-      "vif": 1.1,
-      "tolerance": 0.91,
+      "vif": 1.08,
+      "tolerance": 0.93,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "baseline_stai",
-      "vif": 1.21,
-      "tolerance": 0.827,
+      "vif": 1.16,
+      "tolerance": 0.859,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "baseline_hr",
-      "vif": 1.13,
-      "tolerance": 0.886,
+      "vif": 1.11,
+      "tolerance": 0.898,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "frequency_mode",
-      "vif": 1.0,
-      "tolerance": 0.997,
+      "vif": 1.01,
+      "tolerance": 0.991,
       "status": "İdeal (< 3.0)"
     },
     {
       "feature": "session_minutes",
       "vif": 1.01,
-      "tolerance": 0.995,
+      "tolerance": 0.989,
       "status": "İdeal (< 3.0)"
     }
   ],
-  "regression_metrics": {
-    "mae_pts": 1.8,
-    "r2_score": 0.7287
-  },
-  "cv_results": {
-    "Logistic Regression": {
-      "accuracy_mean": 0.8467,
-      "precision_mean": 0.8278,
-      "recall_mean": 0.8248,
-      "f1_mean": 0.8258,
-      "roc_auc_mean": 0.9347
-    },
-    "Random Forest": {
-      "accuracy_mean": 0.8381,
-      "precision_mean": 0.8696,
-      "recall_mean": 0.7469,
-      "f1_mean": 0.8018,
-      "roc_auc_mean": 0.9287
-    },
+  "cv_metrics": {
     "Gradient Boosting (GBM)": {
-      "accuracy_mean": 0.8371,
-      "precision_mean": 0.8428,
-      "recall_mean": 0.775,
-      "f1_mean": 0.807,
-      "roc_auc_mean": 0.9232
+      "accuracy_mean": 0.8696,
+      "precision_mean": 0.8782,
+      "recall_mean": 0.8171,
+      "f1_mean": 0.846,
+      "roc_auc_mean": 0.9333
+    },
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.875,
+      "precision_mean": 0.9092,
+      "recall_mean": 0.7956,
+      "f1_mean": 0.8481,
+      "roc_auc_mean": 0.9371
+    },
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.8505,
+      "precision_mean": 0.794,
+      "recall_mean": 0.8979,
+      "f1_mean": 0.8405,
+      "roc_auc_mean": 0.9337
     }
   },
   "test_metrics": {
-    "accuracy": 0.8476,
-    "precision": 0.8659,
-    "recall": 0.7717,
-    "f1_score": 0.8161,
-    "roc_auc": 0.9338,
+    "accuracy": 0.8851,
+    "precision": 0.8429,
+    "recall": 0.9077,
+    "f1_score": 0.8741,
+    "roc_auc": 0.954,
     "confusion_matrix": {
-      "tn": 107,
+      "tn": 72,
       "fp": 11,
-      "fn": 21,
-      "tp": 71
+      "fn": 6,
+      "tp": 59
     }
   },
-  "feature_importances": [
+  "regression_metrics": {
+    "target": "stai_reduction_points",
+    "mae": 1.81,
+    "r2_score": 0.713
+  },
+  "sfs_ranking": [
     {
       "feature": "frequency_mode",
-      "importance": 0.6595
+      "importance_pct": 56.42
     },
     {
       "feature": "session_minutes",
-      "importance": 0.1088
-    },
-    {
-      "feature": "baseline_stai",
-      "importance": 0.0951
+      "importance_pct": 17.95
     },
     {
       "feature": "baseline_hr",
-      "importance": 0.085
+      "importance_pct": 8.7
     },
     {
       "feature": "maternal_age",
-      "importance": 0.0434
+      "importance_pct": 8.33
+    },
+    {
+      "feature": "baseline_stai",
+      "importance_pct": 7.19
     },
     {
       "feature": "gestational_stage",
-      "importance": 0.0082
+      "importance_pct": 1.41
     }
   ]
 }
