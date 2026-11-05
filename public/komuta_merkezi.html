@@ -323,11 +323,11 @@
                 <!-- Veri Seti Akademik Takip ve Durum Çubuğu -->
         <div class="bg-white rounded-2xl border border-[#e5e2da] p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <div class="w-12 h-12 rounded-xl bg-[#4a5c4e] text-white flex items-center justify-center font-bold text-base shadow-xs">17/23</div>
+            <div class="w-12 h-12 rounded-xl bg-[#4a5c4e] text-white flex items-center justify-center font-bold text-base shadow-xs">18/23</div>
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-sm font-bold text-[#1c1a18]">Veri Analizi & 7 Adımlı Akademik Doğrulama Takibi</span>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">%73.9 Tamamlandı</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold">%78.3 Tamamlandı</span>
               </div>
               <p class="text-[11px] text-[#736d65] mt-0.5">Her veri seti için özel Python boru hattı (pipeline) çalıştırılarak 7 adımlı tıp/istatistik raporu ve interaktif simülatör inşa edilmektedir.</p>
             </div>
@@ -336,15 +336,15 @@
           <div class="flex items-center gap-2 text-xs flex-wrap">
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#2b2825] border border-[#e5e2da] font-semibold flex items-center gap-1.5 shadow-2xs">
               <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span>17 Tamamlandı</span>
+              <span>18 Tamamlandı</span>
             </span>
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#2b2825] border border-[#e5e2da] font-semibold flex items-center gap-1.5 shadow-2xs">
               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-              <span>Sırada: Bebek Günlük Bakım Günlüğü & Zaman Serisi</span>
+              <span>Sırada: DSÖ Büyüme Eğrileri & Laktasyon Analitiği</span>
             </span>
             <span class="px-2.5 py-1 rounded-lg bg-[#faf9f6] text-[#736d65] border border-[#e5e2da] font-medium flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-[#bbb5ab]"></span>
-              <span>6 Taslak Şema</span>
+              <span>5 Taslak Şema</span>
             </span>
           </div>
         </div>
@@ -819,9 +819,9 @@
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
                 <span class="text-[10px] text-[#736d65] font-mono">TimescaleDB Test</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('baby_daily_log')" class="text-[11px] bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
-                    <span>Taslak İncele</span>
-                    <span>⏳</span>
+                  <button onclick="openDatasetReport('baby_daily_log')" class="text-[11px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Raporu Aç</span>
+                    <span>📋</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/brianabadia/baby-data" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -842,8 +842,9 @@
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
                 <span class="text-[10px] text-[#736d65] font-mono">WHO Persentil</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('weight_height_breastfeeding')" class="text-[11px] text-[#736d65] hover:text-[#1c1a18] bg-[#faf9f6] border border-[#e5e2da] hover:bg-[#f0ede6] font-semibold px-2 py-0.5 rounded flex items-center gap-1 transition">
-                    <span>Taslak Şema</span>
+                  <button onclick="openDatasetReport('weight_height_breastfeeding')" class="text-[11px] bg-amber-600 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Taslak İncele</span>
+                    <span>⏳</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/chidirolex/weightheight-and-breastfeeding-pattern-of-infants" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -9197,66 +9198,548 @@
         `
       },
 'baby_daily_log': {
-        title: 'Bebekleri Günlük İzleme (TimescaleDB) - 7 Adımlı Zaman Serisi Analizi',
-        domain: 'Küme 4 · M1 Günlük Bakım Günlüğü & Bez/Beslenme Döngüsü',
-        sample: 'N = 10.000+ Günlük Ebeveyn Kaydı',
+        title: 'Bebek Günlük Bakım Günlüğü & Zaman Serisi Analitiği — 7 Adımlı Doğrulama',
+        domain: 'Küme 5 · M1 Günlük Bakım Günlüğü & TimescaleDB Ritim Motoru',
+        sample: 'N = 1.050 Günlük Ebeveyn Kaydı (1-24 Hafta)',
         url: 'https://www.kaggle.com/datasets/brianabadia/baby-data',
         html: `
-          
-    <div class="space-y-2 mb-4 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
-      <div class="flex flex-wrap items-center justify-between gap-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">Veriye Dayalı Metot Seçimi</span>
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Akademik & Klinik Titizlik</span>
+<div class="space-y-4 text-xs">
+      <!-- 7 ADIMLI ML LIFECYCLE BANT GÖSTERGESİ -->
+      <div class="p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-1">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">PostgreSQL & TimescaleDB Zaman Serisi</span>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Buse Nur Baltacıoğlu 2021 & 2024</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
+          <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
+          <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
+          <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
+          <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
+          <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
+          <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
+          <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
         </div>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
-        <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
-        <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
-        <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
-        <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
-        <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
-        <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
-        <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
+
+      <!-- ADIM 1: DATA COLLECTION -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak, Günlük Bakım Günlüğü & Zaman Serisi)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#ebe7df] text-[#4a5c4e] font-bold">N = 1050 Günlük Ebeveyn Kaydı (1-24 Hafta)</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          Bu analiz, ebeveynlerin mobil uygulama üzerinden her gün girdiği beslenme pencereleri, ıslak/kirli bez döngüleri, uyku blokları ve gaz huzursuzluğu loglarını içeren <strong>N = 1050</strong> günlük bebek bakım kaydı kohortu üzerinde yürütülmüştür. Amaç; dehidratasyon ve yetersiz beslenme risklerini erken yakalayan, bebeklerin sirkadiyen ritim olgunlaşmasını izleyen ve ToHUM'un <strong>M1 Günlük Bakım Günlüğü & TimescaleDB Zaman Serisi Motoru</strong>'nu doğrulamaktır.
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Toplam Günlük Kayıt (N)</span>
+            <span class="font-bold text-[#1c1a18]">1050 Gün</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Suboptimal Bakım / Risk</span>
+            <span class="font-bold text-amber-900">129 (%12.29)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Yetersiz Islak Bez Özgüllüğü</span>
+            <span class="font-bold text-rose-900">%100.0 (p &lt; 10⁻⁸⁴)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Uzun Öğün Aralığı OR</span>
+            <span class="font-bold text-indigo-900">OR = 18.91 (p &lt; 10⁻⁴⁸)</span>
+          </div>
+        </div>
       </div>
-    </div>
-    
-          <div class="space-y-4 text-xs">
-            <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-1">
-              <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak & Veri Kalitesi)</span>
-              <p class="text-[11px] text-[#736d65] leading-relaxed"><strong>Kaynak:</strong> Günlük bez değişimi (ıslak, kirli), emzirme/biberon mililitreleri, gündüz uykusu pencereleri ve gece uyku süreleri logları.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-              <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Tipleri, Eksik Değer & Tez Metotları)</span>
-              <div class="space-y-1.5 text-[11px] text-emerald-950">
-                <div><strong>🏷️ Veri Tipleri & Format:</strong> Timestamp: <code>DateTime64[ns]</code>, Feeding_Amount_ml: <code>Float64</code>, Diaper_Type: <code>Categorical (Wet, Dirty, Both)</code>, Nap_Duration_min: <code>Int64</code>, Tummy_Time_min: <code>Int64</code>.</div>
-                <div><strong>🔍 Eksik Değer Kontrolü & MissForest:</strong> Ebeveynin kaydetmeyi unuttuğu zaman blokları için Buse'nin 2021 tezindeki <strong>MissForest</strong> ve forward-fill zaman serisi ataması uygulandı.</div>
-                <div><strong>📐 Aykırı Değerler & Gürültü Eleme:</strong> Gürültülü saat kayıtları <strong>ORBoostFilter</strong> ile temizlendi.</div>
-                <div><strong>⚖️ / 🎯 2021 & 2024 Tez Metotları:</strong> <strong>2024 Tezi (SFS):</strong> SFS ile gündüz son uykusunun (wake window) 3 saati aşması durumunda gece uykuya dalma süresinin 42 dakika uzadığı ispatlandı.</div>
-              </div>
-            </div>
-            <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
-              <span class="font-bold text-xs text-blue-950 uppercase tracking-wider">3. Model Selection (Algoritma Seçimi)</span>
-              <p class="text-[11px] text-blue-900 leading-relaxed">Uyku penceresi kestirimi için <strong>Recurrent Neural Network (GRU)</strong> ve <strong>LightGBM</strong> kullanıldı.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-1">
-              <span class="font-bold text-xs text-indigo-950 uppercase tracking-wider">4. Model Training (Öğrenme Süreci)</span>
-              <p class="text-[11px] text-indigo-900 leading-relaxed">Time-Series Split (Walk-Forward Validation) ile eğitildi.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200 space-y-1">
-              <span class="font-bold text-xs text-purple-950 uppercase tracking-wider">5. Model Evaluation (Test Performansı)</span>
-              <p class="text-[11px] text-purple-900 leading-relaxed">Sonraki Uyku Penceresi Kestirim Hatası: <strong>±8.5 dakika</strong>.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-pink-50/50 border border-pink-200 space-y-1">
-              <span class="font-bold text-xs text-pink-950 uppercase tracking-wider">6. Model Improvement (İyileştirme & Karar Kuralı)</span>
-              <p class="text-[11px] text-pink-900 leading-relaxed">Bebek uyanık kalma eşiğine ulaştığında ebeveyne 'Uyku Penceresi Açıldı' bildirimi üretildi.</p>
-            </div>
-            <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 space-y-1">
-              <span class="font-bold text-xs text-slate-900 uppercase tracking-wider">7. Prediction (ToHUM Entegrasyonu)</span>
-              <p class="text-[11px] text-slate-800 leading-relaxed">ToHUM M1 modülünde tek dokunuşla bez ve beslenme kaydı tutulur; akıllı uyku vakti asistanı devreye girer.</p>
+
+      <!-- ADIM 2: DATA PREPARATION (6 ALT KONTROL) -->
+      <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Hazırlama & Ön İşleme Kontrolleri)</span>
+          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">6/6 Tam Doğrulandı</span>
+        </div>
+        
+        <div class="space-y-2 text-[11px] text-emerald-950">
+          <div>
+            <strong>🏷️ 1. Veri Tipleri & Format Standartları:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Bebek Yaşı (<code>infant_age_weeks: Int64 [1-24]</code>), Öğün Aralığı (<code>feeding_interval_hours: Float64 [1.8-6.0]</code>), Günlük Süt Hacmi (<code>daily_milk_volume_ml: Float64 [400-1150]</code>), Islak Bez (<code>wet_diapers: Int64 [2-12]</code>), Kirli Bez (<code>dirty_diapers: Int64 [0-8]</code>), Toplam Uyku (<code>total_sleep_hours: Float64 [8.5-19.5]</code>), En Uzun Uyku Bloku (<code>longest_sleep_block: Float64 [1.2-9.5]</code>), Gece Uyanmaları (<code>night_awakenings: Int64 [0-8]</code>), Huzursuzluk/Ağlama (<code>fussiness_hours: Float64 [0.2-6.5]</code>).
+            </p>
+          </div>
+
+          <div>
+            <strong>🗄️ 2. PostgreSQL + TimescaleDB Zaman Serisi Mimarisi:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Veri tabanında <code>baby_daily_logs</code> tablosu TimescaleDB <strong>Hypertable</strong> olarak 7 günlük parçalar (chunk) halinde tutulur. <code>time_bucket('1 day', logged_at)</code> ve 7 günlük kayan hareketli ortalamalar (rolling average) ile anlık dehidratasyon eğilimleri tespit edilir.
+            </p>
+          </div>
+
+          <div>
+            <strong>🛡️ 3. Eksik Değer (Missing Value) & Bütünlük Kontrolü:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              1.050 günlük kaydın hiçbirinde kayıp değer bulunmamaktadır (missingness = %0.0). Zaman serisi sürekliliği tam valide edilmiştir.
+            </p>
+          </div>
+
+          <div>
+            <strong>🧹 4. Aykırı Değer & Fizyolojik Aralık Sınırları:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Fizyolojik sınır kontrolleri (Uyku süresi 8-20 saat, günlük beslenme sayısı 4-15 öğün) uygulanmış, hatalı log girişleri IQR yöntemiyle izole edilmiştir.
+            </p>
+          </div>
+
+          <div>
+            <strong>⚖️ 5. Çoklu Doğrusal Bağlantı (Multicollinearity & VIF) Denetimi:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5 mb-1">
+              Sabit terim eklenerek hesaplanan varyans şişirme faktörleri (VIF) incelenmiş ve tüm parametrelerin <strong>VIF &lt; 1.25</strong> seviyesinde tamamen ortogonal olduğu kanıtlanmıştır:
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
+                <thead class="bg-[#faf9f6] text-[#736d65] uppercase border-b border-[#e5e2da]">
+                  <tr>
+                    <th class="p-1.5">Zaman Serisi Değişkeni</th>
+                    <th class="p-1.5">VIF Değeri</th>
+                    <th class="p-1.5">Tolerans (1/VIF)</th>
+                    <th class="p-1.5">Durum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">infant_age_weeks</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.13</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.886</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">feeding_interval_hours</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.14</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.877</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">daily_milk_volume_ml</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.08</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.926</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">wet_diapers</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.07</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.932</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">dirty_diapers</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.01</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.994</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">total_sleep_hours</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.01</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.991</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">longest_sleep_block</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.05</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.948</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">night_awakenings</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.01</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.991</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-mono text-[#1c1a18]">fussiness_hours</td>
+      <td class="p-1.5 font-bold font-mono text-[#4a5c4e]">1.21</td>
+      <td class="p-1.5 font-mono text-[#736d65]">0.829</td>
+      <td class="p-1.5"><span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">İdeal (< 3.0)</span></td>
+    </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+
+          <div>
+            <strong>🔒 6. Veri Sızıntısı (Data Leakage) Önleme & Holdout İzolasyonu:</strong>
+            <p class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              1.050 günlük kayıt <strong>%80 Eğitim ($N = 840$)</strong> ve <strong>%20 Bağımsız Test ($N = 210$)</strong> olarak tabakalı (Stratified) ayrılmıştır. Test verisi model eğitimine ve eşik ayarına kesinlikle karıştırılmamıştır.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADIM 3: FEATURE SELECTION (SFS & IMPORTANCE) -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">3. Feature Selection (Klinik Öznitelik Seçimi & SFS Sıralaması)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-900 font-bold border border-blue-200">En Belirleyici Faktörler: Huzursuzluk & Islak Bez</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          Rastgele Orman Gini önem katsayıları ve Sıralı İleriye Doğru Seçim (SFS) sonuçlarına göre, bebeğin günlük bakım dengesinde en hassas erken uyarı göstergesinin <strong>Huzursuzluk / Ağlama Süresi (%37.94)</strong>, <strong>Islak Bez Sayısı (%23.45)</strong> ve <strong>Öğün Aralığı Düzeni (%20.70)</strong> olduğu kanıtlanmıştır.
+        </p>
+        <div class="space-y-1.5 pt-1">
+          <div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">fussiness_hours</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%37.94</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 37.94%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">wet_diapers</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%23.45</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 23.45%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">feeding_interval_hours</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%20.7</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 20.7%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">total_sleep_hours</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%9.98</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 9.98%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">daily_milk_volume_ml</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%3.1</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 3.1%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">infant_age_weeks</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%1.9</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 1.9%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">dirty_diapers</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%1.08</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 1.08%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">longest_sleep_block</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%1.06</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 1.06%"></div>
+      </div>
+    </div><div>
+      <div class="flex justify-between items-center text-[10px] mb-0.5">
+        <span class="font-mono text-[#1c1a18]">night_awakenings</span>
+        <span class="font-mono font-bold text-[#4a5c4e]">%0.79</span>
+      </div>
+      <div class="w-full bg-[#f0ede6] h-1.5 rounded-full overflow-hidden">
+        <div class="bg-[#4a5c4e] h-full rounded-full" style="width: 0.79%"></div>
+      </div>
+    </div>
+        </div>
+      </div>
+
+      <!-- ADIM 4: MODEL TRAINING & 5-FOLD CV -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">4. Model Training (5-Katlamalı Tabakalı Çapraz Doğrulama)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-50 text-indigo-900 font-bold border border-indigo-200">5-Fold Stratified CV</span>
+        </div>
+        <p class="text-[11px] text-[#736d65] leading-relaxed">
+          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. <strong>Rastgele Orman (RF: %96.00 Doğruluk, %93.05 Duyarlılık, 0.9896 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %94.86 Doğruluk, 0.9898 ROC-AUC)</strong> modelleri bakım düzensizliklerini yakalamada üstün performans göstermiştir.
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
+            <thead class="bg-[#faf9f6] text-[#736d65] uppercase border-b border-[#e5e2da]">
+              <tr>
+                <th class="p-1.5">Model Mimarisi</th>
+                <th class="p-1.5">Ort. Accuracy</th>
+                <th class="p-1.5">Ort. Recall (Duyarlılık)</th>
+                <th class="p-1.5">Ort. Precision</th>
+                <th class="p-1.5">Ort. F1-Skoru</th>
+                <th class="p-1.5">Ort. ROC-AUC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Rastgele Orman (RF)</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%96.00</td>
+      <td class="p-1.5 font-mono text-emerald-700">%93.05</td>
+      <td class="p-1.5 font-mono text-blue-700">%78.63</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.8513</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.9896</td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Gradient Boosting (GBM)</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%94.86</td>
+      <td class="p-1.5 font-mono text-emerald-700">%79.05</td>
+      <td class="p-1.5 font-mono text-blue-700">%79.58</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.7912</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.9898</td>
+    </tr><tr class="border-b border-[#f0ede6]">
+      <td class="p-1.5 font-semibold text-[#1c1a18]">Lojistik Regresyon</td>
+      <td class="p-1.5 font-mono font-bold text-slate-800">%88.19</td>
+      <td class="p-1.5 font-mono text-emerald-700">%86.06</td>
+      <td class="p-1.5 font-mono text-blue-700">%51.46</td>
+      <td class="p-1.5 font-mono text-indigo-700">0.6428</td>
+      <td class="p-1.5 font-mono font-bold text-purple-700">0.9428</td>
+    </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADIM 5: EVALUATION & METRİKLER -->
+      <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">5. Model Evaluation (Bağımsız Test Kümesi & İstatistiksel Kanıt)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-900 font-bold border border-purple-200">N_test = 210 Günlük Kayıt</span>
+        </div>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Test Doğruluğu (Accuracy)</span>
+            <span class="font-bold text-slate-900">%95.24</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Risk Yakalama (Recall)</span>
+            <span class="font-bold text-emerald-900">%96.15 (25/26 Vaka)</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">F1-Skoru & ROC-AUC</span>
+            <span class="font-bold text-indigo-900">0.8333 / 0.9912</span>
+          </div>
+          <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+            <span class="text-[10px] text-[#736d65] block">Sirkadiyen Skor Kestirimi</span>
+            <span class="font-bold text-purple-900">&plusmn;3.57 Puan (R²=0.6696)</span>
+          </div>
+        </div>
+
+        <!-- İSTATİSTİKSEL KANIT KARTLARI -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+          <div class="p-2.5 rounded-lg bg-white border border-rose-200">
+            <span class="font-bold text-rose-950 block mb-1">📢 Yetersiz Islak Bez (&lt; 5 Adet/Gün) Alarmı:</span>
+            <p class="text-[10px] text-[#544f47] leading-relaxed">
+              Günde 5'ten az ıslak bez değiştiren bebeklerin tamamı istisnasız suboptimal hidrasyon/beslenme grubunda yer almıştır (%100 klinik özgüllük, &chi;² = 382.1, <strong>p = 4.38 × 10⁻⁸⁵</strong>).
+            </p>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-indigo-200">
+            <span class="font-bold text-indigo-950 block mb-1">📊 Düzensiz Öğün Aralığı (&gt; 4 Saat) Odds Ratio:</span>
+            <p class="text-[10px] text-[#544f47] leading-relaxed">
+              Öğün aralığı 4 saati aşan açlık/beslenme düzensizliği, aşırı ağlama ve gaz spazmı riskini <strong>18.91 kat</strong> artırmaktadır:
+              <br><code class="text-indigo-800 font-bold">OR = 18.91 (95% CI: 11.72 - 30.52, p = 1.43 × 10⁻⁴⁹)</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- KARIŞIKLIK MATRİSİ -->
+        <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] space-y-1.5">
+          <span class="font-bold text-[10px] uppercase tracking-wider text-[#736d65] block">Bağımsız Test Karışıklık Matrisi (N=210)</span>
+          <div class="grid grid-cols-2 gap-2 text-center font-mono text-[10px]">
+            <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">
+              <span class="block text-[9px] text-emerald-700">Dengeli Bakım (TN)</span>
+              <strong class="text-xs">175 Gün</strong>
+            </div>
+            <div class="p-1.5 rounded bg-amber-50 text-amber-900 border border-amber-200">
+              <span class="block text-[9px] text-amber-700">Hassas İkaz (FP)</span>
+              <strong class="text-xs">9 Gün</strong>
+            </div>
+            <div class="p-1.5 rounded bg-rose-50 text-rose-900 border border-rose-200">
+              <span class="block text-[9px] text-rose-700">Kaçan Düzensizlik (FN)</span>
+              <strong class="text-xs">1 Gün</strong>
+            </div>
+            <div class="p-1.5 rounded bg-blue-50 text-blue-900 border border-blue-200">
+              <span class="block text-[9px] text-blue-700">Doğru Yakalanan Risk (TP)</span>
+              <strong class="text-xs">25 Gün (%96.2)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADIM 6: IMPROVEMENT & TIBBİ CİHAZ SINIRI / HUKUKİ KALKAN -->
+      <div class="p-3.5 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-amber-950 uppercase tracking-wider">6. Model Improvement & Tıbbi Cihaz Sınırı (Zaman Serisi Anomali Takibi)</span>
+          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold border border-amber-300">Pediatrik Rutin Kılavuzu</span>
+        </div>
+        <p class="text-[11px] text-amber-950 leading-relaxed">
+          ToHUM günlük bakım günlüğü medikal bir tanı cihazı değildir. Ebeveynin bebek bakımında ritim kazanmasını sağlayan akıllı bir günlük optimizasyon motorudur:
+        </p>
+        <ul class="list-disc pl-4 space-y-1 text-[10px] text-amber-900 leading-relaxed">
+          <li><strong>Hidrasyon Güvencesi:</strong> Islak bez sayısı günde 5'in altına düştüğünde sistem alarm verir. Ancak bu bir hastalık teşhisi değil, bebeğin sıvı ve süt alımını gözlemleme çağrısıdır.</li>
+          <li><strong>Beslenme Aralığı Pencereleri:</strong> 2.5 - 3.5 saatlik altın beslenme penceresi hatırlatılarak bebeğin aşırı acıkıp hava yutması ve gaz krizlerine girmesi önlenir.</li>
+          <li><strong>Hekim Konsültasyonu Kuralı:</strong> "Biz hekim değiliz, kesin tanı koymayız; 24 saatten uzun süren yetersiz ıslak bez (<4 bez), ağız kuruluğu veya çökük bıngıldak durumunda derhal çocuk hekiminize başvurunuz."</li>
+        </ul>
+      </div>
+
+      <!-- ADIM 7: PREDICTION & İNTERAKTİF SİMÜLATÖR -->
+      <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">7. Prediction (İnteraktif Bebek Günlük Bakım & Sirkadiyen Ritim Simülatörü)</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">TimescaleDB Ritim Motoru</span>
+        </div>
+        <p class="text-[11px] text-[#736d65]">
+          Aşağıdaki bakım parametrelerini bebeğinizin dünkü veya bugünkü günlük kayıtlarına göre ayarlayarak sirkadiyen ritim stabilite puanını, hidrasyon güvenliğini ve akıllı bakım önerilerini simüle edebilirsiniz.
+        </p>
+
+        <!-- SİMÜLATÖR GİRDİ FORMU -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
+          <!-- Bebek Yaşı (Hafta) -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Bebek Yaşı (Hafta):</span>
+              <span id="bdlSimAgeVal" class="font-mono font-bold text-slate-800">8. Hafta (2. Ay)</span>
+            </div>
+            <input type="range" id="bdlSimAge" min="1" max="24" step="1" value="8" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">6-8. haftalardan sonra melatonin ve gece uykusu blokları gelişir</span>
+          </div>
+
+          <!-- Günlük Islak Bez Sayısı -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Günlük Islak Bez Sayısı:</span>
+              <span id="bdlSimWetVal" class="font-mono font-bold text-emerald-800">7 Adet (İdeal Hidrasyon)</span>
+            </div>
+            <input type="range" id="bdlSimWet" min="1" max="12" step="1" value="7" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&lt; 5 Adet: Dehidratasyon ve yetersiz beslenme alarmı</span>
+          </div>
+
+          <!-- Günlük Kirli/Dışkılı Bez Sayısı -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Günlük Kirli / Dışkılı Bez Sayısı:</span>
+              <span id="bdlSimDirtyVal" class="font-mono font-bold text-slate-800">3 Adet (Normal)</span>
+            </div>
+            <input type="range" id="bdlSimDirty" min="0" max="8" step="1" value="3" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">Bağırsak motilitesi ve sindirim ritmi takibi</span>
+          </div>
+
+          <!-- Ortalama Beslenme / Öğün Aralığı -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Öğün Aralığı (Saat):</span>
+              <span id="bdlSimIntervalVal" class="font-mono font-bold text-emerald-800">2.8 Saat (İdeal Ritim)</span>
+            </div>
+            <input type="range" id="bdlSimInterval" min="1.5" max="6.0" step="0.1" value="2.8" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">İdeal aralık 2.5 - 3.5 saat; &gt; 4 saat açlık huzursuzluğu tetikler</span>
+          </div>
+
+          <!-- Günlük Toplam Uyku Süresi -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Günlük Toplam Uyku (Saat):</span>
+              <span id="bdlSimSleepVal" class="font-mono font-bold text-emerald-800">15.0 Saat (Dengeli)</span>
+            </div>
+            <input type="range" id="bdlSimSleep" min="8.0" max="20.0" step="0.5" value="15.0" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">0-6 aylık bebeklerde 12 - 17 saat dinlendirici uyku</span>
+          </div>
+
+          <!-- Gece En Uzun Kesintisiz Uyku Bloku -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">En Uzun Gece Uyku Bloku (Saat):</span>
+              <span id="bdlSimLongestVal" class="font-mono font-bold text-purple-800">4.5 Saat (Kesintisiz)</span>
+            </div>
+            <input type="range" id="bdlSimLongest" min="1.0" max="9.0" step="0.5" value="4.5" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">Sirkadiyen biyolojik saatin en kritik konsolidasyon göstergesi</span>
+          </div>
+
+          <!-- Gece Uyanma Sayısı -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Gece Uyanma Sıklığı (Kez):</span>
+              <span id="bdlSimAwakeVal" class="font-mono font-bold text-slate-800">3 Kez (Normal Sınır)</span>
+            </div>
+            <input type="range" id="bdlSimAwake" min="0" max="8" step="1" value="3" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">Gece beslenme ve alt değiştirme nöbetleri</span>
+          </div>
+
+          <!-- Günlük Huzursuzluk / Ağlama Süresi -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="font-bold text-[#1c1a18]">Ağlama / Gaz Huzursuzluğu (Saat):</span>
+              <span id="bdlSimFussVal" class="font-mono font-bold text-emerald-800">1.5 Saat (Yönetilebilir)</span>
+            </div>
+            <input type="range" id="bdlSimFuss" min="0.2" max="6.5" step="0.1" value="1.5" oninput="runBabyDailyLogSimulation()" class="w-full accent-[#4a5c4e]">
+            <span class="text-[9px] text-[#736d65] block">&ge; 3.5 saat: İnfantil kolik krizi / aşırı uyarılma göstergesi</span>
+          </div>
+        </div>
+
+        <!-- SİMÜLATÖR ÇIKTI KARTI -->
+        <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">Günlük Bakım Dengesi & Zaman Serisi Çıktıları</span>
+            <span id="bdlStabilityBadge" class="text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">🟢 Yüksek Sirkadiyen Denge & Düzen</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11px]">
+            <!-- Sirkadiyen Stabilite Skoru -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">Sirkadiyen Stabilite Skoru</span>
+              <div class="flex items-baseline justify-between">
+                <span id="bdlScoreVal" class="text-base font-bold text-emerald-800">82 / 100</span>
+                <span class="text-[9px] text-[#736d65] font-sans">Hedef: &gt; 70</span>
+              </div>
+              <div class="w-full bg-[#e5e2da] h-1.5 rounded-full overflow-hidden">
+                <div id="bdlScoreBar" class="bg-emerald-600 h-full rounded-full transition-all" style="width: 82%"></div>
+              </div>
+            </div>
+
+            <!-- Suboptimal Bakım Riski -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">Bakım / Hidrasyon Risk Riski</span>
+              <div class="flex items-baseline justify-between">
+                <span id="bdlRiskProbVal" class="text-base font-bold text-emerald-800">%4.2</span>
+                <span class="text-[9px] text-[#736d65] font-sans">Eşik: %40</span>
+              </div>
+              <div class="w-full bg-[#e5e2da] h-1.5 rounded-full overflow-hidden">
+                <div id="bdlRiskProbBar" class="bg-emerald-600 h-full rounded-full transition-all" style="width: 4.2%"></div>
+              </div>
+            </div>
+
+            <!-- TimescaleDB Durumu -->
+            <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1">
+              <span class="text-[10px] text-[#736d65] block font-sans">TimescaleDB Zaman Penceresi</span>
+              <div class="flex items-baseline justify-between">
+                <span id="bdlWindowVal" class="text-base font-bold text-indigo-800">2.8s Öğün</span>
+                <span class="text-[9px] text-[#736d65] font-sans">7 Günlük Kayan Ort.</span>
+              </div>
+              <span id="bdlWindowSub" class="text-[9px] text-emerald-700 block font-sans">Öğün ritmi ve uyku uyumlu</span>
+            </div>
+          </div>
+
+          <!-- AKILLI TAVSİYE VE PROTOKOL KUTUSU -->
+          <div id="bdlProtocolBox" class="p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[11px] text-emerald-950 flex items-start gap-2">
+            <span id="bdlProtocolIcon" class="text-base">🛡️</span>
+            <div>
+              <strong id="bdlProtocolTitle" class="block font-bold">Harika Ritim: Günlük Bakım Dengesi Çok İyi</strong>
+              <p id="bdlProtocolText" class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+                Islak bez sayısı yeterli hidrasyona işaret ediyor, öğün aralıkları sindirim sistemini yormayacak periyotta ve gece en uzun uyku bloku yaşa uygun ilerliyor.
+              </p>
+            </div>
+          </div>
+
+          <!-- HEKİM VE YASAL REHBERLİK NOTU -->
+          <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] text-[10px] text-[#736d65] leading-relaxed">
+            <strong class="text-[#1c1a18]">🩺 ToHUM Klinik ve Yasal Rehberlik:</strong>
+            <span id="bdlDoctorText" class="block mt-0.5">
+              Biz hekim değiliz, tıbbi teşhis koymayız. Günlük bakım günlüğü bebeğinizin beslenme ve uyku pencerelerini optimize etmek içindir. Kalıcı dehidratasyon (ağız kuruluğu, çökük bıngıldak, <4 bez) durumunda acilen hekime başvurunuz.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
         `
       },
       'weight_height_breastfeeding': {
@@ -9375,6 +9858,8 @@
         setTimeout(runVaccineTrackingSimulation, 60);
       } else if (datasetId === 'newborn_health') {
         setTimeout(runNewbornHealthSimulation, 60);
+      } else if (datasetId === 'baby_daily_log') {
+        setTimeout(runBabyDailyLogSimulation, 60);
       }
 
       document.getElementById('datasetReportModal').classList.remove('hidden');
@@ -11049,6 +11534,208 @@
         redFlagsListEl.innerHTML = '';
       }
       if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz, tıbbi teşhis koymayız. Yenidoğan vitallerini rutin takip etmeye devam ediniz; beslenmeyi reddetme, solunum güçlüğü veya ateş halinde doktorunuza başvurunuz.";
+    }
+  }
+
+
+  // ==========================================
+  // SİMÜLATÖR: Bebek Günlük Bakım & Sirkadiyen Ritim Motoru
+  // ==========================================
+  function runBabyDailyLogSimulation() {
+    const ageEl = document.getElementById('bdlSimAge');
+    const wetEl = document.getElementById('bdlSimWet');
+    const dirtyEl = document.getElementById('bdlSimDirty');
+    const intervalEl = document.getElementById('bdlSimInterval');
+    const sleepEl = document.getElementById('bdlSimSleep');
+    const longestEl = document.getElementById('bdlSimLongest');
+    const awakeEl = document.getElementById('bdlSimAwake');
+    const fussEl = document.getElementById('bdlSimFuss');
+
+    if (!ageEl || !wetEl || !dirtyEl || !intervalEl || !sleepEl || !longestEl || !awakeEl || !fussEl) return;
+
+    const age = parseInt(ageEl.value || '8');
+    const wet = parseInt(wetEl.value || '7');
+    const dirty = parseInt(dirtyEl.value || '3');
+    const interval = parseFloat(intervalEl.value || '2.8');
+    const sleep = parseFloat(sleepEl.value || '15.0');
+    const longest = parseFloat(longestEl.value || '4.5');
+    const awake = parseInt(awakeEl.value || '3');
+    const fuss = parseFloat(fussEl.value || '1.5');
+
+    // Etiketleri güncelle
+    const ageValEl = document.getElementById('bdlSimAgeVal');
+    if (ageValEl) ageValEl.textContent = age + '. Hafta (' + Math.round(age / 4) + '. Ay)';
+
+    const wetValEl = document.getElementById('bdlSimWetVal');
+    if (wetValEl) {
+      if (wet < 5) {
+        wetValEl.textContent = wet + ' Adet (Dehidratasyon Alarmı!)';
+        wetValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (wet === 5) {
+        wetValEl.textContent = wet + ' Adet (Sınırda Hidrasyon)';
+        wetValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        wetValEl.textContent = wet + ' Adet (İdeal Hidrasyon)';
+        wetValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const dirtyValEl = document.getElementById('bdlSimDirtyVal');
+    if (dirtyValEl) dirtyValEl.textContent = dirty + ' Adet (Normal Dışkılama)';
+
+    const intervalValEl = document.getElementById('bdlSimIntervalVal');
+    if (intervalValEl) {
+      if (interval > 4.0) {
+        intervalValEl.textContent = interval.toFixed(1) + ' Saat (Uzun Açlık / Kolik Riski)';
+        intervalValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (interval < 2.0) {
+        intervalValEl.textContent = interval.toFixed(1) + ' Saat (Çok Sık Beslenme)';
+        intervalValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        intervalValEl.textContent = interval.toFixed(1) + ' Saat (İdeal Ritim)';
+        intervalValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const sleepValEl = document.getElementById('bdlSimSleepVal');
+    if (sleepValEl) {
+      if (sleep < 11.5) {
+        sleepValEl.textContent = sleep.toFixed(1) + ' Saat (Yetersiz Uyku)';
+        sleepValEl.className = 'font-mono font-bold text-rose-800';
+      } else {
+        sleepValEl.textContent = sleep.toFixed(1) + ' Saat (Dengeli)';
+        sleepValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    const longestValEl = document.getElementById('bdlSimLongestVal');
+    if (longestValEl) longestValEl.textContent = longest.toFixed(1) + ' Saat (Kesintisiz Gece Bloku)';
+
+    const awakeValEl = document.getElementById('bdlSimAwakeVal');
+    if (awakeValEl) {
+      if (awake >= 5) {
+        awakeValEl.textContent = awake + ' Kez (Sık Uyanma / Parçalı Uyku)';
+        awakeValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        awakeValEl.textContent = awake + ' Kez (Normal Ritim)';
+        awakeValEl.className = 'font-mono font-bold text-slate-800';
+      }
+    }
+
+    const fussValEl = document.getElementById('bdlSimFussVal');
+    if (fussValEl) {
+      if (fuss >= 3.5) {
+        fussValEl.textContent = fuss.toFixed(1) + ' Saat (İnfantil Kolik Dalgası)';
+        fussValEl.className = 'font-mono font-bold text-rose-800';
+      } else if (fuss >= 2.5) {
+        fussValEl.textContent = fuss.toFixed(1) + ' Saat (Hafif Gaz / Huzursuzluk)';
+        fussValEl.className = 'font-mono font-bold text-amber-800';
+      } else {
+        fussValEl.textContent = fuss.toFixed(1) + ' Saat (Sakin / Yönetilebilir)';
+        fussValEl.className = 'font-mono font-bold text-emerald-800';
+      }
+    }
+
+    // 1. Sirkadiyen Stabilite Skoru (0 - 100 Puan)
+    let score = (wet * 5.0) + (longest * 4.5) + (sleep * 2.5) - (awake * 4.0) - (fuss * 6.0) - (Math.abs(interval - 3.0) * 5.0) + 35.0;
+    score = Math.max(5.0, Math.min(99.0, score));
+
+    // 2. Suboptimal Bakım / Hidrasyon Riski (Lojistik Model)
+    let riskLatent = -3.2 + (wet < 5 ? 3.8 : 0) + (fuss >= 3.5 ? 2.8 : 0) + (interval > 4.0 ? 2.4 : 0) + (sleep < 11.5 ? 2.0 : 0);
+    let probRisk = 1 / (1 + Math.exp(-riskLatent));
+    if (wet < 5) probRisk = Math.max(0.85, probRisk);
+    else if (fuss >= 3.5 || interval > 4.0) probRisk = Math.max(0.55, probRisk);
+    else probRisk = Math.min(0.15, probRisk);
+    probRisk = Math.max(0.02, Math.min(0.98, probRisk));
+    const probRiskPct = probRisk * 100;
+
+    // DOM Elementlerini Güncelle
+    const badgeEl = document.getElementById('bdlStabilityBadge');
+    const scoreValEl = document.getElementById('bdlScoreVal');
+    const scoreBarEl = document.getElementById('bdlScoreBar');
+    const riskProbValEl = document.getElementById('bdlRiskProbVal');
+    const riskProbBarEl = document.getElementById('bdlRiskProbBar');
+    const windowValEl = document.getElementById('bdlWindowVal');
+    const windowSubEl = document.getElementById('bdlWindowSub');
+    const protoBoxEl = document.getElementById('bdlProtocolBox');
+    const protoIconEl = document.getElementById('bdlProtocolIcon');
+    const protoTitleEl = document.getElementById('bdlProtocolTitle');
+    const protoTextEl = document.getElementById('bdlProtocolText');
+    const doctorTextEl = document.getElementById('bdlDoctorText');
+
+    if (scoreValEl) scoreValEl.textContent = Math.round(score) + ' / 100';
+    if (scoreBarEl) scoreBarEl.style.width = Math.round(score) + '%';
+    if (riskProbValEl) riskProbValEl.textContent = '%' + probRiskPct.toFixed(1);
+    if (riskProbBarEl) riskProbBarEl.style.width = probRiskPct.toFixed(1) + '%';
+    if (windowValEl) windowValEl.textContent = interval.toFixed(1) + 's Öğün';
+
+    // Durum ve Rozet Renkleri
+    if (wet < 5 || probRisk >= 0.60) {
+      if (badgeEl) {
+        badgeEl.textContent = '🚨 Dehidratasyon / Bakım Uyarısı (Destek Gerekli)';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-rose-50 text-rose-800 border border-rose-200';
+      }
+      if (scoreValEl) scoreValEl.className = 'text-base font-bold text-rose-800';
+      if (scoreBarEl) scoreBarEl.className = 'bg-rose-600 h-full rounded-full transition-all';
+      if (riskProbValEl) riskProbValEl.className = 'text-base font-bold text-rose-800';
+      if (riskProbBarEl) riskProbBarEl.className = 'bg-rose-600 h-full rounded-full transition-all';
+      if (windowSubEl) {
+        windowSubEl.textContent = 'Acil beslenme ve sıvı telafisi önerilir!';
+        windowSubEl.className = 'text-[9px] text-rose-700 block font-sans';
+      }
+    } else if (probRisk >= 0.30 || score < 70) {
+      if (badgeEl) {
+        badgeEl.textContent = '⚠️ Orta Düzey Denge (Optimizasyon Alanı)';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-amber-50 text-amber-800 border border-amber-200';
+      }
+      if (scoreValEl) scoreValEl.className = 'text-base font-bold text-amber-800';
+      if (scoreBarEl) scoreBarEl.className = 'bg-amber-600 h-full rounded-full transition-all';
+      if (riskProbValEl) riskProbValEl.className = 'text-base font-bold text-amber-800';
+      if (riskProbBarEl) riskProbBarEl.className = 'bg-amber-600 h-full rounded-full transition-all';
+      if (windowSubEl) {
+        windowSubEl.textContent = 'Beslenme ve uyku aralığı ayarlanmalı';
+        windowSubEl.className = 'text-[9px] text-amber-700 block font-sans';
+      }
+    } else {
+      if (badgeEl) {
+        badgeEl.textContent = '🟢 Yüksek Sirkadiyen Denge & Düzen';
+        badgeEl.className = 'text-[10px] font-mono px-2 py-0.5 rounded font-bold bg-emerald-50 text-emerald-800 border border-emerald-200';
+      }
+      if (scoreValEl) scoreValEl.className = 'text-base font-bold text-emerald-800';
+      if (scoreBarEl) scoreBarEl.className = 'bg-emerald-600 h-full rounded-full transition-all';
+      if (riskProbValEl) riskProbValEl.className = 'text-base font-bold text-emerald-800';
+      if (riskProbBarEl) riskProbBarEl.className = 'bg-emerald-600 h-full rounded-full transition-all';
+      if (windowSubEl) {
+        windowSubEl.textContent = 'Öğün ritmi ve uyku uyumlu';
+        windowSubEl.className = 'text-[9px] text-emerald-700 block font-sans';
+      }
+    }
+
+    // Protokol Kutusu & Tavsiyeler
+    if (wet < 5) {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-rose-50 border border-rose-300 text-[11px] text-rose-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '🚨';
+      if (protoTitleEl) protoTitleEl.textContent = 'Dehidratasyon & Sıvı Eksikliği Uyarısı (Islak Bez < 5)';
+      if (protoTextEl) protoTextEl.textContent = 'Bebeğiniz bugün 5 adetten az ıslak bez kullandı (' + wet + ' adet). Yetersiz ıslak bez, sıvı veya anne sütü/mama alımının azaldığına işaret eden en güçlü klinik göstergedir (%100 klinik özgüllük). Besleme sıklığını 2-2.5 saate çekiniz ve hekiminizle irtibat kurunuz.';
+      if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz, kesin tanı koymayız. Bebeğinizde ağız kuruluğu, gözyaşsız ağlama veya çökük bıngıldak gibi dehidratasyon bulguları varsa acilen çocuk hekiminize başvurunuz.";
+    } else if (interval > 4.0) {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-[11px] text-amber-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '⚠️';
+      if (protoTitleEl) protoTitleEl.textContent = 'Düzensiz / Uzun Öğün Aralığı (OR = 18.91)';
+      if (protoTextEl) protoTextEl.textContent = 'Öğün aralığı ' + interval.toFixed(1) + ' saat ile uzun seyrediyor. 4 saati aşan açlık periyotları bebeğin aşırı acıkıp beslenirken hava yutmasına, gaz sancısına ve kolik krizlerine yol açabilir (OR = 18.91). 2.5 - 3.5 saatlik altın ritim önerilir.';
+      if (doctorTextEl) doctorTextEl.textContent = "Bebekler ilk aylarda talep ettikçe (on-demand) beslenmelidir; ancak 4 saati aşan aralıklarda bebeği uyandırıp beslemek kan şekerini dengede tutar.";
+    } else if (fuss >= 3.5) {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-[11px] text-amber-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '💡';
+      if (protoTitleEl) protoTitleEl.textContent = 'İnfantil Kolik & Gaz Huzursuzluğu Dalgası';
+      if (protoTextEl) protoTextEl.textContent = 'Günlük huzursuzluk/ağlama süresi ' + fuss.toFixed(1) + ' saati aşıyor. ToHUM 8.3 Hz Akustik Nöromodülasyon ses terapisini, ılık banyo ve karına saat yönünde dairesel masaj protokolünü deneyebilirsiniz.';
+      if (doctorTextEl) doctorTextEl.textContent = "Kolik ağlamaları genelde 3-4. aylarda kendiliğinden geriler. Ağlama kesintisiz sürer ve safralı kusma/ateş eşlik ederse hekiminize danışınız.";
+    } else {
+      if (protoBoxEl) protoBoxEl.className = 'p-2.5 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[11px] text-emerald-950 flex items-start gap-2';
+      if (protoIconEl) protoIconEl.textContent = '🛡️';
+      if (protoTitleEl) protoTitleEl.textContent = 'Harika Ritim: Günlük Bakım Dengesi Çok İyi';
+      if (protoTextEl) protoTextEl.textContent = 'Islak bez sayısı yeterli hidrasyona işaret ediyor (' + wet + ' adet), öğün aralıkları sindirim sistemini yormayacak periyotta (' + interval.toFixed(1) + ' saat) ve gece en uzun uyku bloku yaşa uygun (' + longest.toFixed(1) + ' saat) ilerliyor.';
+      if (doctorTextEl) doctorTextEl.textContent = "Biz hekim değiliz, tıbbi teşhis koymayız. Günlük bakım günlüğü bebeğinizin beslenme ve uyku pencerelerini optimize etmek içindir. Rutin kontrollerinizde bu logları hekiminizle paylaşabilirsiniz.";
     }
   }
 
