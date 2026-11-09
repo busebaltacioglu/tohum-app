@@ -1,0 +1,225 @@
+{
+  "dataset": "Breastfeeding Duration & Lactation Survival Analytics (IFPS II Benchmark)",
+  "dataset_source": "CDC Infant Feeding Practices Study II & Clinical Lactation Tracking Cohort",
+  "sample_size": 1450,
+  "n_train": 1160,
+  "n_test": 290,
+  "early_weaning_cases": 248,
+  "early_weaning_pct": 17.1,
+  "median_duration_months": 11.1,
+  "mean_duration_months": 11.42,
+  "censored_count": 364,
+  "welch_ttests": {
+    "skin_to_skin_on_duration": {
+      "mean_yes": 13.03,
+      "mean_no": 9.39,
+      "diff_months": 3.64,
+      "t_stat": 14.42,
+      "p_value": 4.324002413418191e-44
+    },
+    "lactation_support_on_duration": {
+      "mean_yes": 13.36,
+      "mean_no": 9.76,
+      "diff_months": 3.59,
+      "t_stat": 14.12,
+      "p_value": 2.1926269534046648e-42
+    },
+    "mastitis_on_duration": {
+      "mean_yes": 8.59,
+      "mean_no": 12.55,
+      "diff_months": -3.96,
+      "t_stat": -14.95,
+      "p_value": 4.1709123049089416e-45
+    }
+  },
+  "odds_ratios": {
+    "mastitis_on_early_weaning": {
+      "or": 4.37,
+      "ci_lower": 3.29,
+      "ci_upper": 5.81,
+      "p_value": 3.972392477326529e-26,
+      "chi2": 111.79,
+      "table": {
+        "tp": 140,
+        "fp": 275,
+        "fn": 108,
+        "tn": 927
+      }
+    },
+    "no_skin_to_skin_on_early_weaning": {
+      "or": 3.57,
+      "ci_lower": 2.66,
+      "ci_upper": 4.79,
+      "p_value": 2.6146411679600785e-18,
+      "chi2": 76.16,
+      "table": {
+        "tp": 173,
+        "fp": 472,
+        "fn": 75,
+        "tn": 730
+      }
+    },
+    "early_work_return_on_early_weaning": {
+      "or": 2.41,
+      "ci_lower": 1.78,
+      "ci_upper": 3.25,
+      "p_value": 1.034343172221841e-08,
+      "chi2": 32.78,
+      "table": {
+        "tp": 84,
+        "fp": 211,
+        "fn": 164,
+        "tn": 991
+      }
+    }
+  },
+  "vif_table": [
+    {
+      "feature": "maternal_age",
+      "vif": 1.01,
+      "tolerance": 0.991,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "maternal_education_years",
+      "vif": 1.01,
+      "tolerance": 0.991,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "parity",
+      "vif": 1.01,
+      "tolerance": 0.992,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "delivery_type",
+      "vif": 1.16,
+      "tolerance": 0.862,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "skin_to_skin_first_hour",
+      "vif": 1.16,
+      "tolerance": 0.861,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "lactation_support_48h",
+      "vif": 1.05,
+      "tolerance": 0.952,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "pacifier_first_month",
+      "vif": 1.01,
+      "tolerance": 0.993,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "nipple_cracks_or_mastitis",
+      "vif": 1.04,
+      "tolerance": 0.958,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "partner_support_score",
+      "vif": 1.0,
+      "tolerance": 0.996,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "maternal_anxiety_score",
+      "vif": 1.01,
+      "tolerance": 0.993,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.7707,
+      "precision_mean": 0.4004,
+      "recall_mean": 0.6523,
+      "f1_mean": 0.4932,
+      "roc_auc_mean": 0.8102
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.8397,
+      "precision_mean": 0.5616,
+      "recall_mean": 0.3541,
+      "f1_mean": 0.428,
+      "roc_auc_mean": 0.7972
+    },
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.7543,
+      "precision_mean": 0.3871,
+      "recall_mean": 0.7535,
+      "f1_mean": 0.5102,
+      "roc_auc_mean": 0.8428
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.7828,
+    "precision": 0.4198,
+    "recall": 0.68,
+    "f1_score": 0.5191,
+    "roc_auc": 0.8173,
+    "confusion_matrix": {
+      "tn": 193,
+      "fp": 47,
+      "fn": 16,
+      "tp": 34
+    }
+  },
+  "regression_metrics": {
+    "target": "duration_months",
+    "mae_months": 3.21,
+    "r2_score": 0.402
+  },
+  "feature_ranking": [
+    {
+      "feature": "nipple_cracks_or_mastitis",
+      "importance_pct": 14.75
+    },
+    {
+      "feature": "skin_to_skin_first_hour",
+      "importance_pct": 13.96
+    },
+    {
+      "feature": "lactation_support_48h",
+      "importance_pct": 13.21
+    },
+    {
+      "feature": "partner_support_score",
+      "importance_pct": 11.79
+    },
+    {
+      "feature": "maternal_anxiety_score",
+      "importance_pct": 8.74
+    },
+    {
+      "feature": "return_to_work_month",
+      "importance_pct": 8.52
+    },
+    {
+      "feature": "maternal_age",
+      "importance_pct": 8.46
+    },
+    {
+      "feature": "pacifier_first_month",
+      "importance_pct": 5.95
+    },
+    {
+      "feature": "delivery_type",
+      "importance_pct": 5.88
+    },
+    {
+      "feature": "maternal_education_years",
+      "importance_pct": 4.41
+    },
+    {
+      "feature": "parity",
+      "importance_pct": 4.34
+    }
+  ]
+}

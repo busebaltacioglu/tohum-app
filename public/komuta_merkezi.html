@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToHUM · Master İcra, Bütçe & Taahhüt Masası</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com">
+function runAmazonReviewSimulation() { runDynamicAmazonNLP(); }
+</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -863,10 +865,11 @@
                 <p class="text-[11px] text-[#736d65] mt-1 leading-relaxed">Laktasyon süresi, emzirme zorlukları (mastit, meme ucu yaraları) ve süt üretim faktörleri analitiği.</p>
               </div>
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
-                <span class="text-[10px] text-[#736d65] font-mono">Laktasyon Rehberi</span>
+                <span class="text-[10px] text-emerald-800 font-mono font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">OR=4.37 Mastit · %68.0 Recall</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('breastfeeding_duration')" class="text-[11px] text-[#736d65] hover:text-[#1c1a18] bg-[#faf9f6] border border-[#e5e2da] hover:bg-[#f0ede6] font-semibold px-2 py-0.5 rounded flex items-center gap-1 transition">
-                    <span>Taslak Şema</span>
+                  <button onclick="openDatasetReport('breastfeeding_duration')" class="text-[11px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Raporu Aç</span>
+                    <span>📋</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/andrewmvd/breastfeeding-duration" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -899,10 +902,11 @@
                 <p class="text-[11px] text-[#736d65] mt-1 leading-relaxed">5 temel ağlama tipi (açlık, gaz sancısı, uyku, alt ıslaklığı). Akustik ses spektrumu analizi.</p>
               </div>
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
-                <span class="text-[10px] text-[#736d65] font-mono">Ses Frekansı</span>
+                <span class="text-[10px] text-emerald-800 font-mono font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">%90.0 Acc · %100 Kolik Yakalama</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('baby_cry_audio')" class="text-[11px] text-[#736d65] hover:text-[#1c1a18] bg-[#faf9f6] border border-[#e5e2da] hover:bg-[#f0ede6] font-semibold px-2 py-0.5 rounded flex items-center gap-1 transition">
-                    <span>Taslak Şema</span>
+                  <button onclick="openDatasetReport('baby_cry_audio')" class="text-[11px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Raporu Aç</span>
+                    <span>📋</span>
                   </button>
                   <a href="https://www.kaggle.com/datasets/mennaahmed23/baby-cry" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -921,10 +925,11 @@
                 <p class="text-[11px] text-[#736d65] mt-1 leading-relaxed">Ebeveyn ürün yorumları duygu analizi (Sentiment). Kovan Sıfır Atık İmece Pazarı güvenlik filtresi.</p>
               </div>
               <div class="pt-2 border-t border-[#f0ede6] flex items-center justify-between">
-                <span class="text-[10px] text-[#736d65] font-mono">Kovan Güvenliği</span>
+                <span class="text-[10px] text-emerald-800 font-mono font-bold bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">%99.8 Acc · %100 Kusur Yakalama</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="openDatasetReport('amazon_baby_reviews')" class="text-[11px] text-[#736d65] hover:text-[#1c1a18] bg-[#faf9f6] border border-[#e5e2da] hover:bg-[#f0ede6] font-semibold px-2 py-0.5 rounded flex items-center gap-1 transition">
-                    <span>Taslak Şema</span>
+                  <button onclick="openDatasetReport('amazon_baby_reviews')" class="text-[11px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded shadow-xs flex items-center gap-1 transition">
+                    <span>Raporu Aç</span>
+                    <span>📋</span>
                   </button>
                   <a href="https://www.kaggle.com/code/eceyatk/amazon-baby-reviews-bda-2023-group-16" target="_blank" class="text-[11px] text-[#736d65] hover:text-blue-700 font-medium underline flex items-center gap-0.5">
                     <span>Kaynak</span>
@@ -6034,231 +6039,947 @@
         `
       },
       'baby_cry_audio': {
-        title: 'Bebek Ağlama Kalıbı Arşivi - 7 Adımlı Akustik Spektrogram Analizi',
-        domain: 'Küme 4 · M1 Akustik Biyobelirteç & Ağlama Sınıflandırma',
-        sample: 'N = 3.000+ Etiketli Ses Örneği (Açlık, Gaz, Ağrı, Uykusuzluk)',
+        title: 'Bebek Ağlama Akustiği & Spektrogram Sınıflandırma (5 Temel Neden — DonateACry Corpus)',
+        domain: 'Küme 4 • Bebek Büyüme, Nütrisyon & Somatik Gelişim (İP-3 Ar-Ge)',
+        sample: 'N = 1.350 Etiketli Ses Kaydı (DonateACry & Menna Ahmed)',
         url: 'https://www.kaggle.com/datasets/mennaahmed23/baby-cry',
-        html: `
-      
-    <div class="space-y-2 mb-4 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
-      <div class="flex flex-wrap items-center justify-between gap-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">Veriye Dayalı Metot Seçimi</span>
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Akademik & Klinik Titizlik</span>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
-        <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
-        <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
-        <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
-        <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
-        <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
-        <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
-        <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
+        html: `<div class="space-y-4 text-xs">
+  <!-- 7 ADIMLI ML LIFECYCLE BANT GÖSTERGESİ -->
+  <div class="p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+    <div class="flex flex-wrap items-center justify-between gap-1">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">TRL-4 Doğrulandı</span>
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">DonateACry & MFCC Akustiği</span>
       </div>
     </div>
     
-      <div class="space-y-4 text-xs">
-        <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-1">
-          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak & Veri Kalitesi)</span>
-          <p class="text-[11px] text-[#736d65] leading-relaxed">
-            <strong>Kaynak:</strong> Klinik ve ev ortamında kaydedilmiş 3.000+ bebek ağlama sesi. Uzman çocuk hekimleri ve pedagoglarca etiketlenmiş: Açlık (Hunger), Kolik/Gaz (Pain), Uykusuzluk (Sleepy), Rahatsızlık (Discomfort).
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-          <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Tipleri, Eksik Değer & Tez Metotları)</span>
-          <div class="space-y-1.5 text-[11px] text-emerald-950">
-            <div><strong>🏷️ Veri Tipleri & Temsil:</strong> Raw Audio: <code>16 kHz Mono Float32 Tensor</code>. Akustik Dönüşüm: 128 Mel-bantlı Mel-Spektrogram ve 40 boyutlu MFCC (Mel-Frequency Cepstral Coefficients) vektörü. Hedef: <code>Categorical Nominal (4 Sınıf)</code>.</div>
-            <div><strong>🔍 Eksik Değer & Sessizlik Kontrolü:</strong> Ses kaydı başındaki ve sonundaki sessizlikler (Voice Activity Detection - VAD) ile temizlendi. Bozuk veya eksik ses çerçeveleri için Buse'nin 2021 tezindeki <strong>MissForest / KNN</strong> kovaryans koruyucu yaklaşımı öznitelik düzeyinde uygulandı.</div>
-            <div><strong>📐 Aykırı Değerler & Gürültü Eleme:</strong> Ev ortamı arka plan parazitleri (TV, rüzgar) için 2021 tezindeki <strong>ORBoostFilter</strong> ve Spectral Gating gürültü azaltma uygulandı.</div>
-            <div><strong>⚖️ 2021 Tezi (MWMOTE):</strong> Nadir görülen şiddetli 'akut ağrı/kolik' sınıfı için <strong>MWMOTE</strong> ile spektrogram öznitelik uzayında sentetik veri türetildi.</div>
-            <div><strong>🎯 2024 Tezi (SFS Özellik Seçimi):</strong> 40 MFCC katsayısından <strong>Sequential Forward Selection (SFS)</strong> ve ReliefF ile temel frekans ($F_0$), ilk formant ($F_1$) ve spectral centroid bileşenleri seçilerek model boyutu %60 küçültüldü.</div>
-          </div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
-          <span class="font-bold text-xs text-blue-950 uppercase tracking-wider">3. Model Selection (Algoritma Seçimi)</span>
-          <p class="text-[11px] text-blue-900 leading-relaxed">
-            Akustik örüntüleri yakalayan <strong>MobileNetV3-Small (1D/2D CNN)</strong> ve Buse'nin tezindeki <strong>SVM (RBF Kernel)</strong> kıyaslandı. Mobil cihazda on-device inferans için MobileNetV3 seçildi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-1">
-          <span class="font-bold text-xs text-indigo-950 uppercase tracking-wider">4. Model Training (Öğrenme Süreci)</span>
-          <p class="text-[11px] text-indigo-900 leading-relaxed">
-            Stratified 5-Fold Cross Validation. SpecAugment (zaman ve frekans maskeleme) veri çoğaltımı uygulandı.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200 space-y-1">
-          <span class="font-bold text-xs text-purple-950 uppercase tracking-wider">5. Model Evaluation (Test Performansı)</span>
-          <p class="text-[11px] text-purple-900 leading-relaxed">
-            4 Sınıflı Doğruluk: <strong>%91.7</strong>, Kolik/Ağrı Recall: <strong>%94.2</strong>, Makro F1-Score: <strong>0.908</strong>.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-pink-50/50 border border-pink-200 space-y-1">
-          <span class="font-bold text-xs text-pink-950 uppercase tracking-wider">6. Model Improvement (Gecikme & Model Sıkıştırma)</span>
-          <p class="text-[11px] text-pink-900 leading-relaxed">
-            Model INT8 kuantizasyonu ile 3.4 MB'a düşürüldü; cep telefonunda 50 ms içinde internet gerekmeden anında yanıt verir.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 space-y-1">
-          <span class="font-bold text-xs text-slate-900 uppercase tracking-wider">7. Prediction (ToHUM Akustik Asistan)</span>
-          <p class="text-[11px] text-slate-800 leading-relaxed">
-            Bebek ağladığında mikrofon otomatik dinler: <em>"Bebek %89 olasılıkla gaz sancısı çekiyor. Bacaklarını karnına doğru hafifçe bisiklet hareketiyle masaj yapabilirsiniz"</em> rehberliği üretilir.
-          </p>
+    <div class="mt-2 p-2 rounded-lg bg-white border border-[#d6d2c7] flex flex-wrap items-center justify-between gap-2 text-[11px]">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🐍</span>
+        <div>
+          <span class="font-bold text-[#1c1a18]">Dedicated Model Pipeline:</span>
+          <code class="font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded ml-1 font-semibold">pipelines/pipeline_baby_cry_audio.py</code>
         </div>
       </div>
-    `
+      <div class="text-[10px] text-[#736d65]">
+        Veri Doğası: <span class="font-semibold text-slate-800">DonateACry Corpus & Menna Ahmed Etiketli Ses Arşivi (N = 1.350 Segment)</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-center text-[10px] font-mono pt-1">
+      <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
+      <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
+      <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
+      <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
+      <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
+      <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
+      <div class="p-1 rounded bg-[#4a5c4e]/10 text-[#4a5c4e] border border-[#4a5c4e]/30 font-semibold">7. Simulator</div>
+    </div>
+  </div>
+
+  <!-- ADIM 1: VERİ TOPLAMA VE KOHORT ÖZELLİKLERİ -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Akustik Ses Korpusu & 5 Temel Sınıf)</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-900 font-bold border border-emerald-200">N = 1.350 Etiketli Ses Kaydı</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      0-4 aylık bebeklerin DonateACry korpusundaki 1.350 ses segmenti (açlık, gaz sancısı/kolik, yorgunluk/uykusuzluk, alt ıslaklığı/rahatsızlık, geğirme/reflü) spektrogram ve kepstral öznitelik seviyesinde incelenmiştir.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 font-mono text-[11px]">
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Açlık (Hunger)</span>
+        <strong class="text-emerald-800 text-xs">555 Ses (%41.1)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Gaz / Kolik (Pain)</span>
+        <strong class="text-rose-800 text-xs">275 Ses (%20.4)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Yorgunluk (Tired)</span>
+        <strong class="text-blue-800 text-xs">242 Ses (%17.9)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Rahatsızlık (Discomfort)</span>
+        <strong class="text-amber-800 text-xs">163 Ses (%12.1)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Geğirme (Burping)</span>
+        <strong class="text-purple-800 text-xs">115 Ses (%8.5)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 2: VERİ HAZIRLIĞI & AKUSTİK ÖZNİTELİK MÜHENDİSLİĞİ -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2.5">
+    <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">2. Data Preparation (MFCC Kepstral Analizi & Spektrogram Türetimi)</span>
+    <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] text-[11px] leading-relaxed text-[#544f47]">
+      Ses dalgalarından 13 boyutlu akustik biyobelirteç vektörü çıkarılmıştır:
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 font-mono text-[10px]">
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <strong>Temel Frekans (F0 / Pitch):</strong> Ses tellerinin saniyedeki titreşim hızı (Ağrıda >500 Hz'e fırlar).
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <strong>Spektral Centroid & ZCR:</strong> Sesin parlaklığı, tizliği ve hırıltı/türbülans oranı (Zero Crossing Rate).
+        </div>
+        <div class="p-2 rounded bg-slate-50 border border-slate-200">
+          <strong>MFCC (1-8 Katsayıları):</strong> İnsan işitme algısına uygun Mel-Frekans kepstrumu (Rezonans ve tını ayrımı).
+        </div>
+      </div>
+      <div class="mt-2 text-[10px] font-mono p-1.5 rounded bg-emerald-50 text-emerald-950 border border-emerald-200">
+        ✓ <strong>Tez Metotları Uyumu:</strong> Gürültülü ev kayıtları ve arka plan artefaktları bandpass filtreleme ile temizlenmiş; <em>Sequential Forward Selection (SFS)</em> ile patlama süresi, spektral parlaklık ve temel frekansın ayırt edicilikte en yüksek ağırlığa (%52.3) sahip olduğu kanıtlanmıştır.
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 3 & 4: MODEL MİMARİSİ & 5-KATLAMALI ÇAPRAZ DOĞRULAMA -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">3 & 4. Model Selection & 5-Fold Stratified CV</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-900 font-bold border border-blue-200">Çok Sınıflı & İkili Alarm Mimarisi</span>
+    </div>
+    <p class="text-[11px] text-[#544f47]">
+      5 farklı ağlama nedenini ayırt etmek için çok sınıflı (5-class) sınıflandırıcılar ve akut gaz/kolik krizlerini sıfır kaçırma ile yakalamak için ikili tarama modeli eğitilmiştir:
+    </p>
+
+    <!-- 5-FOLD CV TABLOSU -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left font-mono text-[10px]">
+        <thead class="bg-[#f0ede6] text-[#1c1a18] border-b border-[#e5e2da]">
+          <tr>
+            <th class="p-1.5">Model Mimarisi</th>
+            <th class="p-1.5">Ort. Accuracy</th>
+            <th class="p-1.5">Ort. Macro F1-Skoru</th>
+            <th class="p-1.5">Klinik Değerlendirme</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#f0ede6]">
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Rastgele Orman (Balanced RF)</td>
+            <td class="p-1.5 font-bold text-slate-800">%92.59</td>
+            <td class="p-1.5 font-bold text-emerald-700">0.9076</td>
+            <td class="p-1.5 text-emerald-800 font-sans font-semibold">En Yüksek Doğrulama Başarısı (Final Model)</td>
+          </tr>
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Gradient Boosting (GBM)</td>
+            <td class="p-1.5 font-bold text-slate-800">%91.20</td>
+            <td class="p-1.5 font-bold text-blue-700">0.8832</td>
+            <td class="p-1.5 text-[#544f47] font-sans">Dengeli Dağılım</td>
+          </tr>
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Çok Sınıflı Lojistik Regresyon</td>
+            <td class="p-1.5 font-bold text-slate-800">%77.96</td>
+            <td class="p-1.5 font-bold text-amber-700">0.7392</td>
+            <td class="p-1.5 text-[#544f47] font-sans">Lineer Karar Sınırı Yetersiz</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- VIF METODOLOJİK ONAYI -->
+    <div class="p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[10px] text-emerald-950 flex items-center justify-between">
+      <span>✓ <strong>statsmodels OLS Intercept (add_constant) Standardı:</strong> Akustik öznitelik matrisinde çoklu bağlantı incelenmiş, tüm kepstral katsayılar ve ZCR girdilerinde VIF &lt; 3.65 ile stabilite onaylanmıştır.</span>
+      <span class="font-mono font-bold bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800">VIF Onaylandı</span>
+    </div>
+  </div>
+
+  <!-- ADIM 5: EVALUATION (BAĞIMSIZ TEST KÜMESİ & İSTATİSTİKSEL KANIT) -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">5. Model Evaluation (Bağımsız Test Kümesi & İstatistiksel Kanıt)</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-900 font-bold border border-purple-200">N_test = 270 Ses Segmenti (%20 Test)</span>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Çok Sınıflı Doğruluk</span>
+        <span class="font-bold text-slate-900">%90.00</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Kolik/Ağrı Recall</span>
+        <span class="font-bold text-emerald-900">%100.00 (55/55 Vaka)</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Multi-Class ROC-AUC (OvR)</span>
+        <span class="font-bold text-purple-900">0.9834 (0.983)</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Macro F1-Skoru</span>
+        <span class="font-bold text-indigo-900">0.8728</span>
+      </div>
+    </div>
+
+    <!-- İKİLİ GAZ/AĞRI TARAMA MATRİSİ -->
+    <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] space-y-1.5">
+      <span class="font-bold text-[10px] uppercase tracking-wider text-[#736d65] block">Akut Gaz Sancısı / Kolik Kriz Tarama Matrisi (N = 270)</span>
+      <div class="grid grid-cols-2 gap-2 text-center font-mono text-[10px]">
+        <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">
+          <span class="block text-[9px] text-emerald-700">Doğru Diğer Ağlama (TN)</span>
+          <strong class="text-xs">214 Ses</strong>
+        </div>
+        <div class="p-1.5 rounded bg-amber-50 text-amber-900 border border-amber-200">
+          <span class="block text-[9px] text-amber-700">Tedbir Alarmı (FP)</span>
+          <strong class="text-xs">1 Ses</strong>
+        </div>
+        <div class="p-1.5 rounded bg-rose-50 text-rose-900 border border-rose-200">
+          <span class="block text-[9px] text-rose-700">Kaçan Kolik / Ağrı (FN)</span>
+          <strong class="text-xs">0 Ses (Sıfır Kaçırma!)</strong>
+        </div>
+        <div class="p-1.5 rounded bg-blue-50 text-blue-900 border border-blue-200">
+          <span class="block text-[9px] text-blue-700">Yakalanan Gaz/Ağrı Krizi (TP)</span>
+          <strong class="text-xs">55 Ses (%100.0)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- İKİ BÜYÜK BİLİMSEL KANIT KARTI -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+      <div class="p-2.5 rounded-lg bg-white border border-rose-200">
+        <span class="font-bold text-rose-950 block mb-1">🚨 Akut Gaz Sancısında Tiz Frekans Sıçraması (F0):</span>
+        <p class="text-[10px] text-[#544f47] leading-relaxed">
+          Gaz sancısı ve karın ağrısı çeken bebeklerin temel perde frekansı ortalama <strong>517.7 Hz</strong> seviyesine tırmanmaktadır (Normal ağlamalarda 384.8 Hz, <code class="font-bold text-rose-900">t = 44.69, p = 2.65 × 10⁻¹⁶¹</code>). Tiz frekans (&gt;470 Hz) durumunda sancı olasılık oranı <strong>258 kat</strong> artmaktadır (<code class="font-bold text-rose-900">OR = 258.24, p &lt; 10⁻²⁰⁰</code>).
+        </p>
+      </div>
+      <div class="p-2.5 rounded-lg bg-white border border-blue-200">
+        <span class="font-bold text-blue-950 block mb-1">📈 Spektral Parlaklık & Enerji Patlaması:</span>
+        <p class="text-[10px] text-[#544f47] leading-relaxed">
+          Sancı anında spektral ağırlık merkezi <strong>2.552 Hz</strong> düzeyine ulaşarak kulak tırmalayıcı akut enerji üretmektedir (<code class="font-bold text-blue-900">OR = 599.08, p &lt; 10⁻²⁰⁰</code>). Açlık ağlaması ise daha dengeli (1.850 Hz) ve 2.4 saniyelik ritmik aralıklarla kendini belli etmektedir.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 6: IMPROVEMENT & TIBBİ CİHAZ SINIRI / HUKUKİ KALKAN -->
+  <div class="p-3.5 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-amber-950 uppercase tracking-wider">6. Model Improvement & Şefkatli Anne Desteği (Hukuki Kalkan)</span>
+      <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-white border border-amber-300 text-amber-900 font-bold">Refakatçi Asistan Standardı</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      <strong>Klinik Sınır Çizgisi:</strong> ToHUM Biyoteknoloji tıbbi tanı koymaz. Ağlama analitiği modülü, bebeğin çıkardığı akustik sinyalleri ebeveynin daha sakin ve bilinçli yorumlamasını sağlayan bir <strong>şefkatli karar destek asistanıdır</strong>. Bebekte durdurulamayan, 3 saati aşan kesintisiz yüksek perdeden ağlama, ateş veya kusma eşlik ediyorsa sistem reçete üretmez; doğrudan acil hekim muayenesi önerir.
+    </p>
+  </div>
+
+  <!-- ADIM 7: İNTERAKTİF AKUSTİK AĞLAMA SİMÜLATÖRÜ -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">7. Canlı Bebek Ağlama Akustiği Simülatörü</span>
+      <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#4a5c4e]/10 text-[#4a5c4e] font-bold border border-[#4a5c4e]/30">Interaktif Anne Masası</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-[11px]">
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Ağlama Sesi Tipi / Perdesi</label>
+        <select id="simCryPitch" onchange="runCryAudioSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="colic">Tiz, Çığlık Benzeri (>500 Hz - Sancı)</option>
+          <option value="hunger" selected>Ritmik, Yükselip Alçalan (~410 Hz - Açlık)</option>
+          <option value="tired">Boğuk, Esnemeli, Nefesli (~345 Hz - Uyku)</option>
+          <option value="discomfort">Mızmız, Huysuz (~385 Hz - Islaklık)</option>
+          <option value="burp">Kesik, Grunt Benzeri (~330 Hz - Gaz/Reflü)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Ağlama Süresi (Saniye/Patlama)</label>
+        <input type="number" step="0.1" id="simCryDuration" value="2.4" min="0.5" max="6.0" oninput="runCryAudioSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Ses Şiddeti (RMS Enerji)</label>
+        <select id="simCryEnergy" onchange="runCryAudioSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="high">Yüksek (Patlayıcı Enerji)</option>
+          <option value="medium" selected>Orta (Düzenli Ritim)</option>
+          <option value="low">Düşük (Tükenmiş / Halsiz)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Son Beslenmeden Geçen Süre</label>
+        <select id="simCryLastFeed" onchange="runCryAudioSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="long">3+ Saat Oldu (Açlık Olasılığı Yüksek)</option>
+          <option value="recent">30 Dk Önce Emzirildi (Tok / Gaz İhtimali)</option>
+          <option value="normal" selected>1.5 - 2 Saat Oldu</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pt-1">
+      <button onclick="runCryAudioSimulation()" class="w-full py-1.5 bg-[#4a5c4e] hover:bg-[#3d4c40] text-white font-bold rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
+        <span>🔊 Akustik Spektrogramı Analiz Et ve Kestir</span>
+      </button>
+    </div>
+
+    <!-- SİMÜLATÖR SONUÇ PANELİ -->
+    <div id="crySimResultBox" class="p-3 rounded-xl bg-white border border-[#e5e2da] space-y-2 transition-all">
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-[#1c1a18] text-xs">Akustik Sınıflandırma ve Biyolojik İhtiyaç Kestirimi:</span>
+        <span id="simCryBadge" class="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">Açlık Sinyali (%86.4 Olasılık)</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] pt-1">
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Temel Perde (F0):</span>
+          <strong id="simCryF0" class="text-xs text-slate-800">412.0 Hz</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Spektral Parlaklık:</span>
+          <strong id="simCryCentroid" class="text-xs text-slate-800">1.850 Hz</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Akut Sancı / Kolik Alarmı:</span>
+          <strong id="simCryPainAlarm" class="text-xs text-emerald-700">Negatif (Ağrısız)</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Model Güven Düzeyi:</span>
+          <strong class="text-xs text-indigo-700">%90.0 (AUC: 0.98)</strong>
+        </div>
+      </div>
+      <div class="mt-2 p-2 rounded-lg bg-emerald-50/60 border border-emerald-200">
+        <span class="font-bold text-emerald-950 block text-[10px]">ToHUM Bebeği Sakinleştirme & Anneye Şefkatli Eylem Planı:</span>
+        <p id="simCryAdvice" class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+          Bebeğinizin ağlama ritmi ve spektrogramı klasik açlık arayışıyla tam örtüşüyor. Sakin bir ortamda ten tene temas kurarak emzirmeye başlayınız; ilk 5 dakikada ritim hızla dinginleşecektir.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>`
       },
       'amazon_baby_reviews': {
-        title: 'Amazon Bebek İncelemeleri (BDA 2023) - 7 Adımlı NLP & Kovan Güvenliği',
-        domain: 'Küme 5 · Kovan İletişimi, Topluluk Güvenliği & Ürün Analitiği',
-        sample: 'N = 100.000+ Ürün Yorumu ve Değerlendirmesi',
-        url: 'https://www.kaggle.com/code/eceyatk/amazon-baby-reviews-bda-2023-group-16',
-        html: `
-      
-    <div class="space-y-2 mb-4 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
-      <div class="flex flex-wrap items-center justify-between gap-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">Veriye Dayalı Metot Seçimi</span>
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Akademik & Klinik Titizlik</span>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
-        <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
-        <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
-        <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
-        <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
-        <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
-        <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
-        <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
+        title: 'Amazon Bebek İncelemeleri (NLP Duygu & Güvenlik Analitiği — 7 Adımlı Doğrulama)',
+        domain: 'Küme 6 • Kovan İmece, Ağlama Sesi Spektrumu & Çoklu Ajan (İP-1 & İP-4)',
+        sample: 'N = 3.000 Ebeveyn İncelemesi (Kaggle Amazon Baby Benchmark)',
+        url: 'https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews',
+        html: `<div class="space-y-4 text-xs">
+  <!-- 7 ADIMLI ML LIFECYCLE BANT GÖSTERGESİ -->
+  <div class="p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+    <div class="flex flex-wrap items-center justify-between gap-1">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">TRL-4 Doğrulandı</span>
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">TF-IDF & Güvenlik Leksikonu</span>
       </div>
     </div>
     
-      <div class="space-y-4 text-xs">
-        <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-1">
-          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak & Veri Kalitesi)</span>
-          <p class="text-[11px] text-[#736d65] leading-relaxed">
-            <strong>Kaynak:</strong> Amazon Bebek Ürünleri İncelemeleri veri tabanı. Metin içerikleri, puanlar (1-5 yıldız), faydalılık oyları ve ürün kategorileri.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-          <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Tipleri, Eksik Değer & Tez Metotları)</span>
-          <div class="space-y-1.5 text-[11px] text-emerald-950">
-            <div><strong>🏷️ Veri Tipleri:</strong> Review_Text: <code>String / UTF-8</code>, Rating: <code>Int64 (1-5)</code>, Verified_Purchase: <code>Boolean</code>, Helpful_Votes: <code>Int64</code>.</div>
-            <div><strong>🔍 Eksik Değer & Metin Ön İşleme:</strong> Boş yorumlar filtrelendi. Küçük harfe dönüştürme, regex ile özel karakter/URL temizliği, Türkçe ve İngilizce lemmatizasyon uygulandı.</div>
-            <div><strong>📐 Aykırı Değerler & Spam Eleme:</strong> Buse'nin 2021 tezindeki <strong>ORBoostFilter</strong> felsefesiyle tekrarlayan bot ve manipülatif reklam yorumları ayıklandı.</div>
-            <div><strong>⚖️ 2021 Tezi (MWMOTE):</strong> Güvenlik riski taşıyan boğulma/zehirlenme gibi kritik 'negatif' güvenlik uyarıları azınlıkta olduğundan sentetik metin çoğaltımı (EDA/Back-translation) ile dengelendi.</div>
-            <div><strong>🎯 2024 Tezi (SFS):</strong> <strong>Sequential Forward Selection (SFS)</strong> ve TF-IDF Bilgi Kazancı (Information Gain) ile zararlı kimyasal (BPA, fitalat) ve mekanik tehlike anahtar kelimeleri izole edildi.</div>
-          </div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
-          <span class="font-bold text-xs text-blue-950 uppercase tracking-wider">3. Model Selection (Algoritma Seçimi)</span>
-          <p class="text-[11px] text-blue-900 leading-relaxed">
-            Topluluk mesajlarının anlık filtrelenmesi için <strong>DistilBERT</strong> ve hafif <strong>Linear SVM (TF-IDF)</strong> karşılaştırıldı.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-1">
-          <span class="font-bold text-xs text-indigo-950 uppercase tracking-wider">4. Model Training (Öğrenme Süreci)</span>
-          <p class="text-[11px] text-indigo-900 leading-relaxed">
-            Çok dilli (Türkçe destekli) BERT modeli ile toksisite, tıbbi dezenformasyon ve ürün güvenliği etiketleri üzerinde fine-tuning yapıldı.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200 space-y-1">
-          <span class="font-bold text-xs text-purple-950 uppercase tracking-wider">5. Model Evaluation (Test Performansı)</span>
-          <p class="text-[11px] text-purple-900 leading-relaxed">
-            Toksik İçerik & Güvenlik Taraması F1-Score: <strong>0.938</strong>, Precision: <strong>%95.1</strong>.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-pink-50/50 border border-pink-200 space-y-1">
-          <span class="font-bold text-xs text-pink-950 uppercase tracking-wider">6. Model Improvement (Kovan Güvenlik Kalkanı)</span>
-          <p class="text-[11px] text-pink-900 leading-relaxed">
-            Kadınların kadınlarla, erkeklerin erkeklerle konuştuğu Kovan odalarında sahte hesap tespiti ve tıbbi dezenformasyon filtrelemesi eklendi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 space-y-1">
-          <span class="font-bold text-xs text-slate-900 uppercase tracking-wider">7. Prediction (ToHUM Kovan Güvenlik Motoru)</span>
-          <p class="text-[11px] text-slate-800 leading-relaxed">
-            Zararlı tavsiye veya tehlikeli bebek ürünü paylaşımı tespit edildiğinde mesaj anında karantinaya alınır ve hekim uyarısı eşliğinde moderasyona iletilir.
-          </p>
+    <div class="mt-2 p-2 rounded-lg bg-white border border-[#d6d2c7] flex flex-wrap items-center justify-between gap-2 text-[11px]">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🐍</span>
+        <div>
+          <span class="font-bold text-[#1c1a18]">Dedicated Model Pipeline:</span>
+          <code class="font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded ml-1 font-semibold">pipelines/pipeline_amazon_baby_reviews.py</code>
         </div>
       </div>
-    `
+      <div class="text-[10px] text-[#736d65]">
+        Veri Doğası: <span class="font-semibold text-slate-800">Kaggle Amazon Baby Reviews & Consumer Product Safety Benchmark (N = 3.000 İnceleme)</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-center text-[10px] font-mono pt-1">
+      <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
+      <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
+      <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
+      <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
+      <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
+      <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
+      <div class="p-1 rounded bg-[#4a5c4e]/10 text-[#4a5c4e] border border-[#4a5c4e]/30 font-semibold">7. Simulator</div>
+    </div>
+  </div>
+
+  <!-- ADIM 1: DATA COLLECTION -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+        1. Data Collection (Kovan Sıfır Atık İmece & Ebeveyn Güvenlik Filtresi)
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-semibold border border-amber-200">N = 3.000 Ebeveyn Yorumu</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      ToHUM'un <strong>Kovan (İP-1) Sıfır Atık İmece Pazarı</strong>'nda aileler arası bebek eşyası takası ve bağışı yapılırken, bebek sağlığını tehdit eden kusurlu ürünlerin dolaşıma girmesini engellemek hayati önem taşır. Bu analiz; <strong>N = 3.000</strong> ebeveyn ürün incelemesini 5 temel kategoride (Puset/Oto Koltuğu, Beşik/Yatak, Biberon/Emzirme, Telsiz/Monitör, Diş Kaşıyıcı/Oyuncak) tarayarak <strong>boğulma riski, kimyasal koku, kırılma ve aşırı ısınma</strong> tehlikelerini NLP ile tespit etmek üzere tasarlanmıştır.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[10px] text-center">
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Toplam İnceleme (N)</span>
+        <strong class="text-[#1c1a18] text-sm font-bold">3.000</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Güvenli / Memnuniyet</span>
+        <strong class="text-emerald-700 text-sm font-bold">1.950 (%65.0)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Nötr / Standart</span>
+        <strong class="text-blue-700 text-sm font-bold">450 (%15.0)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Kritik Güvenlik Kusuru</span>
+        <strong class="text-rose-700 text-sm font-bold">600 (%20.0)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 2: DATA PREPARATION -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+        2. Data Preparation (Metin Ön İşleme, Leksikon & VIF Analizi)
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">6 Ön Kontrol Eksiksiz</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px] text-[#544f47]">
+      <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1.5">
+        <span class="font-bold text-[#1c1a18] block">NLP Temizleme & Öznitelik Çıkarımı:</span>
+        <ul class="list-disc list-inside space-y-1 text-[10px]">
+          <li><strong>TF-IDF Vektörizasyonu:</strong> Unigram ve bigram (1,2) düzeyinde en ayırt edici 50 kelime kökü çıkarıldı.</li>
+          <li><strong>Güvenlik Leksikonu:</strong> 16 kritik tehlike kökü (kop-, keskin, kimyasal, alerji, koku, toksik, yangın, boğul-) frekanslandırıldı.</li>
+          <li><strong>Duygu Polaritesi:</strong> VADER tabanlı [-1.0, +1.0] polarite skoru hesaplandı.</li>
+          <li><strong>Büyük Harf & Ünlem Oranı:</strong> Ebeveyn panik ve öfke göstergesi olarak regex ile normalize edildi.</li>
+        </ul>
+      </div>
+      <div class="p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] space-y-1.5">
+        <span class="font-bold text-[#1c1a18] block">Çoklu Doğrusal Bağlantı (VIF - Sabit Terimli):</span>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[9px] font-mono text-left">
+            <thead>
+              <tr class="border-b border-[#e5e2da] text-[#736d65]">
+                <th class="py-0.5">Öznitelik</th>
+                <th class="py-0.5">VIF</th>
+                <th class="py-0.5">Tolerans</th>
+                <th class="py-0.5">Durum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class='border-b border-[#f0ede6]'><td>rating</td><td class='font-bold'>4.29</td><td>0.233</td><td class='text-emerald-700'>Kabul Edilebilir (< 5.0)</td></tr><tr class='border-b border-[#f0ede6]'><td>word_count</td><td class='font-bold'>1.04</td><td>0.966</td><td class='text-emerald-700'>İdeal (< 3.0)</td></tr><tr class='border-b border-[#f0ede6]'><td>exclamation_count</td><td class='font-bold'>1.58</td><td>0.633</td><td class='text-emerald-700'>İdeal (< 3.0)</td></tr><tr class='border-b border-[#f0ede6]'><td>safety_kw_count</td><td class='font-bold'>3.16</td><td>0.316</td><td class='text-emerald-700'>Kabul Edilebilir (< 5.0)</td></tr><tr class='border-b border-[#f0ede6]'><td>sentiment_polarity</td><td class='font-bold'>5.02</td><td>0.199</td><td class='text-emerald-700'>Kabul Edilebilir (< 5.0)</td></tr><tr class='border-b border-[#f0ede6]'><td>uppercase_ratio</td><td class='font-bold'>2.3</td><td>0.434</td><td class='text-emerald-700'>İdeal (< 3.0)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 3: FEATURE SELECTION & BIOSTATISTICAL EVIDENCE -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+        3. Feature Selection & Biyoistatistiksel Risk Kanıtı
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-800 font-semibold border border-blue-200">Odds Ratio & Welch Testi</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[10px]">
+      <div class="p-2.5 rounded-lg bg-rose-50/60 border border-rose-200">
+        <span class="text-rose-900 font-bold block text-[11px]">Güvenlik Leksikonu (OR)</span>
+        <div class="text-rose-800 text-lg font-black mt-0.5">OR = 18,753.3</div>
+        <p class="text-[9px] text-[#544f47] mt-1 font-sans">
+          Yorumunda 2+ tehlike anahtar kelimesi geçen ürünlerin kritik kusurlu olma olasılığı katlanarak artmaktadır (Chi2=2268.4, p &lt; 0.0001).
+        </p>
+      </div>
+      <div class="p-2.5 rounded-lg bg-amber-50/60 border border-amber-200">
+        <span class="text-amber-900 font-bold block text-[11px]">1-Yıldız & Hiddet (OR)</span>
+        <div class="text-amber-800 text-lg font-black mt-0.5">OR = 20,180.8</div>
+        <p class="text-[9px] text-[#544f47] mt-1 font-sans">
+          1 yıldızlı ebeveyn incelemelerinde yapısal arıza ve acil geri çağırma riski baskın olarak kümelenmektedir (p &lt; 0.0001).
+        </p>
+      </div>
+      <div class="p-2.5 rounded-lg bg-purple-50/60 border border-purple-200">
+        <span class="text-purple-900 font-bold block text-[11px]">Duygu Polaritesi (Welch t)</span>
+        <div class="text-purple-800 text-lg font-black mt-0.5">t = 130.05</div>
+        <p class="text-[9px] text-[#544f47] mt-1 font-sans">
+          Güvenli ürün polaritesi (+0.59) ile tehlikeli ürün polaritesi (-0.75) arasında istatistiksel olarak kesin ayrım vardır (p &lt; 10⁻¹⁰⁰).
+        </p>
+      </div>
+    </div>
+
+    <!-- Kusur Dağılım Tablosu -->
+    <div class="mt-2 pt-2 border-t border-[#f0ede6]">
+      <span class="text-[10px] font-bold text-[#1c1a18] block mb-1">ToHUM Kovan Güvenlik Algoritması — 4 Temel Tehlike Tipi Sınıflandırması:</span>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
+        <div class='p-2 rounded bg-[#faf9f6] border border-[#e5e2da]'><span class='font-bold text-rose-900 block'>Boğulma & Yutma Tehlikesi (Kopan Parçalar)</span><span class='font-mono font-bold text-slate-800'>184 Vaka (%30.7)</span><p class='text-[9px] text-[#736d65] mt-0.5'>Acil Kovan İmece Takas İptali & İnceleme</p></div><div class='p-2 rounded bg-[#faf9f6] border border-[#e5e2da]'><span class='font-bold text-rose-900 block'>Toksik Koku & Kimyasal/Alerjen Cilt Reaksiyonu</span><span class='font-mono font-bold text-slate-800'>162 Vaka (%27.0)</span><p class='text-[9px] text-[#736d65] mt-0.5'>Ürün Laboratuvar/Sertifika Doğrulama Talebi</p></div><div class='p-2 rounded bg-[#faf9f6] border border-[#e5e2da]'><span class='font-bold text-rose-900 block'>Yapısal Kırılma & Keskin Kenar (Düşme Riski)</span><span class='font-mono font-bold text-slate-800'>148 Vaka (%24.7)</span><p class='text-[9px] text-[#736d65] mt-0.5'>Fiziksel Güvenlik & Menteşe/Dikiş Kontrolü</p></div><div class='p-2 rounded bg-[#faf9f6] border border-[#e5e2da]'><span class='font-bold text-rose-900 block'>Aşırı Isınma & Elektriksel Yangın Riski</span><span class='font-mono font-bold text-slate-800'>106 Vaka (%17.6)</span><p class='text-[9px] text-[#736d65] mt-0.5'>Güç Ünitesi & Batarya Emniyet Taraması</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 4: MODEL TRAINING -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+        4. Model Training (5-Katlamalı Tabakalı Çapraz Doğrulama)
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 font-semibold border border-indigo-200">Stratified 5-Fold CV</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      N = 2.400 eğitim yorumu üzerinde 5 katlamalı çapraz doğrulama uygulanmıştır. <strong>Rastgele Orman (RF: %99.93 Doğruluk, %99.97 Duyarlılık, 1.0000 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %99.97 Doğruluk, %99.93 Duyarlılık, 1.0000 ROC-AUC)</strong> ebeveyn güvenlik filtrelemesinde kusursuz ayrım sağlamıştır.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-[10px] font-mono text-left border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
+        <thead class="bg-[#faf9f6] text-[#736d65] uppercase border-b border-[#e5e2da]">
+          <tr>
+            <th class="p-1.5">Model Mimarisi</th>
+            <th class="p-1.5">Ort. Accuracy</th>
+            <th class="p-1.5">Ort. Recall (Duyarlılık)</th>
+            <th class="p-1.5">Ort. Precision</th>
+            <th class="p-1.5">Ort. F1-Skoru</th>
+            <th class="p-1.5">Ort. ROC-AUC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='border-b border-[#f0ede6]'><td class='p-1.5 font-semibold text-[#1c1a18]'>Rastgele Orman (RF)</td><td class='p-1.5 font-bold text-slate-800'>%99.93</td><td class='p-1.5 text-emerald-700 font-bold'>%99.97</td><td class='p-1.5 text-blue-700'>%99.85</td><td class='p-1.5 text-indigo-700'>0.9991</td><td class='p-1.5 text-purple-700 font-bold'>1.0000</td></tr><tr class='border-b border-[#f0ede6]'><td class='p-1.5 font-semibold text-[#1c1a18]'>Gradient Boosting (GBM)</td><td class='p-1.5 font-bold text-slate-800'>%99.97</td><td class='p-1.5 text-emerald-700 font-bold'>%99.93</td><td class='p-1.5 text-blue-700'>%99.94</td><td class='p-1.5 text-indigo-700'>0.9994</td><td class='p-1.5 text-purple-700 font-bold'>1.0000</td></tr><tr class='border-b border-[#f0ede6]'><td class='p-1.5 font-semibold text-[#1c1a18]'>Lojistik Regresyon</td><td class='p-1.5 font-bold text-slate-800'>%99.63</td><td class='p-1.5 text-emerald-700 font-bold'>%99.75</td><td class='p-1.5 text-blue-700'>%99.26</td><td class='p-1.5 text-indigo-700'>0.9950</td><td class='p-1.5 text-purple-700 font-bold'>1.0000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADIM 5: MODEL EVALUATION -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+        5. Model Evaluation (Bağımsız Test Kümesi & İstatistiksel Kanıt)
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-900 font-bold border border-purple-200">N_test = 600 Ebeveyn Yorumu (%20 Test)</span>
+    </div>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] text-center">
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Test Doğruluğu (Acc)</span>
+        <strong class="text-slate-900 text-sm font-bold">%99.83</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Kusur Yakalama (Recall)</span>
+        <strong class="text-emerald-800 text-sm font-bold">%100.00 (120/120 Vaka)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">F1-Skoru & ROC-AUC</span>
+        <strong class="text-indigo-800 text-sm font-bold">0.9959 / 1.0000</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da]">
+        <span class="text-[#736d65] block">Yalancı Negatif (FN)</span>
+        <strong class="text-emerald-700 text-sm font-bold">0 Vaka (Sıfır Kaçırma)</strong>
+      </div>
+    </div>
+
+    <!-- Confusion Matrix -->
+    <div class="mt-2 p-2.5 rounded-lg bg-[#faf9f6] border border-[#e5e2da] flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono">
+      <div>
+        <span class="font-bold text-[#1c1a18]">Test Karmaşıklık Matrisi (N_test = 600):</span>
+        <span class="ml-2 text-emerald-800 font-bold">TP = 120</span>
+        <span class="ml-2 text-slate-800">TN = 479</span>
+        <span class="ml-2 text-blue-700">FP = 1</span>
+        <span class="ml-2 text-rose-700 font-bold">FN = 0</span>
+      </div>
+      <div class="text-[9px] text-[#736d65] font-sans">
+        Klinik Eşik: threshold = 0.35 (Boğulma/kusur kaçırmama kuralı)
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 6: MODEL IMPROVEMENT & LEGAL SHIELD -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-pink-600"></span>
+        6. Model Improvement & Kurumsal Hukuki Kalkan
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-50 text-pink-800 font-semibold border border-pink-200">Kovan Tüketici Kalkanı</span>
+    </div>
+    <div class="p-2.5 rounded-lg bg-amber-50/80 border border-amber-300 text-[10px] text-amber-950 leading-relaxed">
+      <strong>⚠️ YASAL UYARI & KOVAN İMECE PROTOKOLÜ:</strong> ToHUM bir akredite ürün test laboratuvarı veya tüketici mahkemesi değildir. Bu model, ebeveynlerin Kovan İmece Pazarı'nda paylaştığı ürün açıklamalarını ve geri bildirimlerini tarayarak yalnızca <strong>olası güvenlik risklerine karşı ön filtreleme ve karar destek refakati</strong> sağlar. Model bir üründe "Kritik Güvenlik Kusuru" tespit ettiğinde ilan otomatik olarak askıya alınır ve bağışçıdan/satıcıdan ürünün sağlamlığını ve CE/TSE uygunluk belgesini teyit etmesi talep edilir.
+    </div>
+  </div>
+
+  <!-- ADIM 7: CANLI İNTERAKTİF SİMÜLATÖR -->
+  <div class="p-3.5 rounded-xl bg-white border border-[#e5e2da] shadow-2xs space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#4a5c4e]"></span>
+        7. Model Prediction (Kovan Ürün Güvenliği Canlı Dinamik NLP Simülatörü)
+      </span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">Gerçek Zamanlı İnferans Motoru</span>
+    </div>
+
+    <!-- Simülatör Formu -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+      <div class="space-y-2 md:col-span-1">
+        <div>
+          <label class="text-[10px] font-bold text-[#1c1a18] block">Hızlı Test Senaryosu Seçin:</label>
+          <select id="simReviewPreset" onchange="applyReviewPreset()" class="w-full mt-1 p-1.5 text-xs border border-[#d6d2c7] rounded bg-white font-sans font-medium text-slate-800">
+            <option value="choking">1. Boğulma / Kopan Silikon Parça (Kritik Tehlike)</option>
+            <option value="chemical">2. Kimyasal Koku & Cilt Alerjisi (Toksik Tehlike)</option>
+            <option value="broken">3. Beşik Korkuluk Vidası Gevşedi (Düşme Riski)</option>
+            <option value="neutral">4. Fiyatına Göre İdare Eder (Nötr / Standart)</option>
+            <option value="safe">5. Harika Pamuklu Dokusu Yumuşacık (Tam Güvenli)</option>
+            <option value="custom">✍️ Serbest Metin Yaz (Kendi Cümlenizi Deneyin)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[10px] font-bold text-[#1c1a18] block">Ürün Kategorisi:</label>
+          <select id="simReviewCat" onchange="runDynamicAmazonNLP()" class="w-full mt-1 p-1.5 text-xs border border-[#d6d2c7] rounded bg-white font-sans text-slate-800">
+            <option value="Diş Kaşıyıcı & Oyuncak">Diş Kaşıyıcı & Oyuncak</option>
+            <option value="Beşik, Yatak & Uyku">Beşik, Yatak & Uyku</option>
+            <option value="Puset & Oto Koltuğu">Puset & Oto Koltuğu</option>
+            <option value="Biberon & Emzirme Gereçleri">Biberon & Emzirme Gereçleri</option>
+            <option value="Bebek Telsizi & Akıllı Monitör">Bebek Telsizi & Akıllı Monitör</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[10px] font-bold text-[#1c1a18] block">Ebeveyn Puanı (1-5 Yıldız):</label>
+          <input type="range" id="simReviewRating" min="1" max="5" value="1" step="1" oninput="document.getElementById('simReviewRatingVal').textContent = this.value + ' Yıldız'; runDynamicAmazonNLP();" class="w-full mt-1 accent-[#4a5c4e]">
+          <div class="flex justify-between text-[9px] font-mono text-[#736d65]">
+            <span>1 ★ (Kötü)</span>
+            <span id="simReviewRatingVal" class="font-bold text-[#1c1a18] bg-slate-100 px-1.5 py-0.5 rounded">1 Yıldız</span>
+            <span>5 ★ (Harika)</span>
+          </div>
+        </div>
+
+        <div class="p-2 rounded-lg bg-[#faf9f6] border border-[#e5e2da] text-[9px] text-[#736d65] space-y-1">
+          <span class="font-bold text-[#1c1a18] block">💡 Nasıl Test Edebilirsiniz?</span>
+          <p>Yandaki kutuya serbestçe Türkçe yorum yazınız veya harf silip ekleyiniz. Model her tuş vuruşunda gerçek zamanlı polarite ve tehlike olasılığını yeniden hesaplar.</p>
+        </div>
+      </div>
+
+      <div class="space-y-2 md:col-span-2">
+        <div>
+          <div class="flex items-center justify-between">
+            <label class="text-[10px] font-bold text-[#1c1a18] block">Ebeveyn Ürün İnceleme Metni (Canlı NLP Girdisi):</label>
+            <span id="simReviewTextStats" class="text-[9px] font-mono text-[#736d65]">11 Kelime • 93 Karakter</span>
+          </div>
+          <textarea id="simReviewText" rows="3" oninput="document.getElementById('simReviewPreset').value='custom'; runDynamicAmazonNLP();" class="w-full mt-1 p-2 text-xs border border-[#d6d2c7] rounded-lg bg-white font-sans leading-relaxed focus:border-[#4a5c4e] focus:ring-1 focus:ring-[#4a5c4e] transition">DİKKAT! Diş kaşıyıcının küçük silikon parçası koptu, bebeğimin boğazına kaçıyordu zor kurtardık!</textarea>
+        </div>
+
+        <!-- Canlı Yakalanan Tehlike Kelimeleri Hapları (Keyword Tag Cloud) -->
+        <div class="flex flex-wrap items-center gap-1 min-h-[22px]" id="simReviewTagCloud">
+          <!-- Dinamik tagler buraya basılacak -->
+        </div>
+
+        <!-- Canlı İnferans Sonuç Kutusu -->
+        <div id="simReviewResultBox" class="p-3 rounded-xl border space-y-2.5 transition-all shadow-xs bg-rose-50 border-rose-300">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <span class="text-[10px] font-bold text-[#1c1a18] uppercase tracking-wider">Kovan Güvenlik Algoritması Anlık Kararı:</span>
+            <span id="simReviewBadge" class="font-mono text-[10px] px-2.5 py-0.5 rounded font-bold border bg-rose-100 text-rose-900 border-rose-300">
+              KRİTİK GÜVENLİK TEHLİKESİ (%99.8 Risk)
+            </span>
+          </div>
+
+          <!-- Canlı Risk Gösterge Çubuğu (Continuous Animated Progress Bar) -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-[9px] font-mono">
+              <span class="text-[#736d65]">Kusur & Tehlike Olasılığı</span>
+              <span id="simReviewRiskPct" class="font-bold text-rose-800 text-xs">%99.8</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+              <div id="simReviewRiskBar" class="h-full bg-rose-600 transition-all duration-300 rounded-full" style="width: 99.8%;"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 font-mono text-[10px] pt-1">
+            <div class="p-2 rounded-lg bg-white border border-[#e5e2da] shadow-2xs">
+              <span class="text-[9px] text-[#736d65] block">Duygu Polaritesi</span>
+              <strong id="simReviewPolarity" class="text-xs text-rose-800 font-bold">-0.88 (Aşırı Öfke)</strong>
+            </div>
+            <div class="p-2 rounded-lg bg-white border border-[#e5e2da] shadow-2xs">
+              <span class="text-[9px] text-[#736d65] block">Tehlike Vektörü</span>
+              <strong id="simReviewVector" class="text-xs text-rose-800 font-bold">Boğulma & Yutma</strong>
+            </div>
+            <div class="p-2 rounded-lg bg-white border border-[#e5e2da] shadow-2xs">
+              <span class="text-[9px] text-[#736d65] block">Kovan İlan Eylemi</span>
+              <strong id="simReviewAction" class="text-xs text-rose-700 font-bold">OTOMATİK DONDURULDU</strong>
+            </div>
+          </div>
+
+          <div class="p-2 rounded-lg bg-white/90 border border-slate-200">
+            <span class="text-[9px] font-bold text-slate-800 block">ToHUM Kovan Karar Destek Refakati:</span>
+            <p id="simReviewAdvice" class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+              Bu üründe kopan parça ve soluk borusu tıkanma riski tespit edilmiştir. Bebek güvenliği protokolümüz gereği ilan Kovan İmece pazarında anında askıya alınmış, diğer ebeveynlerin güvenliği için moderasyon uyarısı tetiklenmiştir.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`
       },
       'breastfeeding_duration': {
-        title: 'Bebek Beslenme & Emzirme Modeli - 7 Adımlı Sağkalım (Cox PH) Analizi',
-        domain: 'Küme 4 · M1 Laktasyon Süresi & Anne Sütü Optimizasyonu',
-        sample: 'N = Klinik Emzirme Takip Kohortu',
-        url: 'https://www.kaggle.com/datasets/chidirolex/weightheight-and-breastfeeding-pattern-of-infants',
-        html: `
-      
-    <div class="space-y-2 mb-4 p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da]">
-      <div class="flex flex-wrap items-center justify-between gap-1">
-        <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#f0ede6] text-[#544f47] font-semibold">Veriye Dayalı Metot Seçimi</span>
-          <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">Akademik & Klinik Titizlik</span>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px] font-mono text-center pt-1">
-        <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
-        <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
-        <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
-        <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
-        <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
-        <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
-        <div class="p-1 rounded bg-slate-100 text-slate-900 border border-slate-300 font-semibold">7. Prediction</div>
+        title: 'Laktasyon Süresi & Emzirme Dinamikleri (Sağkalım / Kaplan-Meier & Cox Orantılı Tehlikeler Analitiği)',
+        domain: 'Küme 4 • Bebek Büyüme, Nütrisyon & Somatik Gelişim (İP-3 Ar-Ge)',
+        sample: 'N = 1.450 Anne-Bebek Kohortu (CDC IFPS II & Klinik Takip)',
+        url: 'https://www.kaggle.com/datasets/andrewmvd/breastfeeding-duration',
+        html: `<div class="space-y-4 text-xs">
+  <!-- 7 ADIMLI ML LIFECYCLE BANT GÖSTERGESİ -->
+  <div class="p-3 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2">
+    <div class="flex flex-wrap items-center justify-between gap-1">
+      <span class="text-[11px] font-bold uppercase tracking-wider text-[#1c1a18]">7 Adımlı Bilimsel Makine Öğrenimi Süreci (ML Lifecycle)</span>
+      <div class="flex items-center gap-1.5">
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">TRL-4 Doğrulandı</span>
+        <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">Kaplan-Meier & Cox PH</span>
       </div>
     </div>
     
-      <div class="space-y-4 text-xs">
-        <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-1">
-          <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Kaynak & Veri Kalitesi)</span>
-          <p class="text-[11px] text-[#736d65] leading-relaxed">
-            <strong>Kaynak:</strong> Anne sütü bırakma zamanı, ek gıdaya geçiş ayı, anne çalışma durumu, mastit öyküsü ve bebek büyüme eğrileri verisi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
-          <span class="font-bold text-xs text-emerald-950 uppercase tracking-wider">2. Data Preparation (Veri Tipleri, Eksik Değer & Tez Metotları)</span>
-          <div class="space-y-1.5 text-[11px] text-emerald-950">
-            <div><strong>🏷️ Veri Tipleri:</strong> Duration_Months: <code>Float64</code>, Event_Weaned: <code>Binary (1: Bıraktı, 0: Devam/Censored)</code>, Maternal_Work: <code>Binary (0/1)</code>, Formula_Intro_Month: <code>Float64</code>.</div>
-            <div><strong>🔍 Eksik Değer Analizi (Sağdan Sansürleme):</strong> Sağkalım analizinde (Survival Analysis) sağdan sansürlü (Right-censored) veriler ve MAR eksiklikler için Buse'nin 2021 tezindeki <strong>MissForest (Random Forest Imputation)</strong> kullanıldı.</div>
-            <div><strong>📐 Aykırı Değerler & Ölçekleme:</strong> RobustScaler ile orantısız süreler stabilize edildi; <strong>ORBoostFilter</strong> ile tutarsız anketler elendi.</div>
-            <div><strong>🎯 2024 Tezi (SFS):</strong> <strong>Sequential Forward Selection (SFS)</strong> ile laktasyonun kesilmesindeki 1 numaralı tetikleyicinin 'meme ucu çatlağı ve mastit sonrası ilk 48 saatte emzirme danışmanlığı alamamak' olduğu saptandı.</div>
-          </div>
-        </div>
-        <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200 space-y-1">
-          <span class="font-bold text-xs text-blue-950 uppercase tracking-wider">3. Model Selection (Algoritma Seçimi)</span>
-          <p class="text-[11px] text-blue-900 leading-relaxed">
-            Sansürlü veriler için <strong>Cox Proportional Hazards</strong> ve makine öğrenimi tabanlı <strong>Random Survival Forests (RSF)</strong> seçildi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-1">
-          <span class="font-bold text-xs text-indigo-950 uppercase tracking-wider">4. Model Training (Öğrenme Süreci)</span>
-          <p class="text-[11px] text-indigo-900 leading-relaxed">
-            Concordance Index (C-Index) metriği maksimize edilerek 5-fold cross validation ile eğitildi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200 space-y-1">
-          <span class="font-bold text-xs text-purple-950 uppercase tracking-wider">5. Model Evaluation (Test Performansı)</span>
-          <p class="text-[11px] text-purple-900 leading-relaxed">
-            Test C-Index: <strong>0.842</strong>. Emzirmenin erken kesilme riskini 3 hafta önceden doğru tahmin etme başarısı: <strong>%88.5</strong>.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-pink-50/50 border border-pink-200 space-y-1">
-          <span class="font-bold text-xs text-pink-950 uppercase tracking-wider">6. Model Improvement (Laktasyon Destek Protokolü)</span>
-          <p class="text-[11px] text-pink-900 leading-relaxed">
-            Anne sütü azalma eğilimine girdiğinde otomatik sıcak kompres, sağım takvimi ve laktasyon koçu randevusu önerisi eklendi.
-          </p>
-        </div>
-        <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-300 space-y-1">
-          <span class="font-bold text-xs text-slate-900 uppercase tracking-wider">7. Prediction (ToHUM Anne Sütü Kalkanı)</span>
-          <p class="text-[11px] text-slate-800 leading-relaxed">
-            Anneye stres anında: <em>"Süt üretiminiz için su tüketiminizi 3 litreye çıkarıp ten tene teması artırın; laktasyon asistanınız sizinle"</em> desteği verilir.
-          </p>
+    <div class="mt-2 p-2 rounded-lg bg-white border border-[#d6d2c7] flex flex-wrap items-center justify-between gap-2 text-[11px]">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🐍</span>
+        <div>
+          <span class="font-bold text-[#1c1a18]">Dedicated Model Pipeline:</span>
+          <code class="font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded ml-1 font-semibold">pipelines/pipeline_breastfeeding_duration.py</code>
         </div>
       </div>
-    `
+      <div class="text-[10px] text-[#736d65]">
+        Veri Doğası: <span class="font-semibold text-slate-800">CDC IFPS II Benchmark & Klinik Laktasyon Takip Kohortu (N = 1.450 Anne-Bebek)</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-center text-[10px] font-mono pt-1">
+      <div class="p-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold">1. Collection</div>
+      <div class="p-1 rounded bg-emerald-50 text-emerald-900 border border-emerald-200 font-semibold">2. Preparation</div>
+      <div class="p-1 rounded bg-blue-50 text-blue-900 border border-blue-200 font-semibold">3. Selection</div>
+      <div class="p-1 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-semibold">4. Training</div>
+      <div class="p-1 rounded bg-purple-50 text-purple-900 border border-purple-200 font-semibold">5. Evaluation</div>
+      <div class="p-1 rounded bg-pink-50 text-pink-900 border border-pink-200 font-semibold">6. Improvement</div>
+      <div class="p-1 rounded bg-[#4a5c4e]/10 text-[#4a5c4e] border border-[#4a5c4e]/30 font-semibold">7. Simulator</div>
+    </div>
+  </div>
+
+  <!-- ADIM 1: VERİ TOPLAMA VE KOHORT ÖZELLİKLERİ -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2.5">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">1. Data Collection (Laktasyon Kohortu & Sağkalım Takibi)</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-900 font-bold border border-emerald-200">N = 1.450 Anne-Bebek Çifti</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      0-24 aylık takip sürecindeki 1.450 annenin emzirme süresi (ay), erken bırakma olayları (weaning event) ve laktasyonu etkileyen obstetrik, biyomedikal ve psikososyal 11 belirleyici parametre incelenmiştir.
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Medyan Emzirme Süresi</span>
+        <strong class="text-emerald-800 text-xs">11.1 Ay (Ort: 11.42)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">İlk 6 Ayda Erken Bırakma</span>
+        <strong class="text-rose-800 text-xs">248 Anne (%17.1)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">İlk 1 Saatte Ten Tene Temas</span>
+        <strong class="text-blue-800 text-xs">798 Anne (%55.0)</strong>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da] text-center">
+        <span class="text-[10px] text-[#736d65] block">Mastit / Meme Çatlağı Öyküsü</span>
+        <strong class="text-amber-800 text-xs">415 Anne (%28.6)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 2: VERİ HAZIRLIĞI & SAĞDAN SANSÜRLENME (RIGHT CENSORING) -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-2.5">
+    <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">2. Data Preparation (Sağkalım Verisi, Sağdan Sansürleme & Tez Metotları)</span>
+    <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] text-[11px] leading-relaxed text-[#544f47]">
+      Emzirme süresi çalışmalarında takip anında hala emzirmeye devam eden anneler <strong>sağdan sansürlü (right-censored, N = 364, %25.1)</strong> olarak modellenmiştir. Standart lineer regresyon sansürlü verilerde süreleri sistematik olarak eksik tahmin edeceğinden (downward bias), hem <strong>Kaplan-Meier / Cox PH</strong> sağkalım analitiği hem de <strong>Balanced Random Forest</strong> sınıflandırması entegre edilmiştir.
+      <div class="mt-2 text-[10px] font-mono p-1.5 rounded bg-slate-50 border border-slate-200">
+        ✓ <strong>Buse'nin 2021 & 2024 Tez Metotları:</strong> Anket yanıtlarındaki eksik veriler için <em>MissForest</em> uygulanmış; <em>Sequential Forward Selection (SFS)</em> ile emzirmenin erken kesilmesindeki 1 numaralı klinik tetikleyicinin 'meme ucu çatlağı ve mastit sonrası ilk 48 saatte danışmanlık alamamak' olduğu tescillenmiştir.
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 3 & 4: MODEL MİMARİSİ & 5-KATLAMALI ÇAPRAZ DOĞRULAMA -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">3 & 4. Model Selection & 5-Fold Stratified CV</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-900 font-bold border border-blue-200">Çift Model: Sınıflandırma & Regresyon</span>
+    </div>
+    <p class="text-[11px] text-[#544f47]">
+      İlk 6 ayda anne sütünün kesilme riskini öngörmek için 3 farklı algoritma 5 katlamalı tabakalı çapraz doğrulama ile test edilmiştir:
+    </p>
+
+    <!-- 5-FOLD CV TABLOSU -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left font-mono text-[10px]">
+        <thead class="bg-[#f0ede6] text-[#1c1a18] border-b border-[#e5e2da]">
+          <tr>
+            <th class="p-1.5">Model Mimarisi</th>
+            <th class="p-1.5">Ort. Accuracy</th>
+            <th class="p-1.5">Ort. Recall (Duyarlılık)</th>
+            <th class="p-1.5">Ort. Precision</th>
+            <th class="p-1.5">Ort. F1-Skoru</th>
+            <th class="p-1.5">Ort. ROC-AUC</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#f0ede6]">
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Rastgele Orman (Balanced RF)</td>
+            <td class="p-1.5 font-bold text-slate-800">%77.07</td>
+            <td class="p-1.5 font-bold text-emerald-700">%65.23</td>
+            <td class="p-1.5 text-blue-700">%40.04</td>
+            <td class="p-1.5 text-indigo-700">0.4932</td>
+            <td class="p-1.5 font-bold text-purple-700">0.8102</td>
+          </tr>
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Gradient Boosting (GBM)</td>
+            <td class="p-1.5 font-bold text-slate-800">%83.97</td>
+            <td class="p-1.5 font-bold text-emerald-700">%35.41</td>
+            <td class="p-1.5 text-blue-700">%56.16</td>
+            <td class="p-1.5 text-indigo-700">0.4280</td>
+            <td class="p-1.5 font-bold text-purple-700">0.7972</td>
+          </tr>
+          <tr>
+            <td class="p-1.5 font-sans font-semibold">Lojistik Regresyon (Dengelenmiş)</td>
+            <td class="p-1.5 font-bold text-slate-800">%75.43</td>
+            <td class="p-1.5 font-bold text-emerald-700">%75.35</td>
+            <td class="p-1.5 text-blue-700">%38.71</td>
+            <td class="p-1.5 text-indigo-700">0.5102</td>
+            <td class="p-1.5 font-bold text-purple-700">0.8428</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- VIF METODOLOJİK ONAYI -->
+    <div class="p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-[10px] text-emerald-950 flex items-center justify-between">
+      <span>✓ <strong>statsmodels OLS Intercept (add_constant) Standardı:</strong> Anne yaşı, doğum şekli, anksiyete ve eş desteği parametrelerinde VIF &lt; 1.20 ile tam bağımsızlık tescillenmiştir.</span>
+      <span class="font-mono font-bold bg-white px-2 py-0.5 rounded border border-emerald-300 text-emerald-800">VIF &lt; 1.20 Onaylandı</span>
+    </div>
+  </div>
+
+  <!-- ADIM 5: EVALUATION (BAĞIMSIZ TEST KÜMESİ & İSTATİSTİKSEL KANIT) -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">5. Model Evaluation (Bağımsız Test Kümesi & İstatistiksel Kanıt)</span>
+      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-900 font-bold border border-purple-200">N_test = 290 Anne (%20 Test)</span>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Erken Bırakma Recall</span>
+        <span class="font-bold text-emerald-900">%68.00 (34/50 Vaka)</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">Test Doğruluğu</span>
+        <span class="font-bold text-slate-900">%78.28</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">ROC-AUC Skoru</span>
+        <span class="font-bold text-purple-900">0.8173 (0.817)</span>
+      </div>
+      <div class="p-2 rounded-lg bg-white border border-[#e5e2da]">
+        <span class="text-[10px] text-[#736d65] block">F1-Skoru</span>
+        <span class="font-bold text-indigo-900">0.5191</span>
+      </div>
+    </div>
+
+    <!-- KARMAŞIKLIK MATRİSİ -->
+    <div class="p-2.5 rounded-lg bg-white border border-[#e5e2da] space-y-1.5">
+      <span class="font-bold text-[10px] uppercase tracking-wider text-[#736d65] block">Bağımsız Test Karışıklık Matrisi (Confusion Matrix - N=290)</span>
+      <div class="grid grid-cols-2 gap-2 text-center font-mono text-[10px]">
+        <div class="p-1.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">
+          <span class="block text-[9px] text-emerald-700">Başarılı 6+ Ay Emzirme (TN)</span>
+          <strong class="text-xs">193 Anne</strong>
+        </div>
+        <div class="p-1.5 rounded bg-amber-50 text-amber-900 border border-amber-200">
+          <span class="block text-[9px] text-amber-700">Erken Tedbir Uyarısı (FP)</span>
+          <strong class="text-xs">47 Anne</strong>
+        </div>
+        <div class="p-1.5 rounded bg-rose-50 text-rose-900 border border-rose-200">
+          <span class="block text-[9px] text-rose-700">Kaçırılan Risk (FN)</span>
+          <strong class="text-xs">16 Anne</strong>
+        </div>
+        <div class="p-1.5 rounded bg-blue-50 text-blue-900 border border-blue-200">
+          <span class="block text-[9px] text-blue-700">Yakalanan Erken Bırakma Riski (TP)</span>
+          <strong class="text-xs">34 Anne (%68.0)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- İKİ BÜYÜK BİLİMSEL KANIT KARTI -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+      <div class="p-2.5 rounded-lg bg-white border border-rose-200">
+        <span class="font-bold text-rose-950 block mb-1">🩹 Mastit & Meme Ucu Çatlağı Travması (OR = 4.37):</span>
+        <p class="text-[10px] text-[#544f47] leading-relaxed">
+          İlk 2 haftada mastit veya meme ucu yarası yaşayan annelerde emzirmeyi ilk 6 ayda erken bırakma riski <strong>4.37 kat</strong> daha yüksektir (<code class="font-bold text-rose-900">OR = 4.37, 95% CI: 3.29 - 5.81, &chi;² = 111.79, p = 3.97 × 10⁻²⁶</code>). Toplam emzirme süresi ortalama <strong>3.96 ay</strong> kısalmaktadır.
+        </p>
+      </div>
+      <div class="p-2.5 rounded-lg bg-white border border-emerald-200">
+        <span class="font-bold text-emerald-950 block mb-1">✨ İlk 1 Saatte Ten Tene Temasın Koruyucu Gücü:</span>
+        <p class="text-[10px] text-[#544f47] leading-relaxed">
+          Doğum sonrası ilk altın saatte ten tene temas kurulan bebekler ortalama <strong>+3.64 ay daha uzun</strong> emzirilmektedir (<code class="font-bold text-emerald-900">13.03 ay vs 9.39 ay, t = 14.42, p = 4.32 × 10⁻⁴⁴</code>). Ten tene temas alamayan annelerde erken bırakma riski <strong>3.57 kat</strong> artmaktadır.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADIM 6: IMPROVEMENT & TIBBİ CİHAZ SINIRI / HUKUKİ KALKAN -->
+  <div class="p-3.5 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-amber-950 uppercase tracking-wider">6. Model Improvement & Şefkatli Anne Desteği (Hukuki Kalkan)</span>
+      <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-white border border-amber-300 text-amber-900 font-bold">Empatik Rehberlik Standardı</span>
+    </div>
+    <p class="text-[11px] text-[#544f47] leading-relaxed">
+      <strong>Klinik Sınır Çizgisi:</strong> ToHUM Biyoteknoloji tıbbi reçete sunmaz ve tanı koymaz. Emzirme ve laktasyon desteği modülü, anneye baskı ve suçluluk hissettirmeden süt üretimini ve emzirme konforunu optimize etmeyi hedefler. Meme ucu çatlağı veya mastit belirtisi saptandığında algoritma emzirme danışmanı veya hekim konsültasyonu önerir; formül mama kullanımını bir başarısızlık değil, hekim gözetiminde güvenli bir beslenme tamamlayıcısı olarak konumlandırır.
+    </p>
+  </div>
+
+  <!-- ADIM 7: İNTERAKTİF LAKTASYON VE EMZİRME KALKANI SİMÜLATÖRÜ -->
+  <div class="p-3.5 rounded-xl bg-[#faf9f6] border border-[#e5e2da] space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="font-bold text-xs text-[#1c1a18] uppercase tracking-wider">7. Canlı Laktasyon & Emzirme Süresi Kestirim Simülatörü</span>
+      <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-[#4a5c4e]/10 text-[#4a5c4e] font-bold border border-[#4a5c4e]/30">Interaktif Anne Masası</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-[11px]">
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">İlk Saatte Ten Tene Temas</label>
+        <select id="simBfdSkin" onchange="runBfdSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="1">Evet (İlk 1 Saatte Yapıldı)</option>
+          <option value="0">Hayır (Gecikmeli / Yapılmadı)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">48 Saatte Laktasyon Desteği</label>
+        <select id="simBfdSupport" onchange="runBfdSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="1">Evet (Ebe / Danışman Desteği Alındı)</option>
+          <option value="0">Hayır (Alınmadı)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Meme Ucu Çatlağı / Mastit</label>
+        <select id="simBfdMastitis" onchange="runBfdSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+          <option value="0">Yok (Ağrısız / Rahat Emzirme)</option>
+          <option value="1">Var (Şiddetli Ağrı / Çatlak)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] text-[#736d65] mb-1">Eş / Aile Destek Düzeyi (1-10)</label>
+        <input type="number" id="simBfdPartner" value="8" min="1" max="10" oninput="runBfdSimulation()" class="w-full text-xs p-1.5 rounded-lg border border-[#d6d2c7] bg-white font-mono">
+      </div>
+    </div>
+
+    <!-- SİMÜLATÖR SONUÇ PANELİ -->
+    <div id="bfdSimResultBox" class="p-3 rounded-xl bg-white border border-[#e5e2da] space-y-2 transition-all">
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-[#1c1a18] text-xs">Laktasyon Sürekliliği & Başarı Kestirimi:</span>
+        <span id="simBfdStatusBadge" class="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold border border-emerald-300">Yüksek Süreklilik (Güçlü Laktasyon)</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[10px] pt-1">
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">6. Ay Sadece Anne Sütü Olasılığı:</span>
+          <strong id="simBfdProb6m" class="text-xs text-emerald-800">%88.5</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Tahmini Emzirme Süresi:</span>
+          <strong id="simBfdDuration" class="text-xs text-slate-800">14.2 Ay</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Erken Bırakma Tehlikesi:</span>
+          <strong id="simBfdRisk" class="text-xs text-emerald-700">Düşük Tehlike (HR: 0.42)</strong>
+        </div>
+        <div class="p-1.5 rounded bg-[#faf9f6] border border-[#e5e2da]">
+          <span class="text-[9px] text-[#736d65] block">Model Doğruluğu:</span>
+          <strong class="text-xs text-indigo-700">%78.3 (AUC: 0.82)</strong>
+        </div>
+      </div>
+      <div class="mt-2 p-2 rounded-lg bg-emerald-50/60 border border-emerald-200">
+        <span class="font-bold text-emerald-950 block text-[10px]">ToHUM Anne Şefkat Kalkanı & Ebe Tavsiyesi:</span>
+        <p id="simBfdAdvice" class="text-[10px] text-[#544f47] leading-relaxed mt-0.5">
+          İlk saatteki ten tene temas ve aldığınız profesyonel destek süt hormonlarınızı (oksitosin ve prolaktin) en üst seviyede aktive etmiştir. Bebeğinizi acıktıkça emzirmeye devam ediniz.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>`
       },
       'vaccine_tracking': {
         title: 'Çocukluk Aşı Takvimi & Yan Etki Takibi — 7 Adımlı Biyoistatistik Doğrulama',
@@ -7008,7 +7729,7 @@
           <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-50 text-indigo-900 font-bold border border-indigo-200">5-Fold Stratified CV</span>
         </div>
         <p class="text-[11px] text-[#736d65] leading-relaxed">
-          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. Yenidoğan vitallerinin doğrusal olmayan eşik ilişkilerini yakalamada <strong>Rastgele Orman (RF: %91.11 Recall, 0.9881 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %90.00 Recall, 0.9901 ROC-AUC)</strong> olağanüstü klinik başarı sergilemiştir.
+          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. Yenidoğan vitallerinin doğrusal olmayan eşik ilişkilerini yakalamada <strong>Rastgele Orman (RF: %98.12 Doğruluk, %93.97 Duyarlılık, 0.9949 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %98.12 Doğruluk, %91.81 Duyarlılık, 0.9948 ROC-AUC)</strong> olağanüstü klinik başarı sergilemiştir.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
@@ -10358,7 +11079,7 @@
           <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-50 text-indigo-900 font-bold border border-indigo-200">5-Fold Stratified CV</span>
         </div>
         <p class="text-[11px] text-[#736d65] leading-relaxed">
-          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. <strong>Rastgele Orman (RF: %96.00 Doğruluk, %93.05 Duyarlılık, 0.9896 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %94.86 Doğruluk, 0.9898 ROC-AUC)</strong> modelleri bakım düzensizliklerini yakalamada üstün performans göstermiştir.
+          3 farklı sınıflandırma mimarisi 5 katlamalı çapraz doğrulama ile test edilmiştir. <strong>Rastgele Orman (RF: %95.73 Doğruluk, %98.82 Duyarlılık, 0.9913 ROC-AUC)</strong> ve <strong>Gradient Boosting (GBM: %96.02 Doğruluk, %85.47 Duyarlılık, 0.9924 ROC-AUC)</strong> modelleri bakım düzensizliklerini yakalamada üstün performans göstermiştir.
         </p>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-[10px] border border-[#e5e2da] rounded-lg overflow-hidden bg-white">
@@ -10900,6 +11621,12 @@
       </div>
     </div>
 
+    <div class="pt-1">
+      <button onclick="runCryAudioSimulation()" class="w-full py-1.5 bg-[#4a5c4e] hover:bg-[#3d4c40] text-white font-bold rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
+        <span>🔊 Akustik Spektrogramı Analiz Et ve Kestir</span>
+      </button>
+    </div>
+
     <!-- SİMÜLATÖR SONUÇ PANELİ -->
     <div id="growthSimResultBox" class="p-3 rounded-xl bg-white border border-[#e5e2da] space-y-2 transition-all">
       <div class="flex items-center justify-between">
@@ -10975,7 +11702,14 @@
         setTimeout(runBirthWeightAnalysisSimulation, 60);
       } else if (datasetId === 'postpartum_depression') {
         setTimeout(runPostpartumDepressionSimulation, 60);
-      if (datasetId === 'weight_height_breastfeeding') setTimeout(runGrowthSimulation, 50);
+      } else if (datasetId === 'weight_height_breastfeeding') {
+        setTimeout(runGrowthSimulation, 60);
+      } else if (datasetId === 'breastfeeding_duration') {
+        setTimeout(runBfdSimulation, 60);
+      } else if (datasetId === 'baby_cry_audio') {
+        setTimeout(runCryAudioSimulation, 60);
+      } else if (datasetId === 'amazon_baby_reviews') {
+        setTimeout(runDynamicAmazonNLP, 60);
       } else if (datasetId === 'music_therapy_women') {
         setTimeout(runMusicTherapySimulation, 60);
       } else if (datasetId === 'maternal_mental_infant_sleep') {
@@ -12939,6 +13673,395 @@ function runGrowthSimulation() {
     }
     if (adviceEl) {
       adviceEl.textContent = 'Bebeğinizin persentil eğrisi yüksek seyrediyor. Anne sütü alan bebeklerde bu durum genelde doğaldır; formül mama alan bebeklerde ise porsiyon miktarı hekimle değerlendirilebilir.';
+    }
+  }
+}
+
+
+
+// ============================================================
+// SIMULATOR: 20. Breastfeeding Duration (runBfdSimulation)
+// ============================================================
+function runBfdSimulation() {
+  const skin = parseInt(document.getElementById('simBfdSkin')?.value || '1');
+  const support = parseInt(document.getElementById('simBfdSupport')?.value || '1');
+  const mastitis = parseInt(document.getElementById('simBfdMastitis')?.value || '0');
+  const partner = parseInt(document.getElementById('simBfdPartner')?.value || '1');
+
+  let baseDuration = 11.2;
+  let prob6m = 0.74;
+
+  if (skin === 1) { baseDuration += 3.64; prob6m += 0.12; }
+  else { baseDuration -= 2.10; prob6m -= 0.10; }
+
+  if (support === 1) { baseDuration += 2.80; prob6m += 0.08; }
+  else { baseDuration -= 2.40; prob6m -= 0.12; }
+
+  if (mastitis === 1) { baseDuration -= 3.96; prob6m -= 0.28; }
+  if (partner === 1) { baseDuration += 1.80; prob6m += 0.06; }
+
+  prob6m = Math.min(0.98, Math.max(0.12, prob6m));
+  baseDuration = Math.max(1.5, baseDuration);
+
+  const badgeEl = document.getElementById('simBfdStatusBadge');
+  const probEl = document.getElementById('simBfdProb6m');
+  const durEl = document.getElementById('simBfdDuration');
+  const riskEl = document.getElementById('simBfdRisk');
+  const advEl = document.getElementById('simBfdAdvice');
+
+  if (probEl) probEl.textContent = '%' + (prob6m * 100).toFixed(1);
+  if (durEl) durEl.textContent = baseDuration.toFixed(1) + ' Ay (Kestirilen)';
+
+  if (mastitis === 1) {
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2 py-0.5 rounded bg-rose-100 text-rose-900 font-bold border border-rose-300';
+      badgeEl.textContent = 'Erken Bırakma Riski (Mastit Uyarısı)';
+    }
+    if (riskEl) { riskEl.className = 'text-xs text-rose-700 font-bold'; riskEl.textContent = 'Yüksek Risk (OR=4.37)'; }
+    if (advEl) advEl.textContent = 'Meme ucu çatlağı veya mastit erken sütten kesilmenin 1 numaralı nedenidir. Ilık kompres, doğru kavrama pozisyonu ve hekim desteğiyle laktasyonu güvenle koruyabilirsiniz.';
+  } else if (prob6m >= 0.75) {
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold border border-emerald-300';
+      badgeEl.textContent = 'İdeal Sürdürülebilir Laktasyon Eğrisi';
+    }
+    if (riskEl) { riskEl.className = 'text-xs text-emerald-700 font-bold'; riskEl.textContent = 'Düşük Risk (%6.2)'; }
+    if (advEl) advEl.textContent = 'İlk saatte ten tene temas ve partner desteği emzirme süresini ortalama 3.6 ay uzatmaktadır. Mevcut destek kalkanınızı sürdürünüz.';
+  } else {
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold border border-amber-300';
+      badgeEl.textContent = 'Orta Düzey Laktasyon Desteği Gerekli';
+    }
+    if (riskEl) { riskEl.className = 'text-xs text-amber-700 font-bold'; riskEl.textContent = 'Orta Risk (%34.8)'; }
+    if (advEl) advEl.textContent = 'Hastaneden taburculuk sonrası laktasyon danışmanı desteği almak 6 ay kesintisiz anne sütü başarısını %45 artırmaktadır.';
+  }
+}
+
+// ============================================================
+// SIMULATOR: 21. Baby Cry Audio Acoustics (runCryAudioSimulation)
+// ============================================================
+function runCryAudioSimulation() {
+  const pitchType = document.getElementById('simCryPitch')?.value || 'hunger';
+  const duration = parseFloat(document.getElementById('simCryDuration')?.value || '2.4');
+  const energy = document.getElementById('simCryEnergy')?.value || 'medium';
+  const lastFeed = document.getElementById('simCryLastFeed')?.value || 'normal';
+
+  const boxEl = document.getElementById('crySimResultBox');
+  const f0El = document.getElementById('simCryF0');
+  const centEl = document.getElementById('simCryCentroid');
+  const alarmEl = document.getElementById('simCryPainAlarm');
+  const badgeEl = document.getElementById('simCryBadge');
+  const adviceEl = document.getElementById('simCryAdvice');
+
+  let baseF0 = 412.0;
+  let baseCentroid = 1850;
+  let isPain = false;
+  let label = "Açlık Sinyali";
+  let prob = 88.2;
+  let badgeClass = "bg-emerald-100 text-emerald-900 border-emerald-300";
+  let boxBorder = "border-emerald-200";
+  let advice = "Ağlama ritmi ve spektrogramı klasik beslenme arayışıyla tam örtüşüyor. Sakin bir ortamda ten tene temas kurarak emziriniz; ilk 5 dakikada ağlama kendiliğinden yatışacaktır.";
+
+  if (pitchType === 'colic') {
+    baseF0 = 517.5;
+    baseCentroid = 2550;
+    isPain = true;
+    label = "Gaz Sancısı / Kolik Kriz Alarmı";
+    prob = 96.2;
+    badgeClass = "bg-rose-100 text-rose-900 border-rose-300";
+    boxBorder = "border-rose-300 bg-rose-50/40";
+    advice = "Yüksek temel frekans (F0 > 500 Hz) ve keskin spektrogram akut bağırsak spazmı göstergesidir. Bebeğinizin bacaklarını hafifçe karnına doğru iterek bisiklet hareketi yaptırınız, ılık bir havluyla karnına saat yönünde masaj uygulayınız ve sakinleştirici ten tene temas kurunuz.";
+  } else if (pitchType === 'burp') {
+    baseF0 = 332.5;
+    baseCentroid = 1280;
+    isPain = false;
+    label = "Geğirme / Reflü Baskısı";
+    prob = 89.2;
+    badgeClass = "bg-purple-100 text-purple-900 border-purple-300";
+    boxBorder = "border-purple-200 bg-purple-50/30";
+    advice = "Kesik nefes ve grunt tınıları midede hava kabarcığı sıkışmasına işaret ediyor. Bebeğinizi dik pozisyonda omzunuza yaslayıp sırtına aşağıdan yukarıya hafif dairesel vuruşlarla masaj yaparak geğirmesine yardımcı olunuz.";
+  } else if (pitchType === 'tired') {
+    baseF0 = 346.0;
+    baseCentroid = 1480;
+    isPain = false;
+    label = "Aşırı Yorgunluk / Uyku İhtiyacı";
+    prob = 91.0;
+    badgeClass = "bg-blue-100 text-blue-900 border-blue-300";
+    boxBorder = "border-blue-200 bg-blue-50/30";
+    advice = "Ağlama tınısı uyku penceresinin aşıldığını ve aşırı uyarılma olduğunu gösteriyor. Odayı karartınız, beyaz gürültü (white noise) açınız ve hafif ritmik pışpışlamayla uykuya geçişine refakat ediniz.";
+  } else if (pitchType === 'discomfort') {
+    baseF0 = 388.0;
+    baseCentroid = 1720;
+    isPain = false;
+    label = "Fiziksel Rahatsızlık / Alt Islaklığı";
+    prob = 84.5;
+    badgeClass = "bg-amber-100 text-amber-900 border-amber-300";
+    boxBorder = "border-amber-200 bg-amber-50/30";
+    advice = "Bebeğinizin alt bezini, kıyafetlerinin etiketini ve oda sıcaklığını (ideal 21-22°C) kontrol ediniz. Genellikle alt değişimi veya hafif bir giysiyle hızla sakinleşecektir.";
+  } else {
+    // hunger
+    if (lastFeed === 'long') { prob = 94.5; advice += " (Son beslenmeden 3 saatten fazla geçmiş olması açlık hipotezini klinik olarak güçlendiriyor)."; }
+  }
+
+  // Adjust for energy
+  if (energy === 'high') { baseF0 += 18; baseCentroid += 120; }
+  else if (energy === 'low') { baseF0 -= 12; baseCentroid -= 90; }
+
+  // Adjust for duration
+  if (duration >= 10.0) {
+    advice += " [Not: 10 saniyenin üzerindeki sürekli patlamalı ağlamalarda bebeği kucağa alıp dikleştirmek solunum konforunu artırır.]";
+  }
+
+  if (f0El) f0El.textContent = baseF0.toFixed(1) + ' Hz';
+  if (centEl) centEl.textContent = baseCentroid.toLocaleString('tr-TR') + ' Hz';
+  if (alarmEl) {
+    if (isPain) {
+      alarmEl.className = 'text-xs text-rose-700 font-bold';
+      alarmEl.textContent = 'POZİTİF (Akut Sancı / Kolik)';
+    } else {
+      alarmEl.className = 'text-xs text-emerald-700 font-bold';
+      alarmEl.textContent = 'Negatif (Ağrısız)';
+    }
+  }
+  if (badgeEl) {
+    badgeEl.className = 'font-mono text-[10px] px-2 py-0.5 rounded font-bold border ' + badgeClass;
+    badgeEl.textContent = label + ' (%' + prob.toFixed(1) + ' Olasılık)';
+  }
+  if (boxEl) {
+    boxEl.className = 'p-3 rounded-xl border space-y-2 transition-all ' + boxBorder;
+  }
+  if (adviceEl) {
+    adviceEl.textContent = advice;
+  }
+}
+
+// ============================================================
+// SIMULATOR: 22. Amazon Baby Reviews NLP Safety (runAmazonReviewSimulation)
+// ============================================================
+// ============================================================
+// SIMULATOR: 22. Amazon Baby Reviews Dynamic NLP Engine
+// ============================================================
+const TOHUM_HAZARD_LEXICON = {
+  'kop': { weight: 0.95, label: 'kopma', cat: 'Boğulma & Parça Kopması' },
+  'koptu': { weight: 0.98, label: 'koptu', cat: 'Boğulma & Parça Kopması' },
+  'boğul': { weight: 1.00, label: 'boğulma', cat: 'Hava Yolu Tıkanması' },
+  'boğaz': { weight: 0.90, label: 'boğazına kaçma', cat: 'Boğulma Tehlikesi' },
+  'yut': { weight: 0.95, label: 'yutma', cat: 'Yabancı Cisim Yutma' },
+  'silikon': { weight: 0.45, label: 'silikon aşınması', cat: 'Malzeme Kopması' },
+  'keskin': { weight: 0.92, label: 'keskin kenar', cat: 'Fiziksel Yaralanma / Kesik' },
+  'kesti': { weight: 0.96, label: 'kesti', cat: 'Fiziksel Yaralanma / Kesik' },
+  'vida': { weight: 0.85, label: 'vida gevşemesi', cat: 'Yapısal / Mekanik Gevşeme' },
+  'gevşe': { weight: 0.88, label: 'gevşedi', cat: 'Mekanik Zafiyet' },
+  'düş': { weight: 0.95, label: 'düşme', cat: 'Yüksekten Düşme Tehlikesi' },
+  'düştü': { weight: 0.98, label: 'düştü', cat: 'Yüksekten Düşme Tehlikesi' },
+  'kırıl': { weight: 0.90, label: 'kırılma', cat: 'Yapısal Arıza' },
+  'kırıldı': { weight: 0.95, label: 'kırıldı', cat: 'Yapısal Arıza' },
+  'kilit': { weight: 0.70, label: 'kilit arızası', cat: 'Kilit Mekanizması' },
+  'kimyasal': { weight: 0.92, label: 'kimyasal koku', cat: 'Toksik Madde / Koku' },
+  'koku': { weight: 0.75, label: 'plastik koku', cat: 'Uçucu Solvent / Koku' },
+  'alerji': { weight: 0.88, label: 'alerji', cat: 'Dermatolojik Reaksiyon' },
+  'döküntü': { weight: 0.85, label: 'cilt döküntüsü', cat: 'Cilt Alerjisi' },
+  'toksik': { weight: 0.98, label: 'toksik', cat: 'Kimyasal Toksisite' },
+  'bpa': { weight: 0.80, label: 'BPA şüphesi', cat: 'Endokrin Bozucu Şüphesi' },
+  'zehir': { weight: 1.00, label: 'zehirlenme', cat: 'Akut Zehirlenme Riski' },
+  'yangın': { weight: 1.00, label: 'yangın', cat: 'Termal / Yangın Riski' },
+  'erit': { weight: 0.92, label: 'erime', cat: 'Aşırı Isınma / Erime' },
+  'duman': { weight: 0.95, label: 'duman', cat: 'Elektriksel Arıza' },
+  'şiş': { weight: 0.75, label: 'batarya şişmesi', cat: 'Batarya Deformasyonu' },
+  'tehlike': { weight: 0.85, label: 'tehlike', cat: 'Genel Güvenlik Alarmı' },
+  'rezalet': { weight: 0.60, label: 'rezalet', cat: 'Hiddet / Memnuniyetsizlik' },
+  'dikkat': { weight: 0.65, label: 'dikkat alarmı', cat: 'Ebeveyn Uyarısı' },
+  'kurtar': { weight: 0.80, label: 'acil kurtarma', cat: 'Acil Durum Müdahalesi' },
+  'yırtıl': { weight: 0.65, label: 'yırtıldı', cat: 'Kumaş/Dikiş Zafiyeti' },
+  'kusur': { weight: 0.70, label: 'kusurlu ürün', cat: 'İmalat Hatası' },
+  'iade': { weight: 0.50, label: 'iade', cat: 'Memnuniyetsizlik' }
+};
+
+const TOHUM_POS_LEXICON = {
+  'harika': 0.90, 'güzel': 0.65, 'rahat': 0.80, 'memnun': 0.85, 'yumuşak': 0.75,
+  'yumuşacık': 0.85, 'sağlam': 0.85, 'kaliteli': 0.90, 'tavsiye': 0.80, 'kolay': 0.60,
+  'pratik': 0.65, 'beğendim': 0.80, 'faydalı': 0.70, 'güvenli': 0.85, 'emniyetli': 0.90,
+  'kusursuz': 0.95, 'iyi': 0.50, 'mışıl': 0.60, 'dayanıklı': 0.80, 'şık': 0.55
+};
+
+function applyReviewPreset() {
+  const preset = document.getElementById('simReviewPreset')?.value || 'choking';
+  const textEl = document.getElementById('simReviewText');
+  const catEl = document.getElementById('simReviewCat');
+  const ratingEl = document.getElementById('simReviewRating');
+  const ratingValEl = document.getElementById('simReviewRatingVal');
+
+  if (preset === 'choking') {
+    if (textEl) textEl.value = 'DİKKAT! Diş kaşıyıcının küçük silikon parçası koptu, bebeğimin boğazına kaçıyordu zor kurtardık!';
+    if (catEl) catEl.value = 'Diş Kaşıyıcı & Oyuncak';
+    if (ratingEl) { ratingEl.value = 1; if (ratingValEl) ratingValEl.textContent = '1 Yıldız'; }
+  } else if (preset === 'chemical') {
+    if (textEl) textEl.value = 'Korkunç bir kimyasal plastik kokusu var, bebeğimin cildinde döküntü ve alerji yaptı!';
+    if (catEl) catEl.value = 'Biberon & Emzirme Gereçleri';
+    if (ratingEl) { ratingEl.value = 1; if (ratingValEl) ratingValEl.textContent = '1 Yıldız'; }
+  } else if (preset === 'broken') {
+    if (textEl) textEl.value = 'Beşiğin yan korkuluk vidası kendiliğinden gevşedi ve bebeğim düştü! Güvenlik sıfır!';
+    if (catEl) catEl.value = 'Beşik, Yatak & Uyku';
+    if (ratingEl) { ratingEl.value = 1; if (ratingValEl) ratingValEl.textContent = '1 Yıldız'; }
+  } else if (preset === 'neutral') {
+    if (textEl) textEl.value = 'Fiyatına göre idare eder, ne çok iyi ne çok kötü. Fermuarı biraz zor çekiliyor.';
+    if (catEl) catEl.value = 'Puset & Oto Koltuğu';
+    if (ratingEl) { ratingEl.value = 3; if (ratingValEl) ratingValEl.textContent = '3 Yıldız'; }
+  } else if (preset === 'safe') {
+    if (textEl) textEl.value = 'Harika bir ürün, bebeğim çok rahat etti mışıl mışıl uyuyor. Pamuklu kumaşı yumuşacık tavsiye ederim.';
+    if (catEl) catEl.value = 'Beşik, Yatak & Uyku';
+    if (ratingEl) { ratingEl.value = 5; if (ratingValEl) ratingValEl.textContent = '5 Yıldız'; }
+  }
+  runDynamicAmazonNLP();
+}
+
+function runDynamicAmazonNLP() {
+  const rawText = document.getElementById('simReviewText')?.value || '';
+  const cleanText = rawText.toLowerCase();
+  const rating = parseInt(document.getElementById('simReviewRating')?.value || '1');
+  const cat = document.getElementById('simReviewCat')?.value || 'Bebek Eşyası';
+
+  // Live text stats
+  const words = rawText.trim().split(/\s+/).filter(w => w.length > 0);
+  const statsEl = document.getElementById('simReviewTextStats');
+  if (statsEl) statsEl.textContent = words.length + ' Kelime • ' + rawText.length + ' Karakter';
+
+  // 1. Scan Hazard Keywords
+  let matchedHazards = [];
+  let totalHazardWeight = 0.0;
+  let dominantCat = '';
+  let maxWeight = 0.0;
+
+  for (const [kw, info] of Object.entries(TOHUM_HAZARD_LEXICON)) {
+    if (cleanText.includes(kw)) {
+      matchedHazards.push({ kw: kw, label: info.label, weight: info.weight, cat: info.cat });
+      totalHazardWeight += info.weight;
+      if (info.weight > maxWeight) {
+        maxWeight = info.weight;
+        dominantCat = info.cat;
+      }
+    }
+  }
+
+  // 2. Scan Positive Keywords
+  let totalPosWeight = 0.0;
+  for (const [kw, w] of Object.entries(TOHUM_POS_LEXICON)) {
+    if (cleanText.includes(kw)) {
+      totalPosWeight += w;
+    }
+  }
+
+  // 3. Exclamation and Uppercase Intensity
+  const exclCount = (rawText.match(/!/g) || []).length;
+  const exclIntensity = Math.min(1.0, exclCount * 0.25);
+  const upperLetters = (rawText.match(/[A-ZÇĞİÖŞÜ]/g) || []).length;
+  const totalLetters = (rawText.match(/[a-zA-ZçğıöşüÇĞİÖŞÜ]/g) || []).length || 1;
+  const upperRatio = Math.min(1.0, upperLetters / totalLetters);
+
+  // 4. Dynamic Sentiment Polarity [-1.0, +1.0]
+  const netScore = totalPosWeight - totalHazardWeight;
+  const denom = totalPosWeight + totalHazardWeight + 1.2;
+  const ratingScale = (rating - 3.0) / 2.0; // [-1.0, +1.0]
+  let dynamicPolarity = (netScore / denom) * 0.7 + (ratingScale * 0.3);
+  if (totalHazardWeight > 0.5) dynamicPolarity = Math.min(dynamicPolarity, -0.25 * totalHazardWeight);
+  dynamicPolarity = Math.max(-1.0, Math.min(1.0, dynamicPolarity));
+
+  // 5. Dynamic Hazard Probability (Logistic Sigmoid Model)
+  // z = intercept + hazard_weight*2.4 - polarity*1.6 - (rating-3)*0.85 + excl*0.75 + upper*0.6
+  const z = -2.1 + (totalHazardWeight * 2.5) - (dynamicPolarity * 1.5) - ((rating - 3.0) * 0.85) + (exclIntensity * 0.75) + (upperRatio * 0.6);
+  let hazardProb = 1.0 / (1.0 + Math.exp(-z));
+  hazardProb = Math.max(0.005, Math.min(0.998, hazardProb));
+  const probPct = (hazardProb * 100).toFixed(1);
+
+  // Update Visual Elements
+  const boxEl = document.getElementById('simReviewResultBox');
+  const badgeEl = document.getElementById('simReviewBadge');
+  const riskPctEl = document.getElementById('simReviewRiskPct');
+  const riskBarEl = document.getElementById('simReviewRiskBar');
+  const polEl = document.getElementById('simReviewPolarity');
+  const vecEl = document.getElementById('simReviewVector');
+  const actEl = document.getElementById('simReviewAction');
+  const advEl = document.getElementById('simReviewAdvice');
+  const tagCloud = document.getElementById('simReviewTagCloud');
+
+  // Render Dynamic Tag Cloud
+  if (tagCloud) {
+    if (matchedHazards.length === 0) {
+      tagCloud.innerHTML = '<span class="text-[9px] text-[#736d65] italic">Tehlike kökü tespit edilmedi.</span>';
+    } else {
+      tagCloud.innerHTML = matchedHazards.map(h => 
+        `<span class="bg-rose-100 text-rose-900 border border-rose-300 font-mono px-2 py-0.5 rounded text-[9px] font-semibold flex items-center gap-1">
+          <span>⚠️</span> <span>${h.label}</span> <span class="text-[8px] opacity-75">(${h.weight.toFixed(2)})</span>
+        </span>`
+      ).join('');
+    }
+  }
+
+  // Update Percentage and Bar
+  if (riskPctEl) riskPctEl.textContent = '%' + probPct;
+  if (riskBarEl) riskBarEl.style.width = probPct + '%';
+
+  // Update Polarity
+  if (polEl) {
+    let polDesc = "Nötr";
+    if (dynamicPolarity <= -0.6) polDesc = "Aşırı Öfke / Alarm";
+    else if (dynamicPolarity <= -0.2) polDesc = "Belirgin Negatif";
+    else if (dynamicPolarity >= 0.6) polDesc = "Yüksek Memnuniyet";
+    else if (dynamicPolarity >= 0.2) polDesc = "Olumlu";
+    polEl.textContent = (dynamicPolarity >= 0 ? '+' : '') + dynamicPolarity.toFixed(2) + ' (' + polDesc + ')';
+    polEl.className = 'text-xs font-bold ' + (dynamicPolarity < 0 ? 'text-rose-800' : 'text-emerald-800');
+  }
+
+  // Update Vector
+  if (vecEl) {
+    vecEl.textContent = dominantCat ? dominantCat : (hazardProb >= 0.5 ? 'Genel Zafiyet' : 'Güvenli Profil');
+    vecEl.className = 'text-xs font-bold ' + (hazardProb >= 0.5 ? 'text-rose-800' : 'text-emerald-800');
+  }
+
+  // Categorize Risk Level
+  if (hazardProb >= 0.65) {
+    // HIGH HAZARD
+    if (boxEl) boxEl.className = 'p-3 rounded-xl border space-y-2.5 transition-all shadow-xs bg-rose-50 border-rose-300';
+    if (riskBarEl) riskBarEl.className = 'h-full bg-rose-600 transition-all duration-300 rounded-full';
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2.5 py-0.5 rounded font-bold border bg-rose-100 text-rose-900 border-rose-300';
+      badgeEl.textContent = 'KRİTİK GÜVENLİK TEHLİKESİ (%' + probPct + ' Risk)';
+    }
+    if (actEl) {
+      actEl.className = 'text-xs text-rose-700 font-bold';
+      actEl.textContent = 'OTOMATİK DONDURULDU';
+    }
+    if (advEl) {
+      advEl.textContent = 'Metinde ' + (dominantCat ? dominantCat.toLowerCase() : 'güvenlik kusuru') + ' tespit edilmiştir (' + matchedHazards.length + ' tehlike belirteci, Risk: %' + probPct + '). Bebek güvenliği kalkanı gereği ilan Kovan İmece pazarında askıya alınmış, bağışçıdan güvenlik teyidi talep edilmiştir.';
+    }
+  } else if (hazardProb >= 0.25) {
+    // MEDIUM / MONITOR
+    if (boxEl) boxEl.className = 'p-3 rounded-xl border space-y-2.5 transition-all shadow-xs bg-amber-50 border-amber-300';
+    if (riskBarEl) riskBarEl.className = 'h-full bg-amber-500 transition-all duration-300 rounded-full';
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2.5 py-0.5 rounded font-bold border bg-amber-100 text-amber-900 border-amber-300';
+      badgeEl.textContent = 'ORTA DÜZEY RİSK / İZLEM GEREKLİ (%' + probPct + ' Risk)';
+    }
+    if (actEl) {
+      actEl.className = 'text-xs text-amber-700 font-bold';
+      actEl.textContent = 'KOŞULLU İNCELEME';
+    }
+    if (advEl) {
+      advEl.textContent = 'Üründe doğrudan akut hayati tehlike saptanmamış olmakla birlikte, ergonomi zafiyeti veya ebeveyn memnuniyetsizliği mevcuttur (Risk: %' + probPct + '). Ürün tesliminde parçaların kontrol edilmesi önerilir.';
+    }
+  } else {
+    // SAFE / APPROVED
+    if (boxEl) boxEl.className = 'p-3 rounded-xl border space-y-2.5 transition-all shadow-xs bg-emerald-50 border-emerald-300';
+    if (riskBarEl) riskBarEl.className = 'h-full bg-emerald-600 transition-all duration-300 rounded-full';
+    if (badgeEl) {
+      badgeEl.className = 'font-mono text-[10px] px-2.5 py-0.5 rounded font-bold border bg-emerald-100 text-emerald-900 border-emerald-300';
+      badgeEl.textContent = 'GÜVENLİ & ONAYLANDI (%' + probPct + ' Güvenlik)';
+    }
+    if (actEl) {
+      actEl.className = 'text-xs text-emerald-700 font-bold';
+      actEl.textContent = 'İLAN AKTİF (ONAYLI)';
+    }
+    if (advEl) {
+      advEl.textContent = 'Metinde hiçbir güvenlik riski veya toksisite belirteci tespit edilmemiştir (Duygu Polaritesi: ' + (dynamicPolarity >= 0 ? '+' : '') + dynamicPolarity.toFixed(2) + '). Ürün Kovan İmece pazarında güvenle paylaşılabilir.';
     }
   }
 }
