@@ -447,8 +447,19 @@ const state = {
   humOsc: null,
   heartbeatInterval: null,
 
+  // ÜREM AİLESİ 2 OTURUMLU HESAP (Anne: Buse Nur Ürem & Baba: Oğuz Ürem)
+  family: {
+    name: "Ürem Ailesi",
+    membership: "2 Oturumlu Aile Hesabı (Anne & Baba)",
+    activeSession: "mother", // "mother" (Buse Nur Ürem) | "father" (Oğuz Ürem)
+    sessions: [
+      { id: "mother", name: "Buse Nur Ürem", role: "Anne", title: "Anne Takip & Sanal Bebek Alanı", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=250&q=80" },
+      { id: "father", name: "Oğuz Ürem", role: "Baba", title: "Baba Oturumu & Maternal İhtiyaç Analizi", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80" }
+    ]
+  },
+
   // 1. MODÜL: GÜNEŞ - ÇEKMECE & BESLEME DURUMU
-  isSheetExpanded: false,
+  isSheetExpanded: true,
   isMealSelectorOpen: false,
   homeSubtab: "feed",
 
@@ -531,22 +542,69 @@ const state = {
     levelName: "Köklenen Fidan"
   },
 
+  whatsAppModal: {
+    isOpen: false,
+    title: "WhatsApp Paylaşımı",
+    recipientName: "Oğuz Baltacıoğlu",
+    recipientPhone: "+90 532 123 45 67",
+    message: "",
+    waUrl: "",
+    type: "partner_invite"
+  },
+  auth: {
+    isAuthenticated: true,
+    screen: "app", // 'login' | 'onboarding' | 'app'
+    authTab: "register", // 'register' (Üye Ol) | 'login' (Giriş Yap)
+    onboardingStep: 1, // 1..3 (Mahremiyet dostu 3 sade adım)
+    provider: "google",
+    userId: "buse_founder",
+    email: "busenur.baltacioglu@gmail.com",
+    firstName: "Buse Nur",
+    lastName: "Baltacıoğlu",
+    password: "",
+    googleModalOpen: false,
+    authError: "",
+    syncStatus: "Sunucu ile Senkronize ✓",
+    partnerCodeInput: "",
+    phoneInput: ""
+  },
+  profileSubtab: "identity",
+
   user: {
     name: "Buse Baltacıoğlu",
     shortName: "Buse",
+    age: 30,
     avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=250&q=80",
-    role: "Tasarımcı & Anne",
+    role: "Kurucu & Veri Bilimci · Anne",
     city: "Manisa",
     district: "Yunusemre",
     neighborhood: "Muradiye",
+    baselineSys: 90,
+    baselineDia: 60,
     baselineBP: "90/60",
-    currentWeight: 65,
-    startWeight: 58,
+    baselineHR: 72,
+    heightCm: 168,
+    currentWeight: 65.0,
+    startWeight: 58.0,
     startWaist: 68,
     waistCircumference: 98,
     fundalHeight: 31,
+    parity: "G1P0 (İlk Gebelik · Primigravida)",
+    pregnancyType: "Tekil Gebelik",
+    lmpDate: "2026-01-17",
     dueDate: "24 Ekim 2026",
-    bloodGroup: "A Rh+"
+    bloodGroup: "A Rh+",
+    doctorName: "Dr. Ayşe Yılmaz",
+    hospitalName: "Manisa Şehir Hastanesi",
+    nextCheckupDate: "10 Eylül 2026 · 14:30",
+    baselineCategory: "low", // 'low' (90/60) | 'normal' (110/70) | 'high' (125/80)
+    isFirstBaby: true,
+    survey: {
+      waterHabit: "5-7",
+      supplements: ["iron", "magnesium", "omega", "d3"],
+      symptoms: ["Hafif Bel Ağrısı", "Akşam Yorgunluğu"],
+      specialConditions: ["Düşük Tansiyon Hassasiyeti (90/60)"]
+    }
   },
 
   partner: {
@@ -554,7 +612,33 @@ const state = {
     shortName: "Oğuz",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80",
     role: "Baba & Destekçi",
-    phone: "+90 532 000 00 00"
+    phone: "+90 532 000 00 00",
+    email: "oguz@tohum.app",
+    bloodGroup: "0 Rh+",
+    inviteCode: "THM-31G-834",
+    inviteStatus: "connected", // 'uninvited' | 'pending' | 'connected'
+    permissions: {
+      shareVitals: true,
+      shareSymptoms: true,
+      shareSupplements: true,
+      eveningMassage: true
+    },
+    liveFeed: [
+      {
+        id: 1,
+        time: "09:15",
+        type: "vital",
+        title: "Sabah Bazal Uyum Onayı",
+        text: "Buse'nin sabah dinlenik tansiyonu (92/62 mmHg) kendi 90/60 bazaliyle tam uyumlu. Güneş'in ritmi huzurlu."
+      },
+      {
+        id: 2,
+        time: "21:00",
+        type: "care",
+        title: "Akşam Şefkat Çağrısı (31. Hafta)",
+        text: "31. haftada ağırlık merkezi değiştiği için Buse'nin bel ve sakrum bölgesine 10 dk ılık dokunuş ve masaj çok iyi gelecektir."
+      }
+    ]
   },
 
   pet: {
@@ -1358,6 +1442,9 @@ function saveState() {
       bagItems: state.birthModule.bagItems.map(b => ({ id: b.id, done: b.done })),
       selectedSymptoms: state.healthData.selectedSymptoms,
       selectedMood: state.healthData.selectedMood,
+      userProfile: state.user,
+      partnerProfile: state.partner,
+      profileSubtab: state.profileSubtab,
       savedDate: new Date().toDateString()
     };
     localStorage.setItem('tohum_v1', JSON.stringify(persist));
@@ -1423,6 +1510,17 @@ function loadSavedState() {
     }
     if (saved.selectedSymptoms) state.healthData.selectedSymptoms = saved.selectedSymptoms;
     if (saved.selectedMood) state.healthData.selectedMood = saved.selectedMood;
+    if (saved.userProfile) {
+      state.user = Object.assign({}, state.user, saved.userProfile);
+      state.user.baselineBP = `${state.user.baselineSys}/${state.user.baselineDia}`;
+    }
+    if (saved.partnerProfile) {
+      state.partner = Object.assign({}, state.partner, saved.partnerProfile);
+      if (saved.partnerProfile.permissions) {
+        state.partner.permissions = Object.assign({}, state.partner.permissions, saved.partnerProfile.permissions);
+      }
+    }
+    if (saved.profileSubtab) state.profileSubtab = saved.profileSubtab;
   } catch(e) {}
 }
 
@@ -1439,46 +1537,47 @@ function render() {
 
 // MAIN APP SHELL
 function renderAppShell(root) {
+  if (state.auth && state.auth.screen === "login") {
+    root.innerHTML = renderAuthLoginScreen() + renderWhatsAppModal();
+    return;
+  }
+  if (state.auth && state.auth.screen === "onboarding") {
+    root.innerHTML = renderOnboardingWizardScreen() + renderWhatsAppModal();
+    return;
+  }
   const missing = checkDeficiency();
   const hasDeficiency = missing.length > 0;
 
   root.innerHTML = `
-    <!-- Top Header -->
-    <header class="px-5 pt-4 pb-3 flex justify-between items-center absolute top-0 inset-x-0 z-40 pointer-events-auto bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-      <button onclick="toggleDrawer()" class="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/90 hover:text-white active:scale-95 transition shadow-lg" title="Menü">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h11"></path>
-        </svg>
-      </button>
-
-      <div class="text-center cursor-pointer group" onclick="toggleWeekSelector()" title="Haftayı Değiştir">
-        <h1 class="text-xs font-serif tracking-[0.25em] text-white uppercase font-medium drop-shadow-sm">ToHUM</h1>
-        <div class="flex items-center justify-center space-x-1 mt-0.5 bg-white/10 hover:bg-white/20 px-2.5 py-0.5 rounded-full border border-white/15 transition shadow-xs">
-          <span class="text-[10px] text-amber-200 font-semibold">Güneş · ${state.baby.week}. Hafta</span>
-          <span class="text-[8px] text-white/60">▼</span>
-        </div>
+    <!-- Top Header: Tek Satır, Minimalist, Çakışmasız -->
+    <header class="px-5 pt-3.5 pb-2 flex justify-between items-center absolute top-0 inset-x-0 z-40 pointer-events-auto bg-gradient-to-b from-black/85 via-black/30 to-transparent">
+      <div class="flex items-center space-x-1.5 cursor-pointer" onclick="navigateTab('home')">
+        <span class="text-sm font-serif tracking-[0.22em] text-white font-semibold">ToHUM</span>
       </div>
 
-      <div class="flex items-center space-x-2.5">
+      <button onclick="toggleWeekSelector()" class="flex items-center space-x-1.5 bg-black/45 hover:bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 transition shadow-xs" title="Haftayı Değiştir">
+        <span class="text-[11px] text-amber-200 font-semibold">${state.baby.name} · ${state.baby.week}. Hafta</span>
+        <span class="text-[9px] text-white/50">· Doğuma ${state.user.daysRemaining || 63} Gün</span>
+        <span class="text-[8px] text-white/40 ml-0.5">▼</span>
+      </button>
+
+      <div class="flex items-center space-x-2">
         ${state.birthModule.contractionTimer.isRunning ? `
-          <button onclick="navigateTab('birth'); setBirthSubtab('waves');" class="text-xs font-semibold text-rose-200 bg-rose-500/25 px-3 py-1 rounded-full animate-pulse backdrop-blur-md">
+          <button onclick="navigateTab('birth'); setBirthSubtab('waves');" class="text-xs font-semibold text-rose-200 bg-rose-500/25 px-2.5 py-1 rounded-full animate-pulse backdrop-blur-md">
             🔴 ${String(Math.floor(state.birthModule.contractionTimer.currentSeconds/60)).padStart(2,'0')}:${String(state.birthModule.contractionTimer.currentSeconds%60).padStart(2,'0')}
           </button>
         ` : `
-          <button onclick="toggleAudio()" class="text-xs text-amber-200/90 bg-white/[0.08] hover:bg-white/[0.14] px-3.5 py-1 rounded-full backdrop-blur-md flex items-center space-x-1.5 transition shadow-xs" title="8.3 Hz Calm Tech Rezonansı">
-            <span class="w-2 h-2 rounded-full ${state.isPlayingAudio ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400/80'}"></span>
-            <span>8.3 Hz</span>
+          <button onclick="toggleAudio()" class="text-xs text-amber-200/90 bg-black/45 hover:bg-black/60 px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-md flex items-center space-x-1.5 transition shadow-xs" title="8.3 Hz Calm Tech Rezonansı">
+            <span class="w-1.5 h-1.5 rounded-full ${state.isPlayingAudio ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400/80'}"></span>
+            <span class="text-[10px]">8.3 Hz</span>
           </button>
         `}
-        <div class="relative cursor-pointer" onclick="navigateTab('profile')" title="Profil">
-          <img src="${state.user.avatar}" alt="${state.user.name}" class="w-9 h-9 rounded-full object-cover border border-white/20 shadow-sm">
-        </div>
       </div>
     </header>
 
-    ${renderDrawerMenu()}
     ${renderWeekSelectorModal()}
     ${renderClinicalReportModal()}
+    ${renderWhatsAppModal()}
 
     <main class="flex-1 w-full h-full relative overflow-hidden flex flex-col">
       ${getTabContent()}
@@ -1497,111 +1596,29 @@ function renderAppShell(root) {
 
     ${state.nightMode ? `
       <div class="absolute inset-0 z-[195] bg-black/25 pointer-events-none"></div>
-      <div class="absolute top-[68px] left-1/2 -translate-x-1/2 z-[196] pointer-events-none">
+      <div class="absolute top-[52px] left-1/2 -translate-x-1/2 z-[196] pointer-events-none">
         <span class="text-[9px] text-amber-200/35 font-medium tracking-widest uppercase">Gece Modu</span>
       </div>
     ` : ''}
 
+    <!-- Alt Navigasyon: 5 Net Sekme (Sıfır Mükerrerlik) -->
     <nav class="absolute bottom-0 inset-x-0 z-50 h-16 bg-[#0D0806]/97 backdrop-blur-2xl border-t border-white/[0.06] flex items-center justify-around px-2 shadow-[0_-4px_28px_rgba(0,0,0,0.7)]">
       ${[
         { id: 'home',     sym: '◎', lbl: 'Güneş'  },
         { id: 'health',   sym: '✛', lbl: 'Sağlık'  },
         { id: 'birth',    sym: '◑', lbl: 'Doğum'   },
-        { id: 'calendar', sym: '▦', lbl: 'Takvim'  }
+        { id: 'kovan',    sym: '▦', lbl: 'Kovan'   },
+        { id: 'menu',     sym: '☰', lbl: 'Menü'    }
       ].map(t => `
         <button
           onclick="navigateTab('${t.id}')"
-          class="flex flex-col items-center justify-center space-y-1 px-4 py-2 rounded-xl transition-all active:scale-95
+          class="flex flex-col items-center justify-center space-y-0.5 px-3 py-1.5 rounded-xl transition-all active:scale-95
             ${state.currentTab === t.id ? 'text-amber-300 font-semibold' : 'text-white/40 hover:text-white/70'}">
-          <span class="text-[20px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]' : ''}">${t.sym}</span>
+          <span class="text-[18px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]' : ''}">${t.sym}</span>
           <span class="text-[10px] tracking-wide">${t.lbl}</span>
         </button>
       `).join('')}
     </nav>
-  `;
-}
-
-// SLIDING DRAWER MENU
-function renderDrawerMenu() {
-  if (!state.isDrawerOpen) return '';
-
-  const curData = getLifecycleDataForWeek(state.baby.week);
-
-  return `
-    <div class="absolute inset-0 bg-black/75 z-[90] backdrop-blur-sm transition-opacity" onclick="toggleDrawer()"></div>
-    <div class="absolute top-0 left-0 bottom-0 w-[290px] bg-[#140D0B] z-[100] shadow-[0_0_50px_rgba(0,0,0,0.9)] flex flex-col justify-between p-6 border-r border-white/15 text-white animate-in slide-in-from-left duration-200">
-      <div>
-        <div class="flex justify-between items-center pb-4 border-b border-white/10">
-          <div class="flex items-center space-x-2.5">
-            <img src="${state.user.avatar}" class="w-9 h-9 rounded-full object-cover border border-white/20">
-            <div>
-              <div class="text-xs font-serif font-semibold text-white/90">ToHUM Çemberi</div>
-              <div class="text-[10px] text-white/50">${state.user.shortName}, ${state.partner.shortName} ve ${state.baby.name}</div>
-            </div>
-          </div>
-          <button onclick="toggleDrawer()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white text-xs">✕</button>
-        </div>
-
-        <div class="mt-4 space-y-1 text-xs">
-          <!-- 1. GÜNEŞ (YAŞAYAN ALAN) -->
-          <button onclick="navigateTab('home')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'home' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>1. Güneş</span>
-            <span class="text-[10px] font-semibold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-400/20">
-              ${state.baby.week}. Hafta
-            </span>
-          </button>
-
-          <!-- 2. ŞİFA & SAĞLIK (DİNAMİK TRİMESTER) -->
-          <button onclick="navigateTab('health')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'health' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>2. Şifa & Sağlık Takibi</span>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-400/25 font-medium">
-              ${state.baby.week < 14 ? 'hCG & Folat' : (state.baby.week < 28 ? 'Organ & Demir' : 'Tansiyon & Pelvik')}
-            </span>
-          </button>
-
-          <!-- 3. MODÜL: 1-13W KÖKLENME / 14-27W GELİŞİM / 28-40W DOĞUM & HAZIRLIK -->
-          <button onclick="navigateTab('birth')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'birth' ? 'bg-rose-500/25 text-rose-200 font-semibold border border-rose-400/40' : 'text-white/70 hover:bg-white/5'}">
-            <span>3. ${state.baby.week < 14 ? 'Köklenme & Erken Güvenlik' : (state.baby.week < 28 ? 'Gelişim & Beden Uyumu' : 'Doğum & Hazırlık')}</span>
-            <span class="text-[10px] ${state.baby.week >= 28 ? 'bg-rose-500/30 text-rose-200' : 'bg-white/10 text-white/60'} px-2 py-0.5 rounded-full font-medium">
-              ${curData.trimester}
-            </span>
-          </button>
-
-          <!-- 4. TAKVİM (DİNAMİK RANDEVU & YOL HARİTASI) -->
-          <button onclick="navigateTab('calendar')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'calendar' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>4. Bütünleşik Takvim</span>
-            <span class="text-[10px] opacity-70">
-              ${state.baby.week < 14 ? 'İkili Test' : (state.baby.week < 28 ? 'Organ Taraması' : 'NST & Randevu')}
-            </span>
-          </button>
-
-          <!-- 5. İHTİYAÇ & BÜTÇE -->
-          <button onclick="navigateTab('shopping')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'shopping' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>5. İhtiyaç & Bütçe Planı</span>
-            <span class="text-[10px] opacity-70">
-              ${state.baby.week < 14 ? 'Erken İhtiyaç' : (state.baby.week < 28 ? 'Oda & Çeyiz' : 'Çanta & Liste')}
-            </span>
-          </button>
-
-          <!-- 6. KOMŞU AĞI -->
-          <button onclick="navigateTab('kovan')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'kovan' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>6. Muradiye Komşu Ağı</span>
-            <span class="text-[10px] opacity-70">İmece & Paylaşım</span>
-          </button>
-
-          <!-- 7. BABA DESTEK -->
-          <button onclick="navigateTab('father')" class="w-full text-left px-3.5 py-2.5 rounded-2xl flex items-center justify-between transition ${state.currentTab === 'father' ? 'bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/30' : 'text-white/70 hover:bg-white/5'}">
-            <span>7. Baba Destek Alanı</span>
-            <span class="text-[10px] opacity-70">Oğuz (${state.baby.week}.H)</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="pt-3 border-t border-white/10 text-xs text-white/50 flex justify-between items-center">
-        <span>Muradiye, Manisa</span>
-        <button onclick="navigateTab('profile')" class="text-amber-200 font-medium hover:underline">Profilim ➔</button>
-      </div>
-    </div>
   `;
 }
 
@@ -1613,9 +1630,9 @@ function getTabContent() {
     case "calendar": return renderCalendarTab();
     case "shopping": return renderShoppingTab();
     case "kovan": return renderKovanTab();
-    case "father": return renderFatherTab();
+    case "menu": return renderMenuTab();
     case "profile": return renderProfileTab();
-    default: return renderBirthTab();
+    default: return renderHomeTab();
   }
 }
 
@@ -1623,9 +1640,12 @@ function getTabContent() {
 function renderHomeTab() {
   const missing = checkDeficiency();
   const hasDeficiency = missing.length > 0;
+  const waterPct = Math.min(100, Math.round((state.nurture.water.count / state.nurture.water.target) * 100));
+  const nutrientPct = state.nurture.meal.taken ? 85 : 45;
 
   return `
     <div class="absolute inset-0 flex flex-col justify-between overflow-hidden bg-[#0A0605]">
+      <!-- Canlı Anne Karnı ve Dokunma Alanı (Ferah ve Açık) -->
       <div 
         id="cinematicTouchStage"
         onpointerdown="handleCinematicTouch(event)"
@@ -1642,39 +1662,117 @@ function renderHomeTab() {
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0605] via-transparent to-black/35 pointer-events-none z-10 animate-maternal-breath"></div>
       </div>
 
-      <!-- Sakin Calm Tech Durum Çubuğu (Gözü Yormayan Sade Çubuk) -->
-      <div class="absolute top-20 inset-x-5 z-30 flex items-center justify-between pointer-events-auto">
-        <div class="px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-xl border border-white/[0.08] text-white/80 text-xs font-light shadow-sm flex items-center space-x-2">
-          <span class="text-amber-200">🌱</span>
+      <!-- Sade, İnce Floating Rozetler (Header'ın Hemen Altında - Çakışmasız) -->
+      <div class="absolute top-14 inset-x-4 z-30 flex items-center justify-between pointer-events-auto">
+        <div class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-light shadow-xs flex items-center space-x-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>${state.baby.sizeComparison}</span>
         </div>
 
-        <button onclick="triggerDirectKick()" class="px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-xl border border-white/[0.08] text-amber-200 text-xs font-medium flex items-center space-x-1.5 hover:bg-white/10 active:scale-95 transition shadow-sm">
-          <span>🐾</span>
-          <span>${state.interactive.kicksToday} Hareket</span>
+        <button onclick="triggerDirectKick()" class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-amber-200 text-[10px] font-medium flex items-center space-x-1.5 hover:bg-white/10 active:scale-95 transition shadow-xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>${state.interactive.kicksToday} Fetal Hareket</span>
         </button>
       </div>
 
-      <div class="absolute bottom-14 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
-        <div class="bg-[#140D0B]/95 backdrop-blur-2xl rounded-t-[32px] border-t border-white/15 text-white shadow-[0_-10px_35px_rgba(0,0,0,0.6)] transition-all duration-300 overflow-hidden">
-          <div onclick="toggleBottomSheet()" class="px-5 pt-3 pb-3.5 cursor-pointer hover:bg-white/5 active:bg-white/10 transition flex flex-col justify-center select-none">
-            <div class="w-10 h-1 bg-white/30 rounded-full mx-auto mb-2.5 hover:bg-white/50 transition-all"></div>
+      <!-- Alt Çekmece: Sanal Bebek Besleme & Günlük Denge Paneli -->
+      <div class="absolute bottom-16 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
+        <div class="bg-[#140D0B]/95 backdrop-blur-2xl rounded-t-[28px] border-t border-white/15 text-white shadow-[0_-10px_35px_rgba(0,0,0,0.7)] transition-all duration-300 overflow-hidden">
+          
+          <!-- Çekmece Tepe Barı (Kapalıyken Görünen İnce Kapsül) -->
+          <div onclick="toggleBottomSheet()" class="px-5 pt-2.5 pb-3 cursor-pointer hover:bg-white/5 active:bg-white/10 transition flex flex-col justify-center select-none">
+            <div class="w-8 h-1 bg-white/25 rounded-full mx-auto mb-2 hover:bg-white/40 transition-all"></div>
             <div class="flex justify-between items-center text-xs">
               <div class="flex items-center space-x-2 truncate">
                 <span class="w-2 h-2 rounded-full ${hasDeficiency ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse shrink-0"></span>
-                <span id="cinematicFeedbackBox" class="font-serif italic text-white/90 truncate">
+                <span id="cinematicFeedbackBox" class="font-serif italic text-white/90 truncate text-[11px]">
                   "${state.interactive.reactionText}"
                 </span>
               </div>
-              <div class="flex items-center space-x-1 text-amber-200 text-[11px] font-medium shrink-0 ml-2 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
-                <span>${state.isSheetExpanded ? 'Kapat ✕' : 'Güneş’i Besle & Duyular ⌃'}</span>
+              <div class="flex items-center space-x-1.5 text-amber-200 text-[10px] font-medium shrink-0 ml-2 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
+                <span class="text-cyan-300 font-mono">${state.nurture.water.count}/${state.nurture.water.target}B</span>
+                <span>·</span>
+                <span>${state.isSheetExpanded ? 'Kapat ✕' : 'Güneş’i Besle ⌃'}</span>
               </div>
             </div>
           </div>
 
+          <!-- Açıldığında Görünen Sanal Bebek Besleme & İhtiyaç Havuzu -->
           ${state.isSheetExpanded ? `
-            <div class="px-5 pb-6 border-t border-white/10 animate-in fade-in duration-200">
-              <div class="grid grid-cols-4 gap-1 bg-white/5 p-1 rounded-2xl text-xs my-3">
+            <div class="px-5 pb-5 border-t border-white/10 space-y-3 animate-in fade-in duration-200 max-h-[340px] overflow-y-auto">
+              
+              <!-- SANAL BEBEK (TAMAGOTCHI) CANLILIK & BESLEME HUD KARTI -->
+              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2 mt-2">
+                <div class="flex items-center justify-between text-[11px]">
+                  <div class="flex items-center space-x-1.5 font-medium text-white/90">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span>Güneş Yaşam & Besleme Havuzu</span>
+                  </div>
+                  <span class="text-[10px] text-amber-200/90 font-mono">${state.baby.bpm} bpm · Dingin Nabız</span>
+                </div>
+
+                <!-- Canlı Barlar: Amniyotik Berraklık & Hücresel Besin -->
+                <div class="grid grid-cols-2 gap-2 text-[10px]">
+                  <div class="p-2 rounded-xl bg-black/25 border border-white/5 space-y-1">
+                    <div class="flex justify-between text-white/70">
+                      <span>Amniyotik Berraklık</span>
+                      <span class="text-cyan-300 font-semibold">%${waterPct} (${state.nurture.water.count}/${state.nurture.water.target}B)</span>
+                    </div>
+                    <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-cyan-400 h-full rounded-full transition-all duration-300" style="width: ${waterPct}%"></div>
+                    </div>
+                  </div>
+
+                  <div class="p-2 rounded-xl bg-black/25 border border-white/5 space-y-1">
+                    <div class="flex justify-between text-white/70">
+                      <span>Hücresel Besin</span>
+                      <span class="text-emerald-300 font-semibold">%${nutrientPct}</span>
+                    </div>
+                    <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-emerald-400 h-full rounded-full transition-all duration-300" style="width: ${nutrientPct}%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sanal Bebek Hızlı Etkileşim Butonları (Tamagotchi Alanı) -->
+                <div class="grid grid-cols-4 gap-1.5 pt-0.5">
+                  <button onclick="feedAction('water')" class="py-2 px-1 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-medium text-center transition active:scale-95">
+                    Ilık Su Ver
+                  </button>
+                  <button onclick="feedAction('nutrient')" class="py-2 px-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 text-[10px] font-medium text-center transition active:scale-95">
+                    Besin Ver
+                  </button>
+                  <button onclick="triggerDirectKick()" class="py-2 px-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-amber-200 text-[10px] font-medium text-center transition active:scale-95">
+                    Karnı Sev
+                  </button>
+                  <button onclick="toggleAudio()" class="py-2 px-1 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/30 text-purple-200 text-[10px] font-medium text-center transition active:scale-95">
+                    Ninni Dinlet
+                  </button>
+                </div>
+              </div>
+
+              <!-- "Bugün Nasıl Hissediyorsun?" Sakin & Soft Karşılama (Emojisiz) -->
+              <div class="p-3 bg-white/5 rounded-2xl border border-white/10 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-semibold text-amber-200/95">Bugün Nasıl Hissediyorsun?</span>
+                  <span class="text-[9px] text-white/50">Doğuma ${state.user.daysRemaining || 63} Gün</span>
+                </div>
+                <!-- Emojisiz Sade Soft Butonlar -->
+                <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+                  <button onclick="selectMaternalMood('serene')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'serene' ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Dingin</button>
+                  <button onclick="selectMaternalMood('tired')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'tired' ? 'bg-amber-500/25 border-amber-400 text-amber-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Yorgun</button>
+                  <button onclick="selectMaternalMood('emotional')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'emotional' ? 'bg-sky-500/25 border-sky-400 text-sky-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Hassas</button>
+                  <button onclick="selectMaternalMood('ache')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'ache' ? 'bg-rose-500/25 border-rose-400 text-rose-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Bel Hassasiyeti</button>
+                </div>
+                <!-- Otomatik Maternal Analiz Güvencesi: Anne Eşine Talep Bildirmez -->
+                <div class="pt-2 border-t border-white/5 flex items-start space-x-2 text-[10px] text-white/60 leading-relaxed">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1 shrink-0"></span>
+                  <span>ToHUM Akıllı Çekirdek: Beden verileriniz analiz edilerek Oğuz'un baba portalına proaktif destek kartı olarak aktarıldı. Rica etmenize gerek kalmadan şefkatle eşlik edilir.</span>
+                </div>
+              </div>
+
+              <!-- Alt Sekmeler: Besle, Bağ Kur, Gelişim, Mektuplar -->
+              <div class="grid grid-cols-4 gap-1 bg-white/5 p-1 rounded-2xl text-xs">
                 <button onclick="setHomeSubtab('feed')" class="py-2 rounded-xl transition ${state.homeSubtab === 'feed' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
                   Besle
                 </button>
@@ -1689,7 +1787,7 @@ function renderHomeTab() {
                 </button>
               </div>
 
-              <div class="max-h-[230px] overflow-y-auto pr-1">
+              <div>
                 ${getHomeSubtabContent()}
               </div>
             </div>
@@ -1984,20 +2082,31 @@ function getHealthSubtabContent() {
             </button>
           </div>
 
-          <div class="p-3.5 bg-white/5 rounded-2xl flex items-center justify-between border border-white/5">
-            <div>
-              <div class="text-lg font-bold text-white">${state.healthData.bloodPressureHistory[0].systolic}/${state.healthData.bloodPressureHistory[0].diastolic} <span class="text-xs font-normal text-white/60">mmHg</span></div>
-              <div class="text-[10px] text-emerald-300 mt-0.5">✓ Son Ölçüm: ${state.healthData.bloodPressureHistory[0].date}</div>
-            </div>
-            <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold border
-              ${state.healthData.bloodPressureHistory[0].systolic >= 130
-                ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
-                : state.healthData.bloodPressureHistory[0].systolic >= 115
-                ? 'bg-amber-500/25 border-amber-400/40 text-amber-300'
-                : 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'}">
-              ${state.healthData.bloodPressureHistory[0].systolic >= 130 ? '⚠ Yüksek' : state.healthData.bloodPressureHistory[0].systolic >= 115 ? '⚑ İzle' : '✓ Güvenli'}
-            </span>
-          </div>
+          ${(() => {
+            const latestBp = state.healthData.bloodPressureHistory[0];
+            const aiRes = window.runAiSeedCoreAnalysis ? window.runAiSeedCoreAnalysis(latestBp.systolic, latestBp.diastolic) : { status: 'optimal', badgeText: '✓ Güvenli', message: '' };
+            const badgeCls = aiRes.status === 'critical'
+              ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
+              : (aiRes.status === 'borderline' || aiRes.status === 'watch')
+              ? 'bg-amber-500/25 border-amber-400/40 text-amber-200'
+              : 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300';
+            return `
+              <div class="p-3.5 bg-white/5 rounded-2xl space-y-2 border border-white/5">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-lg font-bold text-white">${latestBp.systolic}/${latestBp.diastolic} <span class="text-xs font-normal text-white/60">mmHg</span></div>
+                    <div class="text-[10px] text-emerald-300 mt-0.5">✓ Son Ölçüm: ${latestBp.date}</div>
+                  </div>
+                  <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold border ${badgeCls}">
+                    ${aiRes.badgeText}
+                  </span>
+                </div>
+                <div class="text-[10px] text-white/75 bg-black/30 p-2.5 rounded-xl border border-white/5 leading-relaxed">
+                  ${aiRes.message}
+                </div>
+              </div>
+            `;
+          })()}
 
           ${(() => {
             const hist = state.healthData.bloodPressureHistory.slice(0, 6).reverse();
@@ -2094,22 +2203,27 @@ function getHealthSubtabContent() {
         </div>
 
         <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3.5 shadow-sm">
-          <div class="flex justify-between items-center">
-            <div>
-              <span class="text-xs font-semibold text-white/95">Haftalık İlerleme Eğrisi</span>
-              <p class="text-[10px] text-white/50">0. Hafta (58 kg / 68 cm) ➔ 31. Hafta (65 kg / 98 cm)</p>
-            </div>
-            <button onclick="editCurrentWeight()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 text-amber-200 text-xs font-medium rounded-xl">
-              Düzenle
-            </button>
-          </div>
+          ${(() => {
+            const m0w = window.computeM0BaselineProfile ? window.computeM0BaselineProfile() : { expectedMinGain: '7.0', expectedMaxGain: '10.2', bmi: '20.5', bmiCategory: 'Normal VKİ', weightStatusText: 'DSÖ Koridorunda' };
+            return `
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-xs font-semibold text-white/95">Haftalık İlerleme Eğrisi (VKİ: ${m0w.bmi} kg/m²)</span>
+                  <p class="text-[10px] text-white/50">0. Hafta (${state.user.startWeight} kg) ➔ ${state.baby.week}. Hafta (${state.user.currentWeight} kg)</p>
+                </div>
+                <button onclick="editCurrentWeight()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 text-amber-200 text-xs font-medium rounded-xl">
+                  Düzenle
+                </button>
+              </div>
 
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
-              <span class="text-[10px] text-white/50">Toplam Kilo Artışı</span>
-              <div class="text-base font-bold text-emerald-300 mt-0.5">+${weightGain} kg</div>
-              <span class="text-[9px] text-white/40">Hedef: +7 ila +11 kg</span>
-            </div>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
+                  <span class="text-[10px] text-white/50">Toplam Kilo Artışı</span>
+                  <div class="text-base font-bold text-emerald-300 mt-0.5">${weightGain >= 0 ? '+' : ''}${weightGain} kg</div>
+                  <span class="text-[9px] text-white/50">${state.baby.week}.H Hedef: +${m0w.expectedMinGain} – +${m0w.expectedMaxGain} kg</span>
+                </div>
+            `;
+          })()}
             <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
               <span class="text-[10px] text-white/50">Karın Çevresi Artışı</span>
               <div class="text-base font-bold text-amber-200 mt-0.5">+${waistGain} cm</div>
@@ -3494,22 +3608,113 @@ function renderShoppingTab() {
 }
 
 // 6. MODÜL: MURADİYE KOMŞU AĞI
-function renderKovanTab() {
+
+// MENÜ SEKME RENDERI (Mükerrer çekmece yerine temiz, düzenli alt bar sekmesi)
+function renderMenuTab() {
   return `
     <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
-          <h2 class="text-base font-serif font-semibold text-white/95">Muradiye Komşu Ağı</h2>
-          <p class="text-[11px] text-white/60">Yunusemre ve Çevresi Anne İmecesi (${state.imeceItems.length} Paylaşım)</p>
+          <h2 class="text-base font-serif font-semibold text-white/95">ToHUM Menü & Planlama</h2>
+          <p class="text-[11px] text-white/60">Buse Nur Ürem · 31. Gebelik Haftası</p>
         </div>
-        <span class="text-xs bg-cyan-500/20 text-cyan-200 px-2.5 py-1 rounded-full border border-cyan-400/30 font-medium">
-          Aktif Çember
+        <span class="text-[10px] bg-white/10 text-white/70 px-2.5 py-1 rounded-full border border-white/10">
+          Modüller
         </span>
       </div>
 
+      <div class="space-y-2.5 text-xs">
+        <!-- 4. BÜTÜNLEŞİK TAKVİM -->
+        <button onclick="navigateTab('calendar')" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">4. Bütünleşik Takvim & Randevular</div>
+            <div class="text-[11px] text-amber-200 mt-0.5">NST, Hekim Randevusu & Yol Haritası</div>
+          </div>
+          <span class="text-amber-200 text-xs">Aç ➔</span>
+        </button>
+
+        <!-- 5. İHTİYAÇ & BÜTÇE PLANI -->
+        <button onclick="navigateTab('shopping')" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">5. İhtiyaç & Bütçe Planı</div>
+            <div class="text-[11px] text-amber-200 mt-0.5">Doğum Çantası, Bebek Odası & Maliyet</div>
+          </div>
+          <span class="text-amber-200 text-xs">Aç ➔</span>
+        </button>
+
+        <!-- PROFİL M0 BAZAL & GÜVENLİ TANSİYON -->
+        <button onclick="navigateTab('profile'); setProfileSubtab('baseline');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">M0 Kişisel Bazal & Güvenli Koridor</div>
+            <div class="text-[11px] text-emerald-300 mt-0.5">90/60 mmHg Doğal Bazal & Kardiyo Koridoru</div>
+          </div>
+          <span class="text-emerald-300 text-xs">İncele ➔</span>
+        </button>
+
+        <!-- DMT1 MİNERAL TAKVİMİ -->
+        <button onclick="navigateTab('profile'); setProfileSubtab('supplements');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">DMT1 Mineral Takvimi & Reçeteler</div>
+            <div class="text-[11px] text-amber-200 mt-0.5">Ferro Sanol (Sabah Aç) · Magnimore (Akşam Tok)</div>
+          </div>
+          <span class="text-amber-200 text-xs">Aç ➔</span>
+        </button>
+
+        <!-- SAĞLIK VERİSİ EGEMENLİĞİ & KVKK -->
+        <button onclick="navigateTab('profile'); setProfileSubtab('security');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">Sağlık Verisi Egemenliği & JSON Yedek</div>
+            <div class="text-[11px] text-white/50 mt-0.5">M0 Verilerini Dışa Aktar (KVKK Uyumlu)</div>
+          </div>
+          <span class="text-white/70 text-xs">Yedekle ➔</span>
+        </button>
+
+        <!-- KURULUM & PROFİL -->
+        <button onclick="openAuthWelcomeFlow()" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
+          <div>
+            <div class="font-bold text-white text-sm">Giriş & Kurulum Anketi</div>
+            <div class="text-[11px] text-white/50 mt-0.5">Hesap Bilgilerini Düzenle</div>
+          </div>
+          <span class="text-white/70 text-xs">Aç ➔</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderKovanTab() {
+  const motherItems = [
+    { id: 1, title: "Organik Pamuk Yenidoğan Tulum Seti", user: "Merve", bio: "Muradiye · 2. Anne", dist: "400m", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80", type: "gift", desc: "Hiç giyilmemiş organik pamuklu tulum seti, bir anneye hediye etmek isterim." },
+    { id: 2, title: "Lansinoh Çiftli Göğüs Pompası", user: "Zeynep", bio: "Güzelyurt · 1 Yaş Anne", dist: "1.2km", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80", type: "trade", desc: "Tüm parçaları sterilize edilmiş elektrikli süt pompası." },
+    { id: 3, title: "Hamile Destek Yastığı & Pelvik Minderi", user: "Elif", bio: "Uncubozköy · 33. Hafta", dist: "2.5km", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80", type: "gift", desc: "Sol yan yatış için harika ergonomik destek yastığı." }
+  ];
+
+  const motherMessages = [
+    { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
+    { sender: "Buse Nur", text: "Selam Merve, hafif bel hassasiyeti var ama magnezyum ve dinlenmeyle dengeliyoruz.", time: "14:15", isMe: true },
+    { sender: "Zeynep", text: "Akşamları ayakları hafifçe yükselterek dinlenmek ödeme çok iyi geliyor canım.", time: "14:22", isMe: false }
+  ];
+
+  return `
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
+      <div class="flex justify-between items-center pb-2 border-b border-white/10">
+        <div>
+          <h2 class="text-base font-serif font-semibold text-white/95">Muradiye Anne Kovanı (Kadınlar Çemberi)</h2>
+          <p class="text-[11px] text-white/60">Yunusemre ve Çevresi Anne & Kadın Dayanışması</p>
+        </div>
+        <span class="text-[10px] bg-rose-500/20 text-rose-200 px-2.5 py-1 rounded-full border border-rose-400/30 font-medium shrink-0">
+          Kadın Kullanıcılara Özel Mahrem Alan
+        </span>
+      </div>
+
+      <!-- Kadınlar Çemberi Mahremiyet Güvencesi -->
+      <div class="p-3 bg-white/5 rounded-2xl border border-white/10 text-[10px] text-white/70 leading-relaxed">
+        Bu alan yalnızca kadın ve gebe kullanıcıların güvenli ve samimi bir ortamda tecrübe, doğum dalgaları, lohusalık ve bebek ihtiyaçlarını paylaştığı mahrem kadınlar çemberidir.
+      </div>
+
       <div class="space-y-2.5">
-        <div class="text-xs font-semibold text-amber-200 uppercase tracking-wider">Komşulardan Paylaşılan Eşyalar</div>
-        ${state.imeceItems.map(i => `
+        <div class="text-xs font-semibold text-amber-200 uppercase tracking-wider">Annelerden Paylaşılan Eşyalar & İmece</div>
+        ${motherItems.map(i => `
           <div class="p-4 bg-white/5 rounded-3xl flex items-start justify-between text-xs border border-white/10">
             <div class="flex items-start space-x-3">
               <img src="${i.avatar}" class="w-10 h-10 rounded-full object-cover border border-white/20">
@@ -3527,9 +3732,9 @@ function renderKovanTab() {
       </div>
 
       <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2 text-xs">
-        <div class="font-semibold text-white/90">Muradiye Sohbet Hattı</div>
+        <div class="font-semibold text-white/90">Kadınlar Çemberi Sohbet Hattı</div>
         <div class="space-y-2 max-h-36 overflow-y-auto pr-1">
-          ${state.messages.map(m => `
+          ${motherMessages.map(m => `
             <div class="p-2.5 rounded-2xl ${m.isMe ? 'bg-amber-500/15 border border-amber-400/20 text-right ml-6' : 'bg-white/5 border border-white/5 mr-6'}">
               <div class="text-[9px] text-white/40">${m.sender} · ${m.time}</div>
               <div class="text-[11px] text-white/90 mt-0.5">${m.text}</div>
@@ -3537,7 +3742,7 @@ function renderKovanTab() {
           `).join('')}
         </div>
         <div class="flex items-center space-x-2 pt-2 border-t border-white/10">
-          <input id="kovanMsgInput" type="text" placeholder="Komşuya yaz..."
+          <input id="kovanMsgInput" type="text" placeholder="Çembere yaz..."
             class="flex-1 bg-white/8 border border-white/15 rounded-xl px-3 py-2 text-[11px] text-white placeholder-white/25 focus:outline-none focus:border-amber-400/50 transition"
             onkeydown="if(event.key==='Enter') sendKovanGroupMessage()">
           <button onclick="sendKovanGroupMessage()"
@@ -3550,112 +3755,1407 @@ function renderKovanTab() {
   `;
 }
 
-// 7. MODÜL: BABA DESTEK ALANI
+window.computeM0BaselineProfile = function() {
+  const u = state.user;
+  const p = state.partner;
+  const curW = state.baby.week || 31;
+
+  // 1. Gebelik Öncesi VKİ (BMI) ve DSÖ / IOM Haftalık Kilo Koridoru
+  const heightM = (Number(u.heightCm) || 168) / 100;
+  const startW = Number(u.startWeight) || 58.0;
+  const curWeight = Number(u.currentWeight) || 65.0;
+  const bmi = startW / (heightM * heightM);
+  const actualGain = curWeight - startW;
+
+  let bmiCategory = "Normal VKİ (18.5–24.9)";
+  let totalTargetRange = "11.5 – 16.0 kg";
+  let weeklyRate = 0.42; // 2. ve 3. trimester haftalık ideal artış (kg/hafta)
+  let weeklyMinRate = 0.35;
+  let weeklyMaxRate = 0.50;
+
+  if (bmi < 18.5) {
+    bmiCategory = "Düşük VKİ (<18.5)";
+    totalTargetRange = "12.5 – 18.0 kg";
+    weeklyRate = 0.51;
+    weeklyMinRate = 0.44;
+    weeklyMaxRate = 0.58;
+  } else if (bmi >= 25.0 && bmi < 30.0) {
+    bmiCategory = "Yüksek VKİ (25.0–29.9)";
+    totalTargetRange = "7.0 – 11.5 kg";
+    weeklyRate = 0.28;
+    weeklyMinRate = 0.23;
+    weeklyMaxRate = 0.33;
+  } else if (bmi >= 30.0) {
+    bmiCategory = "Obezite Sınıfı VKİ (≥30.0)";
+    totalTargetRange = "5.0 – 9.0 kg";
+    weeklyRate = 0.22;
+    weeklyMinRate = 0.17;
+    weeklyMaxRate = 0.27;
+  }
+
+  // İlk 13 haftada ortalama 1.0 - 2.0 kg, sonrasında haftalık hız
+  const weeksAfterT1 = Math.max(0, curW - 13);
+  const expectedMinGain = curW <= 13 ? (curW * 0.04) : (0.5 + weeksAfterT1 * weeklyMinRate);
+  const expectedMaxGain = curW <= 13 ? (curW * 0.16) : (2.0 + weeksAfterT1 * weeklyMaxRate);
+
+  let weightStatus = "optimal";
+  let weightStatusText = "✓ DSÖ/IOM Koridorunda Dengeli";
+  let weightAdvice = `${curW}. haftada +${actualGain.toFixed(1)} kg kazanımınız, ${bmi.toFixed(1)} kg/m² başlangıç VKİ değerinize göre hesaplanan +${expectedMinGain.toFixed(1)} ile +${expectedMaxGain.toFixed(1)} kg koridorunun tam içindedir.`;
+
+  if (actualGain > expectedMaxGain + 0.8) {
+    weightStatus = "high";
+    weightStatusText = "⚠️ Beklenen Koridorun Üzerinde (+GDM/Ödem İzlemi)";
+    weightAdvice = `${curW}. haftada +${actualGain.toFixed(1)} kg artış, kişisel koridorunuzun (+${expectedMinGain.toFixed(1)}–${expectedMaxGain.toFixed(1)} kg) üzerindedir. Hızlı sıvı tutulumu (ödem) veya gestasyonel glukoz toleransı açısından ${u.doctorName} ile değerlendirilmesi önerilir.`;
+  } else if (actualGain < expectedMinGain - 0.8) {
+    weightStatus = "low";
+    weightStatusText = "⚑ Beklenen Koridorun Altında (Beslenme Desteği)";
+    weightAdvice = `${curW}. haftada +${actualGain.toFixed(1)} kg artış, kişisel koridorunuzun (+${expectedMinGain.toFixed(1)}–${expectedMaxGain.toFixed(1)} kg) altındadır. Fetal büyüme eğrisini desteklemek için protein ve sağlıklı yağ alımını artırabilirsiniz.`;
+  }
+
+  // 2. Kişisel Kardiyovasküler Tansiyon Koridoru (AI Seed Core Bazal Vektörü)
+  const baseSys = Number(u.baselineSys) || 90;
+  const baseDia = Number(u.baselineDia) || 60;
+  const bpCorridors = {
+    optimal: `${baseSys - 10}–${baseSys + 14} / ${baseDia - 8}–${baseDia + 9}`,
+    watch: `${baseSys + 15}–${baseSys + 24} / ${baseDia + 10}–${baseDia + 17}`,
+    borderline: `${baseSys + 25}–${baseSys + 34} / ${baseDia + 18}–${baseDia + 24}`,
+    critical: `≥${Math.min(135, baseSys + 35)} / ≥${Math.min(88, baseDia + 25)}`
+  };
+
+  // 3. Rh İzoimmünizasyon (Kan Uyuşmazlığı) Kalkanı (Anne x Baba Çaprazlama)
+  const momRhNeg = (u.bloodGroup || "").includes("Rh-");
+  const dadRhPos = (p.bloodGroup || "").includes("Rh+");
+  const rhIncompatibility = momRhNeg && dadRhPos;
+  let rhStatusText = "✓ Rh Kan Uyumu Güvenli";
+  let rhDetailText = `Anne (${u.bloodGroup}) ve Baba (${p.bloodGroup}) kan grupları arasında Rh izoimmünizasyon (kan uyuşmazlığı) riski bulunmamaktadır.`;
+  if (rhIncompatibility) {
+    rhStatusText = "🛡️ Rh Kan Uyuşmazlığı Kalkanı Aktif (Anne Rh- / Baba Rh+)";
+    rhDetailText = `Anne ${u.bloodGroup} ve Baba ${p.bloodGroup} olduğu için 28. haftada İndirekt Coombs testi ve Anti-D İmmünglobulin (Kan Uyuşmazlığı İğnesi) protokolü takviminizde işaretlenmiştir.`;
+  } else if (momRhNeg && !dadRhPos) {
+    rhStatusText = "✓ Rh Negatif Uyumlu (Her İki Ebeveyn Rh-)";
+    rhDetailText = `Anne (${u.bloodGroup}) ve Baba (${p.bloodGroup}) Rh negatif olduğu için antikor oluşumu beklenmez.`;
+  }
+
+  return {
+    bmi: bmi.toFixed(1),
+    bmiCategory,
+    totalTargetRange,
+    actualGain: actualGain.toFixed(1),
+    expectedMinGain: expectedMinGain.toFixed(1),
+    expectedMaxGain: expectedMaxGain.toFixed(1),
+    weightStatus,
+    weightStatusText,
+    weightAdvice,
+    baseSys,
+    baseDia,
+    bpCorridors,
+    rhIncompatibility,
+    rhStatusText,
+    rhDetailText
+  };
+};
+
+// 7. MODÜL: BABA DESTEK ALANI (PROFİLDEKİ EŞ KÖPRÜSÜ İLE CANLI SENKRONİZE)
 function renderFatherTab() {
+  const m0 = window.computeM0BaselineProfile();
+  const curW = state.baby.week;
+  const lc = getLifecycleDataForWeek(curW);
+  const latestBp = (state.healthData.bloodPressureHistory && state.healthData.bloodPressureHistory[0]) || { systolic: 92, diastolic: 62 };
+  const maternalAnalysis = window.computeMaternalNeedsAnalysis();
+
   return `
-    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
+    <div class="w-full h-full pt-16 pb-20 px-4 space-y-3.5 text-white overflow-y-auto">
+      <!-- Üst Başlık & Oturum Rozeti -->
       <div class="flex justify-between items-center pb-2 border-b border-white/10">
         <div>
-          <h2 class="text-base font-serif font-semibold text-white/95">Baba Destek Alanı</h2>
-          <p class="text-[11px] text-white/60">Oğuz için rehber ve eşlik alanı</p>
+          <div class="flex items-center space-x-2">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 border border-amber-400/30 font-medium">Ürem Ailesi · 2. Oturum</span>
+            <span class="text-[10px] text-white/50">Baba Arayüzü</span>
+          </div>
+          <h2 class="text-base font-serif font-semibold text-white/95 mt-1">${state.partner.shortName || 'Oğuz'} · Proaktif Baba Rehberi</h2>
         </div>
-        <span class="text-xs bg-amber-500/20 text-amber-200 px-2.5 py-1 rounded-full border border-amber-400/30 font-medium">
-          ${state.baby.week}. Hafta
-        </span>
+        <button onclick="switchSessionRole('mother')" class="px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-amber-200 border border-white/15 transition flex items-center space-x-1">
+          <span>Anne Oturumu</span>
+          <span>➔</span>
+        </button>
       </div>
 
-      <div class="flex items-center space-x-3.5 p-4 bg-white/5 rounded-3xl border border-amber-400/30">
-        <img src="${state.partner.avatar}" class="w-14 h-14 rounded-full object-cover border-2 border-amber-300 shadow-md">
-        <div>
-          <h3 class="text-base font-serif font-semibold text-white">${state.partner.name}</h3>
-          <p class="text-[11px] text-amber-200/90 mt-0.5">Buse ve Güneş'in Yol Arkadaşı</p>
-          <p class="text-[10px] text-white/50">Muradiye, Manisa</p>
-        </div>
-      </div>
-
-      <div class="p-4 bg-gradient-to-br from-amber-950/40 via-white/5 to-white/5 rounded-3xl text-xs space-y-3 border border-amber-400/25 shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="font-bold text-amber-200">${state.baby.week}. Haftada Oğuz'a Özel Görev</span>
-          <span class="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/20">${getLifecycleDataForWeek(state.baby.week).trimester}</span>
-        </div>
-        <p class="text-[11px] text-white/85 leading-relaxed bg-black/30 p-3 rounded-2xl border border-white/5 italic">
-          "${getLifecycleDataForWeek(state.baby.week).partnerMission}"
+      <!-- Bilgi Kutusu: Anne İstek Bildirmez, Sistem Analiz Eder -->
+      <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 text-[11px] space-y-1">
+        <div class="font-semibold text-amber-200">ToHUM Anne İhtiyaç Analiz Motoru</div>
+        <p class="text-white/70 leading-relaxed text-[10px]">
+          Buse uygulamadan doğrudan istek bildirmez; sistemimiz Buse'nin biyometrik, fizyolojik ve anket verilerini analiz ederek size özel şefkatli aksiyon kartları hazırlar.
         </p>
       </div>
 
-      <button onclick="playFatherVoice()" class="w-full py-3 bg-gradient-to-r from-amber-500/30 to-amber-600/20 border border-amber-400/40 text-amber-200 text-xs font-semibold rounded-2xl hover:from-amber-500/40 transition shadow-lg flex items-center justify-center space-x-2">
-        <span>Güneş'e Sesini Dinlet (Ses Frekansı)</span>
-      </button>
-
-      <button onclick="sendPartnerPainAlert()" class="w-full py-3.5 bg-gradient-to-r from-rose-600/25 to-rose-700/15 border border-rose-400/35 text-rose-200 text-xs font-bold rounded-2xl hover:from-rose-600/35 transition shadow-lg flex items-center justify-center space-x-2">
-        <span class="text-base">📲</span>
-        <span>Oğuz'u Acil Uyar — WhatsApp Bildir</span>
-      </button>
-    </div>
-  `;
-}
-
-// 8. MODÜL: BUSE'NİN PROFİLİ
-function renderProfileTab() {
-  return `
-    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
-      <div class="p-5 bg-white/5 rounded-3xl border border-white/15 text-center relative overflow-hidden shadow-lg">
-        <img src="${state.user.avatar}" class="w-20 h-20 mx-auto rounded-full object-cover border-2 border-amber-400 shadow-md">
-        <h2 class="text-base font-bold text-white mt-2.5">${state.user.name}</h2>
-        <p class="text-xs text-amber-200 font-medium">${state.user.role} · ${state.user.neighborhood}, ${state.user.district}</p>
-        <div class="mt-2 inline-block px-3 py-1 bg-white/10 rounded-full text-[10px] text-white/70 border border-white/10">
-          Kan Grubu: ${state.user.bloodGroup} · Hedef Doğum: ${state.user.dueDate}
+      <!-- TOHUM AKILLI ANNE İHTİYAÇ ANALİZİ KARTLARI -->
+      <div class="space-y-2.5">
+        <div class="flex justify-between items-center px-1">
+          <span class="text-xs font-semibold text-white/90">Buse İçin Günlük İhtiyaç Analizi</span>
+          <span class="text-[10px] text-white/50">${curW}. Hafta · 3. Trimester</span>
         </div>
+
+        ${maternalAnalysis.map(card => `
+          <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 space-y-2 transition hover:bg-white/[0.07]">
+            <div class="flex justify-between items-center">
+              <span class="text-[11px] font-bold text-white/95">${card.category}</span>
+              <span class="text-[9px] px-2 py-0.5 rounded-full border ${card.badgeColor}">
+                ${card.badge}
+              </span>
+            </div>
+            <div class="text-[11px] font-medium text-amber-200/90">${card.headline}</div>
+            <p class="text-[10px] text-white/70 leading-relaxed">${card.insight}</p>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+              <span class="text-[10px] text-white/50 italic">${card.actionTitle}</span>
+              ${card.completed ? `
+                <span class="text-[10px] text-emerald-300 font-semibold px-2.5 py-1 bg-emerald-500/20 border border-emerald-400/30 rounded-xl">
+                  Tamamlandı
+                </span>
+              ` : `
+                <button onclick="completeFatherCareAction('${card.actionType}')" class="px-3 py-1.5 bg-amber-500/25 hover:bg-amber-500/35 border border-amber-400/40 text-amber-200 text-[10px] font-semibold rounded-xl transition shadow-xs">
+                  ${card.buttonText}
+                </button>
+              `}
+            </div>
+          </div>
+        `).join('')}
       </div>
 
-      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2 text-xs">
-        <div class="flex justify-between items-center font-medium">
-          <span class="text-white/90">Güneş'in Yolculuğu</span>
-          <span class="text-amber-200">${state.baby.week}. Hafta (${state.baby.daysLeft} Gün Kaldı)</span>
-        </div>
-        <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden my-2">
-          <div class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full" style="width: ${(state.baby.week / 40) * 100}%"></div>
-        </div>
-        <div class="flex justify-between text-[10px] text-white/50">
-          <span>Başlangıç</span>
-          <span>Doğum (40. Hafta)</span>
-        </div>
-      </div>
-
-      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-between text-xs">
-        <div>
-          <div class="text-[10px] text-white/50">ToHUM Bilinç Puanı</div>
-          <div class="text-base font-bold text-white mt-0.5">${state.growth.points} Puan · ${state.growth.levelName}</div>
-        </div>
-        <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-xl text-xs font-semibold">
-          Seviye ${state.growth.level}
-        </span>
-      </div>
-
-      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2.5 text-xs">
+      <!-- Çapraz Kan Grubu & Rh Takibi -->
+      <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 space-y-2 text-xs">
         <div class="flex justify-between items-center">
-          <div class="font-semibold text-white/95">Güneş'e Mektuplarım (${state.timeCapsules.length})</div>
-          <button onclick="openNewLetterModal()" class="text-amber-200 text-xs font-medium hover:underline">+ Mektup Yaz</button>
+          <span class="font-medium text-white/90">Kan Grubu & Rh Güvenliği</span>
+          <span class="text-[10px] text-white/50">Buse (${state.user.bloodGroup}) · Oğuz (${state.partner.bloodGroup})</span>
         </div>
-        <div class="space-y-2">
-          ${state.timeCapsules.map(c => `
-            <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
-              <div class="flex justify-between text-white/90 font-medium">
-                <span>${c.title}</span>
-                <span class="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full">${c.unlockEvent}</span>
+        ${m0.rhIncompatibility ? `
+          <div class="p-2.5 bg-rose-950/30 border border-rose-400/30 rounded-xl text-[10px] text-rose-200 leading-relaxed">
+            <b>Rh Uyuşmazlığı Protokolü:</b> Anne Rh(-) ve Baba Rh(+) olduğu için 28. hafta İndirekt Coombs ve Rhogam takibi hekim kontrolünde izlenmektedir.
+          </div>
+        ` : `
+          <div class="p-2 rounded-xl bg-emerald-950/30 border border-emerald-400/20 text-[10px] text-emerald-200">
+            Kan gruplarında Rh izoimmünizasyon riski bulunmamaktadır.
+          </div>
+        `}
+      </div>
+
+      <!-- Haftalık Baba Rehberliği (31. Hafta) -->
+      <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 space-y-1.5 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-amber-200">${curW}. Haftada Oğuz'un Rolü</span>
+          <span class="text-[9px] text-white/40">${lc.stageName}</span>
+        </div>
+        <p class="text-[10px] text-white/80 leading-relaxed italic bg-black/20 p-2.5 rounded-xl border border-white/5">
+          "${lc.partnerMission}"
+        </p>
+      </div>
+
+      <!-- Güneş ile Ses Köprüsü & Destek Butonları -->
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button onclick="playFatherVoice()" class="py-2.5 px-3 bg-amber-500/20 border border-amber-400/30 text-amber-200 text-[11px] font-semibold rounded-2xl hover:bg-amber-500/30 transition flex items-center justify-center space-x-1.5">
+          <span>Güneş'e Sesini Dinlet</span>
+        </button>
+        <button onclick="sendPartnerPainAlert()" class="py-2.5 px-3 bg-white/10 border border-white/15 text-white/80 text-[11px] font-medium rounded-2xl hover:bg-white/15 transition flex items-center justify-center space-x-1.5">
+          <span>WhatsApp Bildirimi</span>
+        </button>
+      </div>
+
+      <!-- Canlı Tamamlanan Destek Geçmişi -->
+      <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 space-y-2 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-white/90">Tamamlanan Şefkatli Destekler</span>
+          <span class="text-[9px] text-amber-200">${(state.partner.liveFeed || []).length} Kayıt</span>
+        </div>
+        <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+          ${(state.partner.liveFeed || []).map(f => `
+            <div class="p-2 bg-black/30 rounded-xl border border-white/5 flex justify-between items-start text-[10px]">
+              <div>
+                <div class="font-medium text-amber-200">${f.title}</div>
+                <div class="text-white/70 mt-0.5">${f.text}</div>
               </div>
-              <p class="text-[10px] text-white/50 italic mt-1 line-clamp-1">"${c.preview}"</p>
+              <span class="text-[9px] text-white/40 font-mono shrink-0 ml-2">${f.time}</span>
             </div>
           `).join('')}
         </div>
       </div>
+    </div>
+  `;
+}
 
-      <!-- 1. M0 - M7 TOHUM 18 YILLIK YAŞAM AĞACI VE YETENEK PUSULASI -->
-      <div class="p-4 bg-gradient-to-br from-amber-950/35 via-white/5 to-emerald-950/25 rounded-3xl border border-amber-400/25 space-y-3 text-xs">
+function renderAuthLoginScreen() {
+  const a = state.auth || {};
+  const isReg = (a.authTab || "register") === "register";
+  const fName = a.firstName !== undefined ? a.firstName : (state.user.shortName || "Buse Nur");
+  const lName = a.lastName !== undefined ? a.lastName : "Baltacıoğlu";
+  const emailVal = a.email || "busenur.baltacioglu@gmail.com";
+
+  return `
+    <div class="w-full h-full px-5 py-6 flex flex-col justify-between text-white overflow-y-auto bg-gradient-to-b from-[#1A0F0A] via-[#120A07] to-[#0A0605] relative">
+      
+      <!-- Üst Logo & Başlık -->
+      <div class="text-center space-y-1.5">
+        <div class="w-13 h-13 mx-auto rounded-full bg-gradient-to-br from-amber-400/30 to-emerald-500/20 border-2 border-amber-400/50 flex items-center justify-center shadow-[0_0_30px_rgba(251,191,36,0.25)]">
+          <span class="text-xl">🌱</span>
+        </div>
+        <h1 class="text-lg font-serif tracking-[0.2em] text-white uppercase font-bold">ToHUM</h1>
+        <p class="text-[11px] text-amber-200/90 font-medium">Anne ve Bebek Yaşam Yoldaşı</p>
+      </div>
+
+      <!-- ÜYE OL / GİRİŞ YAP Sekme Seçici -->
+      <div class="my-3 space-y-3">
+        <div class="grid grid-cols-2 gap-1.5 bg-white/5 p-1 rounded-2xl border border-white/10 text-xs">
+          <button onclick="switchAuthModeTab('register')"
+            class="py-2.5 rounded-xl font-bold transition ${isReg ? 'bg-amber-500 text-black shadow-md' : 'text-white/60 hover:text-white'}">
+            ✨ Yeni Üye Ol
+          </button>
+          <button onclick="switchAuthModeTab('login')"
+            class="py-2.5 rounded-xl font-bold transition ${!isReg ? 'bg-amber-500 text-black shadow-md' : 'text-white/60 hover:text-white'}">
+            🔑 Giriş Yap
+          </button>
+        </div>
+
+        ${a.authError ? `
+          <div class="p-2.5 bg-rose-500/20 border border-rose-400/40 rounded-xl text-[11px] text-rose-200 text-center">
+            ${a.authError}
+          </div>
+        ` : ''}
+
+        <!-- 1. Gerçek Google Hesabı ile Tek Dokunuşla Üye Ol / Giriş Yap -->
+        <button onclick="openGoogleAccountModal()"
+          class="w-full py-3 px-4 bg-white text-gray-900 hover:bg-gray-100 rounded-2xl font-bold text-xs flex items-center justify-between shadow-lg active:scale-98 transition">
+          <div class="flex items-center space-x-3">
+            <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">G</span>
+            <div class="text-left">
+              <div class="text-xs font-bold text-gray-900">${isReg ? 'Google Hesabımla Üye Ol' : 'Google Hesabımla Giriş Yap'}</div>
+              <div class="text-[10px] text-gray-500 font-normal">Gerçek Google e-posta hesabınla devam et</div>
+            </div>
+          </div>
+          <span class="text-gray-400 text-sm">➔</span>
+        </button>
+
+        <div class="flex items-center space-x-2 text-[10px] text-white/35">
+          <div class="flex-1 h-px bg-white/10"></div>
+          <span>veya e-posta ile ${isReg ? 'üye ol' : 'giriş yap'}</span>
+          <div class="flex-1 h-px bg-white/10"></div>
+        </div>
+
+        ${isReg ? `
+          <!-- YENİ ÜYE OL FORMU (Ad, Soyad, E-posta, Şifre — Kesintisiz Yazılabilir!) -->
+          <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2.5 text-xs">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[10px] text-amber-200 font-semibold block mb-1">Adın *</label>
+                <input id="regFirstNameInput" type="text" value="${fName}" placeholder="Örn: Buse Nur"
+                  oninput="silentUpdateAuthName()"
+                  class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              </div>
+              <div>
+                <label class="text-[10px] text-amber-200 font-semibold block mb-1">Soyadın</label>
+                <input id="regLastNameInput" type="text" value="${lName}" placeholder="Örn: Baltacıoğlu"
+                  oninput="silentUpdateAuthName()"
+                  class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[10px] text-amber-200 font-semibold block mb-1">E-Posta Adresin veya Telefonun *</label>
+              <input id="regEmailInput" type="email" value="${emailVal}" placeholder="ornek@gmail.com"
+                oninput="state.auth.email = this.value"
+                class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="text-[10px] text-amber-200 font-semibold block mb-1">Şifre Belirle *</label>
+              <input id="regPasswordInput" type="password" value="${a.password || ''}" placeholder="En az 6 karakter"
+                oninput="state.auth.password = this.value"
+                class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div class="text-[10px] text-white/55 leading-relaxed pt-0.5">
+              🔒 Ev adresin veya konumun <b>kesinlikle</b> istenmez. Bilgilerin KVKK kapsamında yalnızca senin ve bebeğinin takibi için korunur.
+            </div>
+
+            <button onclick="submitEmailRegistration()"
+              class="w-full py-3 bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-600 text-black font-bold text-xs rounded-2xl shadow-lg transition">
+              🌱 Üye Ol ve Kısa Tanışma Anketine Geç ➔
+            </button>
+          </div>
+        ` : `
+          <!-- MEVCUT HESAP İLE GİRİŞ YAP FORMU -->
+          <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2.5 text-xs">
+            <div>
+              <label class="text-[10px] text-amber-200 font-semibold block mb-1">Kayıtlı E-Posta Adresin</label>
+              <input id="loginEmailInput" type="email" value="${emailVal}" placeholder="ornek@gmail.com"
+                oninput="state.auth.email = this.value"
+                class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="text-[10px] text-amber-200 font-semibold block mb-1">Şifren</label>
+              <input id="loginPasswordInput" type="password" value="${a.password || ''}" placeholder="••••••••"
+                oninput="state.auth.password = this.value"
+                class="w-full bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <button onclick="submitEmailLogin()"
+              class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-xs rounded-2xl shadow-lg transition">
+              🔑 Hesabıma Giriş Yap ➔
+            </button>
+          </div>
+
+          <!-- Eş / Baba Davet Kodu ile Bağlanma -->
+          <div class="p-3 bg-emerald-950/25 rounded-2xl border border-emerald-400/25 space-y-1.5">
+            <label class="text-[10px] font-semibold text-emerald-200 block">🤝 Eş / Baba Davet Kodun Var mı?</label>
+            <div class="flex space-x-2">
+              <input type="text" placeholder="Örn: THM-31G-834" value="${a.partnerCodeInput || state.partner.inviteCode || 'THM-31G-834'}"
+                oninput="state.auth.partnerCodeInput = this.value"
+                class="flex-1 bg-black/40 border border-emerald-400/30 rounded-xl px-3 py-1.5 text-xs font-mono text-emerald-200 focus:outline-none">
+              <button onclick="connectAsPartnerWithCode()"
+                class="px-3 py-1.5 bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 rounded-xl text-xs font-bold shrink-0">
+                Baba Girişi ➔
+              </button>
+            </div>
+          </div>
+        `}
+      </div>
+
+      <!-- Alt Bilgi -->
+      <div class="pt-2 border-t border-white/10 text-center">
+        <button onclick="startLoginWithProvider('google', 'founder')"
+          class="text-[11px] text-amber-200/80 hover:text-amber-200 underline font-medium">
+          Uygulamaya Doğrudan Geç (${state.user.name} · ${state.baby.week}. Hafta) ➔
+        </button>
+      </div>
+
+      <!-- GERÇEK GOOGLE HESAP SEÇİM MODALI -->
+      ${a.googleModalOpen ? `
+        <div class="fixed inset-0 bg-black/80 z-[200] backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div class="bg-[#181210] border border-white/20 rounded-3xl w-full max-w-[360px] p-5 space-y-4 text-white shadow-2xl">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">G</span>
+                <span class="font-bold text-sm">Google ile Oturum Aç</span>
+              </div>
+              <button onclick="closeGoogleAccountModal()" class="text-white/60 hover:text-white text-sm">✕</button>
+            </div>
+
+            <p class="text-[11px] text-white/70">
+              ToHUM uygulamasına devam etmek için Google hesabınızı seçin veya kendi Gmail adresinizi girin:
+            </p>
+
+            <!-- Hazır Google Hesabı Seçeneği -->
+            <button onclick="completeGoogleAuth('Buse Nur', 'Baltacıoğlu', 'busenur.baltacioglu@gmail.com', 'onboarding')"
+              class="w-full p-3 bg-white/5 hover:bg-white/10 border border-white/15 rounded-2xl flex items-center space-x-3 text-left transition">
+              <img src="${state.user.avatar}" class="w-9 h-9 rounded-full object-cover">
+              <div class="flex-1 overflow-hidden">
+                <div class="font-bold text-xs text-white truncate">Buse Nur Baltacıoğlu</div>
+                <div class="text-[10px] text-white/60 truncate">busenur.baltacioglu@gmail.com</div>
+              </div>
+              <span class="text-amber-300 text-xs">Seç ➔</span>
+            </button>
+
+            <!-- Kendi Gerçek Gmail Adresini Yazarak Giriş -->
+            <div class="p-3 bg-black/40 rounded-2xl border border-white/10 space-y-2 text-xs">
+              <div class="font-semibold text-amber-200 text-[11px]">Başka Bir Google Hesabı Kullan:</div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <input id="googleCustomFirst" type="text" value="${fName}" placeholder="Adınız"
+                  oninput="state.auth.firstName = this.value"
+                  class="bg-white/5 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                <input id="googleCustomLast" type="text" value="${lName}" placeholder="Soyadınız"
+                  oninput="state.auth.lastName = this.value"
+                  class="bg-white/5 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              </div>
+              <input id="googleCustomEmail" type="email" value="${emailVal}" placeholder="gmail adresiniz (örn: ad.soyad@gmail.com)"
+                oninput="state.auth.email = this.value"
+                class="w-full bg-white/5 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              <button onclick="completeCustomGoogleAuth()"
+                class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition">
+                Bu Google Hesabıyla Devam Et ➔
+              </button>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+    </div>
+  `;
+}
+
+// =========================================================================
+// 3 ADIMLI MAHREMİYET DOSTU İLK TANIŞMA ANKETİ (KONUMSUZ, SADE VE AKICI)
+// Adım 1: Bebeğin İsmi & Kaçıncı Haftada Olduğun
+// Adım 2: Genel Sağlık & Kullandığın Vitaminler (Tıbbi Terimsiz)
+// Adım 3: Eş & Doktor Bilgileri (İsteğe Bağlı)
+// =========================================================================
+function renderOnboardingWizardScreen() {
+  const step = Math.min(3, Math.max(1, state.auth.onboardingStep || 1));
+  const u = state.user;
+  const p = state.partner;
+  const b = state.baby;
+  const sv = u.survey || { waterHabit: "5-7", supplements: ["iron", "magnesium"], symptoms: [] };
+  const m0 = window.computeM0BaselineProfile();
+
+  const stepTitles = [
+    { num: 1, title: "Hoş Geldin ${u.shortName}! Bebeğini Tanıyalım 👶", sub: "Bebeğinin ismini ve kaçıncı haftada olduğunu belirleyelim" },
+    { num: 2, title: "Sağlık & Vitamin Anketi 🩺", sub: "Sana doğru hatırlatmalar yapabilmemiz için birkaç basit soru" },
+    { num: 3, title: "Eşin & Doktorun 🤝🏥 (İsteğe Bağlı)", sub: "İstersen şimdi, istersen daha sonra menüden ekleyebilirsin" }
+  ];
+  const curStepInfo = stepTitles[step - 1] || stepTitles[0];
+
+  return `
+    <div class="w-full h-full px-4 py-5 flex flex-col justify-between text-white overflow-y-auto bg-[#0E0907]">
+      
+      <!-- Üst Adım Çubuğu -->
+      <div class="space-y-2.5 pb-3 border-b border-white/10">
+        <div class="flex justify-between items-center">
+          <span class="text-[10px] bg-amber-500/20 text-amber-200 border border-amber-400/30 px-2.5 py-0.5 rounded-full font-bold">
+            Adım ${step} / 3 · İlk Kurulum
+          </span>
+          <button onclick="finishOnboardingAndStartApp()" class="text-[10px] text-white/50 hover:text-white underline">
+            Şimdilik Geç ✕
+          </button>
+        </div>
+
+        <!-- 3 Adım İlerleme Çizgisi -->
+        <div class="grid grid-cols-3 gap-2">
+          ${[1, 2, 3].map(idx => `
+            <button onclick="setOnboardingStep(${idx})"
+              class="h-2 rounded-full transition-all ${idx === step ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]' : idx < step ? 'bg-emerald-400/70' : 'bg-white/15'}"></button>
+          `).join('')}
+        </div>
+
+        <div>
+          <h2 class="text-base font-serif font-bold text-white">${curStepInfo.title.replace('${u.shortName}', u.shortName || 'Anne Adayı')}</h2>
+          <p class="text-[11px] text-white/60">${curStepInfo.sub}</p>
+        </div>
+      </div>
+
+      <!-- Orta İçerik (Adım 1..3) -->
+      <div class="flex-1 py-3 space-y-3.5 overflow-y-auto pr-0.5 text-xs">
+        
+        ${step === 1 ? `
+          <!-- ADIM 1: KİŞİSEL BİLGİ KONTROLÜ, BEBEK İSMİ VE HAFTA SEÇİMİ (KONUM YOK!) -->
+          <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="text-[10px] text-amber-200 font-semibold block mb-1">Adın Soyadın</label>
+                <input type="text" value="${u.name}" placeholder="Adın Soyadın"
+                  oninput="silentUpdateField('user', 'name', this.value)"
+                  class="w-full bg-black/40 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              </div>
+              <div>
+                <label class="text-[10px] text-amber-200 font-semibold block mb-1">Yaşın (İsteğe Bağlı)</label>
+                <input type="number" min="17" max="52" value="${u.age || 31}"
+                  oninput="silentUpdateField('user', 'age', this.value)"
+                  class="w-full bg-black/40 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-semibold text-amber-200 block mb-1">1. Bebeğine bir isim veya sevgi dolu bir lakap koydunuz mu?</label>
+              <div class="flex space-x-2">
+                <input id="onbBabyNameInput" type="text" value="${b.name}" placeholder="Örn: Güneş, Can, Minik Tohum..."
+                  oninput="silentUpdateField('baby', 'name', this.value)"
+                  class="flex-1 bg-black/40 border border-amber-400/40 rounded-2xl px-3.5 py-2.5 text-sm font-bold text-amber-200 focus:outline-none focus:border-amber-400">
+                <button onclick="setBabyNicknameQuick('Minik Tohum')"
+                  class="px-3 py-2 bg-white/10 hover:bg-white/15 rounded-2xl text-[10px] text-white/85 border border-white/10 shrink-0">
+                  Henüz Yok ("Minik Tohum")
+                </button>
+              </div>
+            </div>
+
+            <!-- Kaçıncı Haftada Olduğu Seçimi -->
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-white/10 space-y-2.5">
+              <div class="flex justify-between items-center">
+                <span class="text-[11px] font-semibold text-emerald-300">2. Şu an hamileliğinin kaçıncı haftasındasın?</span>
+                <span class="px-3 py-1 bg-amber-500/25 border border-amber-400/40 rounded-full text-xs font-bold text-amber-200">
+                  ${b.week}. Hafta
+                </span>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <button onclick="changePregnancyWeek(Math.max(4, ${b.week} - 1))" class="w-9 h-9 rounded-xl bg-white/10 text-white font-bold text-base">-</button>
+                <input type="range" min="4" max="40" value="${b.week}"
+                  onchange="changePregnancyWeek(this.value)"
+                  class="flex-1 accent-amber-400 cursor-pointer h-2 bg-white/15 rounded-lg">
+                <button onclick="changePregnancyWeek(Math.min(40, ${b.week} + 1))" class="w-9 h-9 rounded-xl bg-white/10 text-white font-bold text-base">+</button>
+              </div>
+
+              <div class="p-2.5 bg-amber-500/10 border border-amber-400/25 rounded-xl text-[11px] text-amber-100 leading-relaxed">
+                🌱 <b>${b.week}. Hafta:</b> Bebeğin şu an yaklaşık <b>${getLifecycleDataForWeek(b.week).weight}</b> ağırlığında ve doğuma yaklaşık <b>${b.daysLeft} gün</b> var.
+              </div>
+
+              <div class="pt-2 border-t border-white/10 space-y-1">
+                <label class="text-[10px] text-white/65 block">💡 <b>Haftanı tam bilmiyor musun?</b> Son adet gördüğün ilk günü seç, biz hesaplayalım:</label>
+                <input type="date" value="${u.lmpDate || '2026-01-17'}"
+                  onchange="calculateWeekFromLmpDate(this.value)"
+                  class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[11px] font-semibold text-amber-200 block mb-1.5">3. Bu senin ilk hamileliğin mi?</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="selectFirstBabyOption(true)"
+                  class="p-2.5 rounded-2xl border text-left transition ${u.isFirstBaby !== false ? 'bg-emerald-500/25 border-emerald-400 text-white font-bold' : 'bg-black/30 border-white/10 text-white/65'}">
+                  <div class="text-xs">🌱 Evet, İlk Bebeğim</div>
+                </button>
+                <button onclick="selectFirstBabyOption(false)"
+                  class="p-2.5 rounded-2xl border text-left transition ${u.isFirstBaby === false ? 'bg-emerald-500/25 border-emerald-400 text-white font-bold' : 'bg-black/30 border-white/10 text-white/65'}">
+                  <div class="text-xs">🌿 Daha Önce Doğum Yaptım</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        ${step === 2 ? `
+          <!-- ADIM 2: SAĞLIK VE VİTAMİN ANKETİ (TIBBİ TERİMSİZ, ZORLAMASIZ) -->
+          <div class="space-y-3">
+            
+            <!-- Soru 1: Ortalama Tansiyon Yapısı (Büyük & Küçük Tansiyon) -->
+            <div class="p-4 bg-white/5 rounded-3xl border border-amber-400/30 space-y-3">
+              <div class="flex justify-between items-center">
+                <div>
+                  <label class="text-xs font-bold text-amber-200 block">1. Ortalama tansiyonunuz (Büyük / Küçük) kaçtır?</label>
+                  <p class="text-[10px] text-white/55 mt-0.5">Sana özel kardiyovasküler koridoru hesaplamak için doğal bazalini belirleyelim:</p>
+                </div>
+                <span id="onbBpBadge" class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${u.baselineSys <= 95 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' : (u.baselineSys >= 125 ? 'bg-amber-500/20 text-amber-200 border-amber-400/30' : 'bg-sky-500/20 text-sky-200 border-sky-400/30')}">
+                  ${u.baselineBP || `${u.baselineSys || 90}/${u.baselineDia || 60}`} mmHg
+                </span>
+              </div>
+
+              <!-- Büyük ve Küçük Sayı Girişleri (Odak kaybetmeden akıcı yazım) -->
+              <div class="grid grid-cols-2 gap-3">
+                <div class="p-3 bg-black/40 rounded-2xl border border-white/10 space-y-1">
+                  <div class="flex justify-between items-center text-[10px]">
+                    <span class="text-amber-200 font-bold">Büyük Tansiyon</span>
+                    <span class="text-white/40">Sistolik (mmHg)</span>
+                  </div>
+                  <input id="onbSysInput" type="number" min="70" max="180" step="1"
+                    value="${u.baselineSys || 90}"
+                    placeholder="Örn: 90"
+                    oninput="silentUpdateBaselineBP(this.value, null)"
+                    class="w-full bg-white/5 border border-amber-400/30 focus:border-amber-400 rounded-xl px-3 py-2 text-base font-bold text-amber-200 focus:outline-none text-center">
+                  <span class="text-[9px] text-white/45 block text-center">Genelde 90–120 arası</span>
+                </div>
+
+                <div class="p-3 bg-black/40 rounded-2xl border border-white/10 space-y-1">
+                  <div class="flex justify-between items-center text-[10px]">
+                    <span class="text-emerald-300 font-bold">Küçük Tansiyon</span>
+                    <span class="text-white/40">Diyastolik (mmHg)</span>
+                  </div>
+                  <input id="onbDiaInput" type="number" min="40" max="120" step="1"
+                    value="${u.baselineDia || 60}"
+                    placeholder="Örn: 60"
+                    oninput="silentUpdateBaselineBP(null, this.value)"
+                    class="w-full bg-white/5 border border-emerald-400/30 focus:border-emerald-400 rounded-xl px-3 py-2 text-base font-bold text-emerald-300 focus:outline-none text-center">
+                  <span class="text-[9px] text-white/45 block text-center">Genelde 60–80 arası</span>
+                </div>
+              </div>
+
+              <!-- Tek Tıkla Hızlı Seçim Çipleri -->
+              <div>
+                <span class="text-[9px] text-white/50 block mb-1.5">Veya yaygın ortalamalardan birine dokunabilirsiniz:</span>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button onclick="quickSetBaselineBP(90, 60, 'low')"
+                    class="p-2 rounded-xl border text-left transition ${u.baselineSys <= 95 ? 'bg-emerald-500/25 border-emerald-400 text-white font-semibold' : 'bg-black/30 border-white/10 text-white/70'}">
+                    <div class="text-[11px] font-bold">🌿 90 / 60 (Düşük Yapı)</div>
+                    <div class="text-[9px] text-white/55">Buse'nin doğal dinlenik yapısı</div>
+                  </button>
+                  <button onclick="quickSetBaselineBP(110, 70, 'normal')"
+                    class="p-2 rounded-xl border text-left transition ${(u.baselineSys > 95 && u.baselineSys < 120) ? 'bg-emerald-500/25 border-emerald-400 text-white font-semibold' : 'bg-black/30 border-white/10 text-white/70'}">
+                    <div class="text-[11px] font-bold">⚖️ 110 / 70 (Normal)</div>
+                    <div class="text-[9px] text-white/55">Standart dinlenik tansiyon</div>
+                  </button>
+                  <button onclick="quickSetBaselineBP(120, 80, 'normal')"
+                    class="p-2 rounded-xl border text-left transition ${(u.baselineSys >= 120 && u.baselineSys < 125) ? 'bg-emerald-500/25 border-emerald-400 text-white font-semibold' : 'bg-black/30 border-white/10 text-white/70'}">
+                    <div class="text-[11px] font-bold">✨ 120 / 80 (İdeal / Sınır)</div>
+                    <div class="text-[9px] text-white/55">Geleneksel referans aralığı</div>
+                  </button>
+                  <button onclick="quickSetBaselineBP(110, 70, 'unknown')"
+                    class="p-2 rounded-xl border text-left transition ${u.baselineCategory === 'unknown' ? 'bg-emerald-500/25 border-emerald-400 text-white font-semibold' : 'bg-black/30 border-white/10 text-white/70'}">
+                    <div class="text-[11px] font-bold">❓ Bilmiyorum</div>
+                    <div class="text-[9px] text-white/55">110 / 70 varsayalım, sonra güncellersiniz</div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Soru 2: Kullanılan Vitamin ve İlaçlar -->
+            <div class="p-3.5 bg-white/5 rounded-3xl border border-white/10 space-y-2">
+              <label class="text-[11px] font-semibold text-amber-200 block">2. Şu an hangi vitaminleri veya ilaçları içiyorsun?</label>
+              <p class="text-[10px] text-white/55">Seçtiklerini sana her gün doğru saatte hatırlatacağız:</p>
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                ${[
+                  { id: 'iron', lbl: '🩸 Kan / Demir İlacı' },
+                  { id: 'magnesium', lbl: '✨ Magnezyum (Kramp için)' },
+                  { id: 'folic', lbl: '🌱 Folik Asit' },
+                  { id: 'omega', lbl: '🐟 Balık Yağı (Omega-3)' },
+                  { id: 'd3', lbl: '☀️ D Vitamini Damla' }
+                ].map(sup => {
+                  const active = (sv.supplements || []).includes(sup.id);
+                  return `
+                    <button onclick="toggleSurveyArrayItem('supplements', '${sup.id}')"
+                      class="px-3 py-2 rounded-xl text-[11px] font-semibold border transition ${active ? 'bg-amber-500/30 border-amber-400 text-amber-100' : 'bg-black/30 border-white/10 text-white/60'}">
+                      ${active ? '✓ ' : ''}${sup.lbl}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Soru 3: Bugünlerdeki Şikayetler -->
+            <div class="p-3.5 bg-white/5 rounded-3xl border border-white/10 space-y-2">
+              <label class="text-[11px] font-semibold text-amber-200 block">3. Bugünlerde seni en çok ne yoruyor?</label>
+              <div class="flex flex-wrap gap-1.5">
+                ${[
+                  'Hafif Bel Ağrısı', 'Mide Bulantısı / Yanması', 'Bacak Krampı',
+                  'Akşam Yorgunluğu', 'Baş Dönmesi', 'Uyku Zorluğu', 'Çok Şükür İyiyim'
+                ].map(sym => {
+                  const active = (state.healthData.selectedSymptoms || []).includes(sym);
+                  return `
+                    <button onclick="logSymptomAction('${sym}')"
+                      class="px-2.5 py-1.5 rounded-xl text-[10px] font-medium border transition ${active ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200' : 'bg-black/30 border-white/10 text-white/60'}">
+                      ${active ? '✓ ' : ''}${sym}
+                    </button>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Soru 4: Kan Grubu ve İsteğe Bağlı Boy/Kilo -->
+            <div class="p-3.5 bg-white/5 rounded-3xl border border-white/10 space-y-2">
+              <div class="flex justify-between items-center">
+                <label class="text-[11px] font-semibold text-amber-200">4. Kan Grubun & Kilo Takibi</label>
+                <span class="text-[9px] text-white/45">İsteğe Bağlı</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <span class="text-[9px] text-white/55 block mb-1">Kan Grubun</span>
+                  <select onchange="updateProfileField('bloodGroup', this.value)"
+                    class="w-full bg-black/40 border border-white/15 rounded-xl px-2 py-2 text-xs text-white">
+                    ${['A Rh+', 'A Rh-', '0 Rh+', '0 Rh-', 'B Rh+', 'B Rh-', 'AB Rh+', 'AB Rh-', 'Bilmiyorum'].map(bg => `
+                      <option value="${bg}" ${u.bloodGroup === bg ? 'selected' : ''}>${bg}</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <div>
+                  <span class="text-[9px] text-white/55 block mb-1">Başlangıç Kilon</span>
+                  <input type="number" step="0.5" value="${u.startWeight || 58}"
+                    oninput="silentUpdateField('user', 'startWeight', this.value)"
+                    class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white">
+                </div>
+                <div>
+                  <span class="text-[9px] text-white/55 block mb-1">Şu Anki Kilon</span>
+                  <input type="number" step="0.5" value="${u.currentWeight || 65}"
+                    oninput="silentUpdateField('user', 'currentWeight', this.value)"
+                    class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-amber-200 font-bold">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        ` : ''}
+
+        ${step === 3 ? `
+          <!-- ADIM 3: EŞ TANIMLAMA VE HASTANE / DOKTOR BİLGİLERİ (İSTEĞE BAĞLI, AKICI YAZILABİLİR) -->
+          <div class="space-y-3">
+            
+            <!-- Eş / Baba Tanımlama Kartı -->
+            <div class="p-4 bg-white/5 rounded-3xl border border-amber-400/30 space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-amber-200 text-xs">🤝 Eş / Baba Tanımlama (İsteğe Bağlı)</span>
+                <span class="text-[9px] text-white/50">Sonra da ekleyebilirsin</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="text-[10px] text-white/60 block mb-1">Eşinin Adı Soyadı</label>
+                  <input type="text" value="${p.name}" placeholder="Örn: Oğuz Baltacıoğlu"
+                    oninput="silentUpdateField('partner', 'name', this.value)"
+                    class="w-full bg-black/40 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                  <label class="text-[10px] text-white/60 block mb-1">Eşinin Kan Grubu</label>
+                  <select onchange="updatePartnerField('bloodGroup', this.value)"
+                    class="w-full bg-black/40 border border-white/20 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                    ${['0 Rh+', '0 Rh-', 'A Rh+', 'A Rh-', 'B Rh+', 'B Rh-', 'AB Rh+', 'AB Rh-', 'Bilmiyorum'].map(bg => `
+                      <option value="${bg}" ${p.bloodGroup === bg ? 'selected' : ''}>${bg}</option>
+                    `).join('')}
+                  </select>
+                </div>
+              </div>
+
+              <!-- Kan Uyuşmazlığı Durumu -->
+              <div class="p-2.5 rounded-2xl border ${m0.rhIncompatibility ? 'bg-rose-950/40 border-rose-400/50 text-rose-200' : 'bg-emerald-950/30 border-emerald-400/30 text-emerald-200'}">
+                <div class="font-bold text-[11px]">${m0.rhStatusText}</div>
+                <p class="text-[10px] text-white/80 mt-0.5 leading-relaxed">${m0.rhDetailText}</p>
+              </div>
+            
+              <!-- WhatsApp ile Eş Daveti Butonu (Geri tuşu destekli) -->
+              <button onclick="sendPartnerInviteWhatsApp()" class="w-full py-2.5 bg-gradient-to-r from-amber-500/30 to-emerald-500/25 hover:from-amber-500/40 border border-amber-400/40 rounded-2xl text-amber-100 font-bold text-[11px] transition flex items-center justify-center space-x-1.5 shadow-md">
+                <span>💌</span>
+                <span>${p.shortName || 'Eşine'}'a WhatsApp ile Davet Gönder</span>
+              </button>
+            </div>
+<!-- Hastane ve Doktor Bilgileri Kartı -->
+            <div class="p-4 bg-white/5 rounded-3xl border border-emerald-400/30 space-y-2.5">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-emerald-200 text-xs">🏥 Hastane & Doktor Bilgisi (İsteğe Bağlı)</span>
+                <span class="text-[9px] text-white/50">Randevu takibi için</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="text-[10px] text-white/60 block mb-1">Hastane / Klinik Adı</label>
+                  <input type="text" value="${u.hospitalName || 'Manisa Şehir Hastanesi'}" placeholder="Hastane adı"
+                    oninput="silentUpdateField('user', 'hospitalName', this.value)"
+                    class="w-full bg-black/40 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                  <label class="text-[10px] text-white/60 block mb-1">Doktorunun Adı</label>
+                  <input type="text" value="${u.doctorName || 'Dr. Ayşe Yılmaz'}" placeholder="Doktor adı"
+                    oninput="silentUpdateField('user', 'doctorName', this.value)"
+                    class="w-full bg-black/40 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        ` : ''}
+
+      </div>
+
+      <!-- Alt İleri / Geri / Kaydet Butonları -->
+      <div class="pt-3 border-t border-white/10 flex items-center justify-between space-x-2.5">
+        ${step > 1 ? `
+          <button onclick="setOnboardingStep(${step - 1})"
+            class="px-4 py-3 bg-white/10 hover:bg-white/15 rounded-2xl text-xs font-semibold text-white/80">
+            ‹ Geri
+          </button>
+        ` : `
+          <button onclick="openAuthWelcomeFlow()"
+            class="px-4 py-3 bg-white/10 hover:bg-white/15 rounded-2xl text-xs font-semibold text-white/80">
+            ‹ Üyelik Ekranı
+          </button>
+        `}
+
+        ${step < 3 ? `
+          <button onclick="setOnboardingStep(${step + 1})"
+            class="flex-1 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 text-black font-bold text-xs rounded-2xl shadow-lg transition">
+            Devam Et (Adım ${step + 1} / 3) ➔
+          </button>
+        ` : `
+          <button onclick="finishOnboardingAndStartApp()"
+            class="flex-1 py-3.5 bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-emerald-600 text-black font-bold text-xs rounded-2xl shadow-lg transition">
+            🌱 Bilgilerimi Kaydet ve Başla ➔
+          </button>
+        `}
+      </div>
+
+    </div>
+  `;
+}
+
+// =========================================================================
+// 8. MODÜL: PROFİLİM & FARKLI MENÜLER ALTINDA BİLGİLERİMİ GÜNCELLEME MERKEZİ
+// Tüm <input> alanları silentUpdateField() kullanır; yazarken asla odak kaybolmaz!
+// =========================================================================
+function renderProfileTab() {
+  const sub = state.profileSubtab || "identity";
+  const m0 = window.computeM0BaselineProfile();
+  const curW = state.baby.week;
+  const lc = getLifecycleDataForWeek(curW);
+
+  return `
+    <div class="w-full h-full pt-16 pb-20 px-4 space-y-3 text-white overflow-y-auto">
+      
+      <!-- Üst Kompakt Kimlik & Sunucu Kayıt Durumu -->
+      <div class="p-3.5 bg-gradient-to-br from-amber-950/40 via-white/5 to-emerald-950/25 rounded-3xl border border-amber-400/30 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+          <div class="relative">
+            <img src="${state.user.avatar}" class="w-13 h-13 rounded-full object-cover border-2 border-amber-400 shadow-md">
+            <span class="absolute -bottom-1 -right-1 px-1.5 py-0.2 bg-emerald-500 text-black font-bold text-[8px] rounded-full">M0</span>
+          </div>
+          <div>
+            <h2 id="profileHeaderName" class="text-sm font-bold text-white leading-tight">${state.user.name}</h2>
+            <p class="text-[10px] text-amber-200 font-medium mt-0.5"><span id="profileHeaderBaby">${state.baby.name}</span> (${curW}. Hafta) · ${state.auth && state.auth.email ? state.auth.email : 'Kayıtlı Üye'}</p>
+            <div class="flex items-center space-x-1.5 mt-1">
+              <span id="profileSyncBadge" class="px-2 py-0.5 bg-emerald-500/20 rounded-full text-[9px] text-emerald-200 border border-emerald-400/30">
+                ${state.auth ? state.auth.syncStatus : 'Kaydedildi ✓'}
+              </span>
+              <button onclick="openOnboardingWizardAtStep(1)" class="px-2 py-0.5 bg-amber-500/20 hover:bg-amber-500/30 rounded-full text-[9px] text-amber-200 border border-amber-400/30 font-semibold">
+                📋 Tanışma Anketi
+              </button>
+            </div>
+          </div>
+        </div>
+        <button onclick="openAuthWelcomeFlow()" class="px-2.5 py-2 bg-white/10 hover:bg-white/20 border border-white/15 rounded-2xl text-[9px] text-white/85 font-semibold shrink-0 text-center leading-tight transition" title="Üye Ol / Giriş Ekranını Aç">
+          🚪 Üyelik<br>/ Giriş
+        </button>
+      </div>
+
+      <!-- 5 Ayrı Bilgi Güncelleme Menüsü -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar bg-white/5 p-1.5 rounded-2xl border border-white/10 text-[10px]">
+        ${[
+          { id: 'identity', lbl: '👩 Ben & Bebeğim' },
+          { id: 'baseline', lbl: '❤️ M0 Bazal & Kilo' },
+          { id: 'supplements', lbl: '💊 DMT1 Takvim' },
+          { id: 'hospital', lbl: '🏥 Hastane & Doktor' },
+          { id: 'partner',  lbl: '🤝 Eşim & Davet' },
+          { id: 'security', lbl: '🔒 Veri & KVKK' },
+          { id: 'ecosystem',lbl: '🌱 Giriş & Anket' }
+        ].map(t => `
+          <button onclick="setProfileSubtab('${t.id}')"
+            class="py-2 px-2.5 rounded-xl font-semibold whitespace-nowrap transition ${sub === t.id ? 'bg-amber-400/25 text-amber-200 border border-amber-400/40 shadow-xs' : 'text-white/55 hover:text-white/85'}">
+            ${t.lbl}
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- SEÇİLEN MENÜ İÇERİĞİ -->
+      ${getProfileSubtabContent(sub, m0, curW, lc)}
+
+    </div>
+  `;
+}
+
+function getProfileSubtabContent(sub, m0, curW, lc) {
+  const u = state.user;
+  const p = state.partner;
+  const b = state.baby;
+
+  // =========================================================================
+  // MENÜ 1: BEN & BEBEĞİM (ANNE ADI/SOYADI, ÇOCUK İSMİ, KAÇINCI HAFTA)
+  // =========================================================================
+  if (sub === "identity") {
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <!-- Çocuk İsmi & Kaçıncı Haftada Olduğu Kartı -->
+        <div class="p-4 bg-white/5 rounded-3xl border border-amber-400/30 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-amber-200 text-xs">👶 Bebeğimin İsmi ve Haftası</span>
+              <p class="text-[10px] text-white/55">Rahatça yazıp güncelleyebilirsiniz</p>
+            </div>
+            <span class="px-2.5 py-1 bg-amber-500/20 text-amber-200 border border-amber-400/30 rounded-full text-[10px] font-bold">
+              ${curW}. Hafta
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-[10px] text-white/60 block mb-1">Bebeğimin İsmi / Hitabı</label>
+              <input type="text" value="${b.name}"
+                oninput="silentUpdateField('baby', 'name', this.value)"
+                class="w-full bg-black/40 border border-amber-400/40 rounded-xl px-3 py-2 text-xs font-bold text-amber-200 focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/60 block mb-1">Tahmini Doğum Tarihi</label>
+              <input type="text" value="${u.dueDate}"
+                oninput="silentUpdateField('user', 'dueDate', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <!-- Canlı Hafta Seçici -->
+          <div class="space-y-2 bg-black/30 p-3 rounded-2xl border border-white/5">
+            <div class="flex justify-between text-[10px] text-white/75">
+              <span>Kaçıncı Haftadayım? (Kaydırarak Seç):</span>
+              <span class="font-bold text-amber-300">${curW}. Hafta (${lc.weight})</span>
+            </div>
+            <input type="range" min="4" max="40" value="${curW}"
+              onchange="changePregnancyWeek(this.value)"
+              class="w-full accent-amber-400 cursor-pointer h-2 bg-white/10 rounded-lg">
+            <div class="grid grid-cols-4 gap-1.5 pt-1">
+              <button onclick="changePregnancyWeek(8)" class="py-1.5 rounded-xl text-[10px] border ${curW === 8 ? 'bg-amber-500/30 border-amber-400 text-white font-bold' : 'bg-white/5 border-white/10 text-white/65'}">8. Hafta</button>
+              <button onclick="changePregnancyWeek(20)" class="py-1.5 rounded-xl text-[10px] border ${curW === 20 ? 'bg-amber-500/30 border-amber-400 text-white font-bold' : 'bg-white/5 border-white/10 text-white/65'}">20. Hafta</button>
+              <button onclick="changePregnancyWeek(31)" class="py-1.5 rounded-xl text-[10px] border ${curW === 31 ? 'bg-emerald-500/30 border-emerald-400 text-emerald-200 font-bold' : 'bg-white/5 border-white/10 text-white/65'}">31. Hafta</button>
+              <button onclick="changePregnancyWeek(38)" class="py-1.5 rounded-xl text-[10px] border ${curW === 38 ? 'bg-rose-500/30 border-rose-400 text-rose-200 font-bold' : 'bg-white/5 border-white/10 text-white/65'}">38. Hafta</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kişisel Bilgilerim Kartı (Kesintisiz Yazılabilir Ad & Soyad) -->
+        <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+          <div class="font-bold text-white/95 text-xs">👩 Kişisel Bilgilerim</div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Adım ve Soyadım</label>
+              <input type="text" value="${u.name}"
+                oninput="silentUpdateField('user', 'name', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Hitap Adım</label>
+              <input type="text" value="${u.shortName}"
+                oninput="silentUpdateField('user', 'shortName', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Yaşım</label>
+              <input type="number" min="17" max="52" value="${u.age || 31}"
+                oninput="silentUpdateField('user', 'age', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Kan Grubum</label>
+              <select onchange="updateProfileField('bloodGroup', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white">
+                ${['A Rh+', 'A Rh-', '0 Rh+', '0 Rh-', 'B Rh+', 'B Rh-', 'AB Rh+', 'AB Rh-'].map(bg => `
+                  <option value="${bg}" ${u.bloodGroup === bg ? 'selected' : ''}>${bg}</option>
+                `).join('')}
+              </select>
+            </div>
+          </div>
+
+          <button onclick="saveProfileToBackend(true)"
+            class="w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 rounded-2xl text-emerald-200 font-bold text-xs transition">
+            💾 Bilgilerimi Kaydet ve Güncelle ✓
+          </button>
+        </div>
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // MENÜ 2: HASTANE & DOKTOR BİLGİLERİ
+  // =========================================================================
+  if (sub === "hospital") {
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <div class="p-4 bg-white/5 rounded-3xl border border-emerald-400/30 space-y-3">
+          <div>
+            <span class="font-bold text-emerald-200 text-xs">🏥 Hastane ve Doktor Bilgilerim</span>
+            <p class="text-[10px] text-white/55">Randevu takvimi ve doktor özet raporu bu bilgilere göre hazırlanır</p>
+          </div>
+
+          <div class="space-y-2.5">
+            <div>
+              <label class="text-[11px] font-semibold text-amber-200 block mb-1">Gittiğim Hastane / Sağlık Kurumu</label>
+              <input type="text" value="${u.hospitalName || 'Manisa Şehir Hastanesi'}"
+                oninput="silentUpdateField('user', 'hospitalName', this.value)"
+                class="w-full bg-black/40 border border-white/20 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="text-[11px] font-semibold text-amber-200 block mb-1">Beni Takip Eden Doktorum / Ebem</label>
+              <input type="text" value="${u.doctorName || 'Dr. Ayşe Yılmaz'}"
+                oninput="silentUpdateField('user', 'doctorName', this.value)"
+                class="w-full bg-black/40 border border-white/20 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-white focus:outline-none focus:border-amber-400">
+            </div>
+
+            <div>
+              <label class="text-[11px] font-semibold text-amber-200 block mb-1">Sıradaki Kontrol Randevu Tarihim</label>
+              <input type="text" value="${u.nextCheckupDate || '10 Eylül 2026 · 14:30'}"
+                oninput="silentUpdateField('user', 'nextCheckupDate', this.value)"
+                class="w-full bg-black/40 border border-white/20 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <button onclick="saveProfileToBackend(true)"
+            class="w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 rounded-2xl text-emerald-200 font-bold text-xs transition">
+            💾 Hastane ve Doktor Bilgilerimi Kaydet ✓
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="toggleClinicalReportModal()"
+            class="p-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 rounded-2xl text-left transition">
+            <div class="font-bold text-amber-200 text-xs">📄 Doktor Özeti Raporu</div>
+            <div class="text-[10px] text-white/65 mt-0.5">${u.doctorName} için tek sayfa özet</div>
+          </button>
+          <button onclick="openHospitalNavigation()"
+            class="p-3 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 rounded-2xl text-left transition">
+            <div class="font-bold text-sky-200 text-xs">📍 Hastane Yol Tarifi</div>
+            <div class="text-[10px] text-white/65 mt-0.5">${u.hospitalName} harita rotası</div>
+          </button>
+        </div>
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // MENÜ 3: EŞİM & DAVET KÖPRÜSÜ
+  // =========================================================================
+  if (sub === "partner") {
+    const st = p.inviteStatus || "connected";
+
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <div class="p-4 bg-white/5 rounded-3xl border border-amber-400/30 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-amber-200 text-xs">🤝 Eş / Baba Bilgileri ve Kan Uyumu</span>
+              <p class="text-[10px] text-white/55">Eşinizin bilgilerini buradan güncelleyebilir ve davet gönderebilirsiniz</p>
+            </div>
+            <button onclick="navigateTab('father')" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 text-amber-200 rounded-xl text-[10px] font-bold">
+              Baba Ekranı ➔
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Eşimin Adı Soyadı</label>
+              <input type="text" value="${p.name}"
+                oninput="silentUpdateField('partner', 'name', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Eşimin Kan Grubu</label>
+              <select onchange="updatePartnerField('bloodGroup', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white">
+                ${['0 Rh+', '0 Rh-', 'A Rh+', 'A Rh-', 'B Rh+', 'B Rh-', 'AB Rh+', 'AB Rh-'].map(bg => `
+                  <option value="${bg}" ${p.bloodGroup === bg ? 'selected' : ''}>${bg}</option>
+                `).join('')}
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Eşimin Telefonu (İsteğe Bağlı)</label>
+              <input type="text" value="${p.phone}"
+                oninput="silentUpdateField('partner', 'phone', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+            <div>
+              <label class="text-[10px] text-white/55 block mb-1">Eşimin E-Postası (İsteğe Bağlı)</label>
+              <input type="text" value="${p.email || 'oguz@tohum.app'}"
+                oninput="silentUpdateField('partner', 'email', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <button onclick="saveProfileToBackend(true)"
+            class="w-full py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 rounded-xl text-emerald-200 font-bold text-[11px] transition">
+            💾 Eş Bilgilerini Kaydet ✓
+          </button>
+
+          <div class="p-3 rounded-2xl border ${m0.rhIncompatibility ? 'bg-rose-950/40 border-rose-400/50 text-rose-200' : 'bg-emerald-950/30 border-emerald-400/30 text-emerald-200'} space-y-1">
+            <div class="font-bold text-[11px]">${m0.rhStatusText}</div>
+            <p class="text-[10px] text-white/80 leading-relaxed">${m0.rhDetailText}</p>
+          </div>
+        </div>
+
+        <!-- Eş Davet Kodu ve Eşleştirme -->
+        <div class="p-4 bg-gradient-to-br from-amber-950/35 via-white/5 to-white/5 rounded-3xl border border-amber-400/30 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-white text-xs">📲 Eş Davet Kodu & Bağlantı Durumu</span>
+              <p class="text-[10px] text-white/55">${p.shortName} kendi telefonundan bu kodla bağlanır</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold border ${st === 'connected' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' : 'bg-amber-500/20 text-amber-200 border-amber-400/30'}">
+              ${st === 'connected' ? 'Bağlı ✓' : 'Onay Bekliyor ⏳'}
+            </span>
+          </div>
+
+          <div class="p-3 bg-black/40 rounded-2xl border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="text-[9px] text-white/45 block">Eşleştirme Kodu</span>
+              <span class="font-mono font-bold text-base text-amber-300 tracking-wider">${p.inviteCode || 'THM-31G-834'}</span>
+            </div>
+            <div class="flex space-x-1.5">
+              <button onclick="copyPartnerInviteCode()" class="px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-white font-medium border border-white/10">Kopyala</button>
+              <button onclick="regenerateInviteCode()" class="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 rounded-xl text-[10px] text-amber-200 font-medium border border-amber-400/30">Yenile ↻</button>
+            </div>
+          </div>
+
+          <button onclick="sendPartnerInviteWhatsApp()" class="w-full py-2.5 bg-gradient-to-r from-amber-500/30 to-emerald-500/25 hover:from-amber-500/40 border border-amber-400/40 rounded-2xl text-amber-100 font-bold text-[11px] transition flex items-center justify-center space-x-1.5 shadow-md">
+            <span>💌</span>
+            <span>${p.shortName}'a WhatsApp ile Davet Gönder</span>
+          </button>
+
+          <button onclick="pushPartnerLiveSignal()" class="w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 font-bold text-[11px] rounded-2xl transition">
+            ⚡ Şimdi ${p.shortName}'a Canlı Durum Sinyali Gönder ve Baba Ekranını Aç ➔
+          </button>
+        </div>
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // MENÜ 4: SAĞLIK ANKETİM & M0 BAZAL KORİDORUM
+  // =========================================================================
+  if (sub === "baseline") {
+    const latestBp = state.healthData.bloodPressureHistory[0] || { systolic: 92, diastolic: 62 };
+    const aiRes = window.runAiSeedCoreAnalysis(latestBp.systolic, latestBp.diastolic);
+
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <div class="p-3.5 bg-gradient-to-br from-amber-950/45 via-white/5 to-white/5 rounded-3xl border border-amber-400/35 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-200 text-xs">⚡ Hızlı Senaryo Testi</span>
+            <button onclick="openOnboardingWizardAtStep(2)" class="text-[10px] text-emerald-300 underline font-semibold">
+              Anket Görünümüyle Düzenle ➔
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button onclick="applyProfilePreset('buse_default')" class="p-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 rounded-2xl text-left">
+              <div class="font-bold text-emerald-200 text-[10px]">🌿 Buse Doğal Bazal (90/60)</div>
+              <div class="text-[9px] text-white/65">58➔65 kg · Dengeli Koridor</div>
+            </button>
+            <button onclick="applyProfilePreset('atypical_preeclampsia')" class="p-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 rounded-2xl text-left">
+              <div class="font-bold text-amber-200 text-[10px]">📈 Atipik Sıçrama (118/78)</div>
+              <div class="text-[9px] text-white/65">Bazal 90/60 iken 118/78 uyarısı</div>
+            </button>
+            <button onclick="applyProfilePreset('rh_incompatibility')" class="p-2 bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 rounded-2xl text-left">
+              <div class="font-bold text-rose-200 text-[10px]">🛡️ Kan Uyuşmazlığı Testi</div>
+              <div class="text-[9px] text-white/65">Anne A Rh- & Baba 0 Rh+</div>
+            </button>
+            <button onclick="applyProfilePreset('rapid_weight_gain')" class="p-2 bg-sky-500/20 hover:bg-sky-500/30 border border-sky-400/40 rounded-2xl text-left">
+              <div class="font-bold text-sky-200 text-[10px]">⚖️ Hızlı Kilo Artışı Testi</div>
+              <div class="text-[9px] text-white/65">58➔71.5 kg (+13.5 kg)</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-white/95 text-xs">❤️ Normal Tansiyon Yapım</span>
+              <p class="text-[10px] text-white/55">Kişisel bazal değerim: <b>${u.baselineBP} mmHg</b></p>
+            </div>
+            <div class="flex space-x-1">
+              <button onclick="selectBaselineBpCategory('low', 90, 60)" class="px-2 py-1 rounded-lg text-[9px] border ${u.baselineSys <= 95 ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-bold' : 'bg-white/5 border-white/10 text-white/60'}">Düşük (90/60)</button>
+              <button onclick="selectBaselineBpCategory('normal', 110, 70)" class="px-2 py-1 rounded-lg text-[9px] border ${u.baselineSys > 95 && u.baselineSys < 120 ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-bold' : 'bg-white/5 border-white/10 text-white/60'}">Normal (110/70)</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Normal Büyük</label>
+              <input type="number" min="75" max="135" value="${u.baselineSys}" onchange="updateProfileField('baselineSys', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-emerald-300">
+            </div>
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Normal Küçük</label>
+              <input type="number" min="45" max="90" value="${u.baselineDia}" onchange="updateProfileField('baselineDia', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-emerald-300">
+            </div>
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Normal Nabzım</label>
+              <input type="number" min="50" max="110" value="${u.baselineHR || 72}" oninput="silentUpdateField('user', 'baselineHR', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-amber-200">
+            </div>
+          </div>
+
+          <div class="p-3 bg-black/35 rounded-2xl border border-white/5 space-y-1.5 text-[10px]">
+            <div class="font-semibold text-amber-200">Sana Özel Güvenli Tansiyon Aralıkların:</div>
+            <div class="grid grid-cols-3 gap-1.5 text-center">
+              <div class="p-1.5 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-200">
+                <div class="font-bold">${m0.bpCorridors.optimal}</div>
+                <div class="text-[8px]">Senin Normalin</div>
+              </div>
+              <div class="p-1.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-200">
+                <div class="font-bold">${m0.bpCorridors.borderline}</div>
+                <div class="text-[8px]">Dikkat / Dinlen</div>
+              </div>
+              <div class="p-1.5 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-200">
+                <div class="font-bold">${m0.bpCorridors.critical}</div>
+                <div class="text-[8px]">Doktoruna Haber Ver</div>
+              </div>
+            </div>
+            <div class="text-white/75 pt-1 border-t border-white/5">${aiRes.message}</div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-white/95 text-xs">⚖️ Boyum ve Kilom (İsteğe Bağlı)</span>
+            <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full text-[10px] font-bold">VKİ: ${m0.bmi}</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Boyum (cm)</label>
+              <input type="number" value="${u.heightCm || 168}" onchange="updateProfileField('heightCm', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-white">
+            </div>
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Başlangıç Kilom</label>
+              <input type="number" step="0.5" value="${u.startWeight}" onchange="updateProfileField('startWeight', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-white">
+            </div>
+            <div>
+              <label class="text-[9px] text-white/50 block mb-1">Şu Anki Kilom</label>
+              <input type="number" step="0.5" value="${u.currentWeight}" onchange="updateProfileField('currentWeight', this.value)"
+                class="w-full bg-black/40 border border-white/15 rounded-xl px-2.5 py-2 text-xs font-bold text-amber-200">
+            </div>
+          </div>
+          <div class="p-2.5 bg-black/35 rounded-2xl border border-white/5 text-[10px] text-white/80 leading-relaxed">
+            ${m0.weightAdvice}
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  
+  // =========================================================================
+  // MENÜ 5: DMT1 MİNERAL YARIŞMASI & KİŞİSEL TAKVİYE ZAMAN ÇİZELGESİ
+  // Kadın Doğum & Biyoistatistik Uzman Onaylı Emilim Kuralları
+  // =========================================================================
+  if (sub === "supplements") {
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <!-- DMT1 Bilimsel Kural Kartı -->
+        <div class="p-3.5 bg-gradient-to-br from-amber-950/40 via-white/5 to-white/5 rounded-3xl border border-amber-400/35 space-y-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">🔬</span>
+            <span class="font-bold text-amber-200 text-xs">DMT1 (Divalan Metal Taşıyıcı 1) Emilim Prensibi</span>
+          </div>
+          <p class="text-[10px] text-white/80 leading-relaxed">
+            Demir (Ferro Sanol) ve Magnezyum/Kalsiyum bağırsak mukozasında aynı taşıyıcı kapı (DMT1) için yarışırlar. İkisinin de vücuda tam emilebilmesi için <b>en az 2 saat ara</b> ile alınmaları klinik olarak şarttır.
+          </p>
+          <div class="flex items-center space-x-2 text-[9px] text-emerald-300 font-semibold bg-emerald-950/30 border border-emerald-400/30 p-2 rounded-xl">
+            <span>✓</span>
+            <span>ToHUM Akıllı Saatleme, takviyelerinizi otomatik olarak 13 saatlik güvenli tamponla ayırmıştır.</span>
+          </div>
+        </div>
+
+        <!-- Günlük Sakin Zaman Akışı (Calm Timeline) -->
+        <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+          <span class="font-bold text-white text-xs block">🕒 Kişiselleştirilmiş Günlük Takviye Akışın</span>
+
+          <div class="space-y-2.5 relative border-l-2 border-amber-400/30 ml-2.5 pl-3.5">
+            
+            <!-- 1. Demir -->
+            <div class="relative group">
+              <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-rose-500 border-2 border-black"></span>
+              <div class="p-2.5 bg-black/40 border border-rose-500/30 rounded-2xl space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-rose-200 text-xs">🌅 08:30 · Sabah Aç Karnına</span>
+                  <span class="text-[9px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 font-semibold">Demir</span>
+                </div>
+                <div class="text-[11px] font-semibold text-white">Ferro Sanol Duodenal (1 Kapsül)</div>
+                <p class="text-[10px] text-white/65 leading-relaxed">
+                  💡 <b>Emilim Tüyosu:</b> C vitamini (taze portakal suyu veya limonlu su) demir emilimini 3 kat artırır. Çay/kahve ve süt ürünlerinden en az 1 saat önce içiniz.
+                </p>
+              </div>
+            </div>
+
+            <!-- 2. Omega-3 & D3 -->
+            <div class="relative group">
+              <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-amber-400 border-2 border-black"></span>
+              <div class="p-2.5 bg-black/40 border border-amber-400/30 rounded-2xl space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-amber-200 text-xs">☀️ 13:00 · Öğle Yemeği ile (Tok)</span>
+                  <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 font-semibold">DHA & D3</span>
+                </div>
+                <div class="text-[11px] font-semibold text-white">Ocean Mummy (Omega-3 DHA) + Coledan D3 (4 Damla)</div>
+                <p class="text-[10px] text-white/65 leading-relaxed">
+                  💡 <b>Emilim Tüyosu:</b> Yağda eriyen vitaminler (D, E, K, A ve Omega-3) sağlıklı yağlar içeren öğünle birlikte maksimum biyoyararlanım sağlar.
+                </p>
+              </div>
+            </div>
+
+            <!-- 3. Magnezyum -->
+            <div class="relative group">
+              <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-black"></span>
+              <div class="p-2.5 bg-black/40 border border-emerald-400/30 rounded-2xl space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-emerald-200 text-xs">🌙 21:30 · Gece Yatmadan Önce (Tok)</span>
+                  <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold">Magnezyum</span>
+                </div>
+                <div class="text-[11px] font-semibold text-white">Magnimore Plus (Magnezyum Bisglisinat)</div>
+                <p class="text-[10px] text-white/65 leading-relaxed">
+                  💡 <b>DMT1 Güvencesi:</b> Sabahki demirden 13 saat uzakta olduğu için yarışma sıfırdır. Gece bacak kramplarını önler ve derin uykuyu destekler.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // MENÜ 6: VERİ EGEMENLİĞİ, KVKK MAHMURİYETİ & JSON DIŞA AKTARMA
+  // =========================================================================
+  if (sub === "security") {
+    return `
+      <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+        
+        <!-- KVKK & Açık Rıza Güvencesi -->
+        <div class="p-3.5 bg-gradient-to-br from-emerald-950/40 via-white/5 to-white/5 rounded-3xl border border-emerald-400/35 space-y-2">
+          <div class="flex items-center space-x-2">
+            <span class="text-base">🔒</span>
+            <span class="font-bold text-emerald-200 text-xs">Sağlık Verisi Egemenliği & Mahremiyet</span>
+          </div>
+          <p class="text-[10px] text-white/80 leading-relaxed">
+            ToHUM, KVKK ve GDPR kapsamında hassas nitelikli sağlık verilerinizi korur. <b>Açık ev adresiniz veya GPS konumunuz asla istenmez.</b> Verileriniz yalnızca sizin ve bebeğinizin sağlığını takip etmek amacıyla saklanır.
+          </p>
+        </div>
+
+        <!-- Dışa Aktarma (Export) ve Yedek Alma -->
+        <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-white text-xs">💾 Sağlık Verilerimi Dışa Aktar</span>
+            <span class="text-[9px] text-white/50">JSON Formatı</span>
+          </div>
+          <p class="text-[10px] text-white/65 leading-relaxed">
+            M0 kardiyo bazal değerleriniz, anket yanıtlarınız, tansiyon geçmişiniz ve eşleşme bilgilerinizi tek tıkla bilgisayarınıza veya telefonunuza indirebilirsiniz:
+          </p>
+          <button onclick="downloadM0DataJson()"
+            class="w-full py-3 bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-emerald-600 text-black font-bold text-xs rounded-2xl shadow-lg transition flex items-center justify-center space-x-2">
+            <span>📥</span>
+            <span>Tüm M0 Verilerimi İndir (.json)</span>
+          </button>
+        </div>
+
+        <!-- Sıfırlama ve Baştan Başlama -->
+        <div class="p-4 bg-black/40 rounded-3xl border border-rose-500/25 space-y-2">
+          <span class="font-bold text-rose-300 text-xs block">🗑️ Veri Sıfırlama</span>
+          <p class="text-[10px] text-white/60 leading-relaxed">
+            Cihazınızdaki yerel çerez ve profil verilerini tamamen sıfırlamak isterseniz:
+          </p>
+          <button onclick="resetLocalData()"
+            class="py-2.5 px-3.5 bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/35 text-rose-200 text-[11px] font-semibold rounded-xl transition">
+            Yerel Verileri Sıfırla ve Çıkış Yap
+          </button>
+        </div>
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // MENÜ 5: AİLE ÇEMBERİ, YAŞAM AĞACI & GİRİŞ / ANKET YÖNETİMİ
+  // =========================================================================
+  return `
+    <div class="space-y-3.5 animate-in fade-in duration-150 text-xs">
+      
+      <div class="p-4 bg-gradient-to-r from-amber-950/45 to-emerald-950/35 rounded-3xl border border-amber-400/40 space-y-2.5">
+        <div class="font-bold text-amber-200 text-xs">🚪 Üyelik, Giriş ve İlk Kurulum Sihirbazı</div>
+        <p class="text-[10px] text-white/75 leading-relaxed">
+          Uygulamayı yeni indiren bir annenin gördüğü <b>Üye Ol / Google Giriş Ekranını</b> ve <b>3 Adımlı Kısa Tanışma Anketini</b> istediğiniz an buradan açabilirsiniz:
+        </p>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="openAuthWelcomeFlow()"
+            class="py-2.5 px-3 bg-white text-gray-900 font-bold text-[11px] rounded-2xl shadow-md">
+            🔵 Üye Ol / Giriş Ekranı
+          </button>
+          <button onclick="openOnboardingWizardAtStep(1)"
+            class="py-2.5 px-3 bg-amber-500/25 border border-amber-400/40 text-amber-200 font-bold text-[11px] rounded-2xl">
+            📋 3 Adımlı Anketi Aç
+          </button>
+        </div>
+      </div>
+
+      <!-- M0 - M7 TOHUM 18 YILLIK YAŞAM AĞACI -->
+      <div class="p-4 bg-gradient-to-br from-amber-950/35 via-white/5 to-emerald-950/25 rounded-3xl border border-amber-400/25 space-y-3">
         <div class="flex justify-between items-center">
           <div>
             <div class="font-bold text-amber-200 text-sm">🌱 ToHUM Yaşam Ağacı (M0 – M7)</div>
-            <div class="text-[10px] text-white/55">To Hum. To Seed. Bee to Hum. · 18 Yıllık Gelişim & Yetenek Pusulası</div>
+            <div class="text-[10px] text-white/55">18 Yıllık Gelişim Pusulası</div>
           </div>
           <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-semibold">
             Aktif: M0 Çimlenme
@@ -3675,99 +5175,939 @@ function renderProfileTab() {
             </button>
           `).join('')}
         </div>
-
-        ${(() => {
-          const curM = (state.lifecycleModules || []).find(x => x.code === (state.selectedLifecycleModule || 'M0')) || (state.lifecycleModules || [])[0];
-          if (!curM) return '';
-          return `
-            <div class="p-3.5 bg-black/40 rounded-2xl border border-white/10 space-y-1.5">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-amber-200 text-xs">${curM.code} · ${curM.poetic} (${curM.age})</span>
-                <span class="text-[9px] px-2 py-0.5 rounded-full border ${curM.code === 'M0' || curM.code === 'M1' ? 'bg-emerald-500/20 border-emerald-400/30 text-emerald-300' : 'bg-white/10 border-white/15 text-white/60'}">${curM.phase}</span>
-              </div>
-              <div class="text-[10px] text-amber-100/75 font-medium italic">Bilimsel Evre: ${curM.scientific}</div>
-              <p class="text-[11px] text-white/85 leading-relaxed">${curM.desc}</p>
-            </div>
-          `;
-        })()}
       </div>
 
-      <!-- 2. UYGULAMA İÇİ "TO HUM" SESLİ AI ASİSTAN AJANDASI (8.3 Hz) -->
-      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3 text-xs">
+      <!-- Güneş'e Mektuplarım -->
+      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-2.5">
         <div class="flex justify-between items-center">
-          <div>
-            <div class="font-bold text-white/95">🎙️ "To Hum" Sesli AI Asistan Ajandası</div>
-            <div class="text-[10px] text-white/55">8.3 Hz Biyo-Rezonans · Sabah, Öğle, Akşam & Gece Rehberi</div>
-          </div>
-          <span class="text-[9px] bg-amber-500/20 text-amber-200 border border-amber-400/30 px-2 py-0.5 rounded-full">
-            Çimlenme v0.0.4
-          </span>
+          <div class="font-semibold text-white/95">💌 ${b.name}'e Mektuplarım (${state.timeCapsules.length})</div>
+          <button onclick="openNewLetterModal()" class="text-amber-200 text-xs font-medium hover:underline">+ Mektup Yaz</button>
         </div>
         <div class="space-y-2">
-          ${(state.aiVoiceAgenda || []).map(item => `
-            <div class="p-3 bg-black/30 rounded-2xl border border-white/5 flex items-start justify-between space-x-2">
-              <div class="space-y-0.5">
-                <div class="flex items-center space-x-2">
-                  <span class="text-[10px] font-mono font-bold text-amber-300">${item.time}</span>
-                  <span class="text-[11px] font-semibold text-white/95">${item.period} · ${item.title}</span>
-                </div>
-                <p class="text-[10px] text-white/65 leading-relaxed">"${item.text}"</p>
+          ${state.timeCapsules.map(c => `
+            <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
+              <div class="flex justify-between text-white/90 font-medium">
+                <span>${c.title}</span>
+                <span class="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full">${c.unlockEvent}</span>
               </div>
-              <button onclick="playAiVoicePrompt('${item.id}')" class="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/30 text-amber-200 rounded-xl text-[10px] font-semibold shrink-0 transition">
-                🔊 Dinle
-              </button>
+              <p class="text-[10px] text-white/50 italic mt-1 line-clamp-1">"${c.preview}"</p>
             </div>
           `).join('')}
         </div>
       </div>
 
-      <!-- 3. TÜRK AİLE KÜLTÜRÜ & ROL TABANLI MAHREMİYET ("KENDİME ALAN") PANELİ -->
-      <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3 text-xs">
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="font-bold text-white/95">🔐 Aile Ekosistemi & Mahremiyet</div>
-            <div class="text-[10px] text-white/55">Şefkatli Geniş Aile · Korunan Çekirdek Özel Alan</div>
-          </div>
-          <button onclick="addFamilyObserver()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-[10px] text-amber-200 font-semibold">
-            + Aile Üyesi Ekle
-          </button>
-        </div>
-
-        <div class="p-3 rounded-2xl border flex items-center justify-between ${state.privacyMode ? 'bg-indigo-950/50 border-indigo-400/40' : 'bg-black/30 border-white/10'}">
-          <div>
-            <div class="font-semibold text-white text-xs">🌙 "Kendime Alan" (Gizlilik Günü Modu)</div>
-            <div class="text-[10px] text-white/60 mt-0.5">
-              ${state.privacyMode
-                ? 'Aktif: Gözlemci aile üyelerinin erişimi durduruldu, asistan sessiz modda.'
-                : 'Pasif: Gözlemci yakınlar haftalık genel bülteni görüntüleyebilir.'}
-            </div>
-          </div>
-          <button onclick="togglePrivacyMode()" class="px-3 py-1.5 rounded-xl text-[10px] font-bold border transition ${state.privacyMode ? 'bg-indigo-500/30 border-indigo-300/50 text-indigo-200' : 'bg-white/10 border-white/15 text-white/70'}">
-            ${state.privacyMode ? 'Açık ✓' : 'Aktif Et'}
-          </button>
-        </div>
-
-        <div class="space-y-2">
-          ${(state.familyMembers || []).map(fm => `
-            <div class="p-2.5 bg-black/25 rounded-2xl border border-white/5 flex items-center justify-between">
-              <div>
-                <div class="font-semibold text-white/90 text-[11px]">${fm.name} <span class="text-[10px] text-white/45 font-normal">(${fm.relation})</span></div>
-                <div class="text-[10px] text-white/55 mt-0.5">${fm.desc}</div>
-              </div>
-              <span class="text-[9px] px-2 py-0.5 rounded-full bg-white/10 border border-white/10 text-amber-200 shrink-0 ml-2 font-medium">
-                ${fm.badge}
-              </span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <button onclick="alert('Buse & Oğuz aile hesabı ve Akıllı Saat biyo-sensör köprüsü senkronize durumda.')" class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 text-xs font-medium rounded-2xl transition">
-        Hesap ve Aile Senkronizasyonu Bilgisi
-      </button>
     </div>
   `;
 }
+
+// =========================================================================
+// KESİNTİSİZ YAZMA (ODAK KAYBETMEYEN INPUT) VE ÜYELİK / GOOGLE HANDLER'LARI
+// =========================================================================
+window.silentUpdateField = function(targetObj, field, val) {
+  if (targetObj === "user") {
+    if (field === "age" || field === "baselineHR" || field === "heightCm") {
+      const n = parseInt(val, 10);
+      if (!isNaN(n)) state.user[field] = n;
+    } else if (field === "startWeight" || field === "currentWeight") {
+      const f = parseFloat(val);
+      if (!isNaN(f)) state.user[field] = f;
+    } else {
+      state.user[field] = val;
+      if (field === "name" && val.trim()) {
+        const parts = val.trim().split(" ");
+        state.user.shortName = parts[0];
+        const hdr = document.getElementById("profileHeaderName");
+        if (hdr) hdr.textContent = val;
+      }
+    }
+  } else if (targetObj === "baby") {
+    state.baby[field] = val;
+    const bhdr = document.getElementById("profileHeaderBaby");
+    if (bhdr) bhdr.textContent = val;
+  } else if (targetObj === "partner") {
+    state.partner[field] = val;
+    if (field === "name" && val.trim()) {
+      state.partner.shortName = val.trim().split(" ")[0];
+    }
+  }
+  saveState();
+};
+
+
+// =========================================================================
+// TANSİYON ORTALAMASI (BÜYÜK / KÜÇÜK) VE WHATSAPP GERİ DÖNÜŞLÜ MODAL SİSTEMİ
+// =========================================================================
+
+// =========================================================================
+// M0 VERİ EGEMENLİĞİ: JSON YEDEK DIŞA AKTARMA VE VERİ SIFIRLAMA
+// =========================================================================
+window.downloadM0DataJson = function() {
+  triggerHaptic([20, 30]);
+  fetch("/api/export")
+    .then(r => r.json())
+    .then(data => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `tohum_m0_saglik_yedegi_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      triggerReaction("water", "M0 Sağlık yedeği JSON olarak indirildi.");
+    })
+    .catch(() => {
+      // Fallback: download local state
+      const localDump = {
+        exportedAt: new Date().toISOString(),
+        system: "ToHUM Calm Tech M0 Health Engine (Local)",
+        user: state.user,
+        baby: state.baby,
+        partner: state.partner,
+        healthData: state.healthData
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localDump, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `tohum_m0_saglik_yedegi_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      triggerReaction("water", "M0 Sağlık yedeği yerel olarak indirildi.");
+    });
+};
+
+window.resetLocalData = function() {
+  if (confirm("Tüm yerel profil verilerinizi sıfırlayıp baştan başlamak istediğinize emin misiniz?")) {
+    try {
+      localStorage.removeItem("tohum_user_profile");
+      localStorage.removeItem("tohum_offline_profile");
+    } catch(e) {}
+    location.href = "index.html?flow=welcome";
+  }
+};
+
+window.calculateLmpFromWeek = function(weekNum) {
+  const w = parseInt(weekNum, 10) || 31;
+  const now = new Date();
+  const lmpTime = now.getTime() - (w * 7 * 24 * 60 * 60 * 1000);
+  const lmp = new Date(lmpTime);
+  const yyyy = lmp.getFullYear();
+  const mm = String(lmp.getMonth() + 1).padStart(2, '0');
+  const dd = String(lmp.getDate()).padStart(2, '0');
+  state.user.lmpDate = `${yyyy}-${mm}-${dd}`;
+  const due = new Date(lmpTime + 280 * 24 * 60 * 60 * 1000);
+  state.user.dueDate = due.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+  state.user.daysRemaining = Math.max(0, Math.ceil((due - now) / (1000 * 60 * 60 * 24)));
+  state.baby.week = w;
+  saveState();
+};
+
+
+// =========================================================================
+// BUSE'NİN GÖZÜNDEN CALM TECH: "SEN NASILSIN?" VE "OĞUZ'A FISILDA" SİSTEMİ
+// =========================================================================
+
+// =========================================================================
+// TOHUM MATERNAL İHTİYAÇ ANALİZ MOTORU & ÇİFT OTURUM (ÜREM AİLESİ)
+// Anne eşinden talep bildirmez; sistem verileri analiz edip babaya rehberlik eder.
+// =========================================================================
+window.computeMaternalNeedsAnalysis = function() {
+  const curW = state.baby.week || 31;
+  const latestBp = (state.healthData.bloodPressureHistory && state.healthData.bloodPressureHistory[0]) || { systolic: 92, diastolic: 62 };
+  const waterCurrent = state.nurture.water.count;
+  const waterTarget = state.nurture.water.target;
+  const waterDeficit = Math.max(0, waterTarget - waterCurrent);
+  const magnesiumTaken = (state.prescriptions.find(p => p.id === 'magnesium') || {}).takenToday;
+  const currentMood = state.healthData.selectedMood || 'tired';
+
+  const cards = [];
+
+  // 1. Amniyotik Sıvı & Hidrasyon Açığı Analizi
+  if (waterDeficit > 0) {
+    cards.push({
+      id: "water",
+      category: "Amniyotik Hidrasyon",
+      badge: `${waterDeficit} Bardak Açık`,
+      badgeColor: "text-sky-300 bg-sky-950/60 border-sky-400/30",
+      headline: "Amniyotik Döngü İçin Hidrasyon Desteği Gerekiyor",
+      insight: `Buse bugün ${waterCurrent}/${waterTarget} bardak su tüketti. 31. haftada amniyotik sıvı her 3 saatte bir tamamen yenilenir. Sıvı eksikliği plasental perfüzyonu etkileyebilir.`,
+      actionTitle: "Buse'ye 1 bardak ılık su götürün",
+      actionType: "water",
+      buttonText: "Ilık Su Götürdüm",
+      completed: false
+    });
+  } else {
+    cards.push({
+      id: "water",
+      category: "Amniyotik Hidrasyon",
+      badge: "Tam Dengede",
+      badgeColor: "text-emerald-300 bg-emerald-950/60 border-emerald-400/30",
+      headline: "Amniyotik Sıvı Mükemmel Seviyede",
+      insight: `Buse bugün ${waterCurrent} bardak su tüketimini tamamladı. Güneş'in amniyotik yaşam havuzu taze ve dengeli.`,
+      actionTitle: "Hidrasyon dengelendi, dinlenmeye eşlik edin",
+      actionType: "water",
+      buttonText: "Su İkramı Yapıldı",
+      completed: true
+    });
+  }
+
+  // 2. Lomber Lordoz & Pelvik Rahatlama Analizi (Biomekanik)
+  const isFatigued = currentMood === 'tired' || currentMood === 'ache' || (state.healthData.selectedSymptoms || []).includes("Akşam Yorgunluğu") || (state.healthData.selectedSymptoms || []).includes("Hafif Bel Ağrısı");
+  cards.push({
+    id: "massage",
+    category: "Biomekanik & Lomber Yük",
+    badge: isFatigued ? "Pelvis Yükü Yüksek" : "Fiziksel Yük Dengeli",
+    badgeColor: isFatigued ? "text-amber-300 bg-amber-950/60 border-amber-400/30" : "text-emerald-300 bg-emerald-950/60 border-emerald-400/30",
+    headline: isFatigued ? "31. Hafta Ağırlık Merkezi Değişimi & Bel Hassasiyeti" : "Pelvik Denge Korunuyor",
+    insight: `31. haftada Güneş'in 1600 gramı aşan ağırlığı annenin sakroiliak eklemlerine baskı yapar. Buse "${currentMood === 'tired' ? 'Akşam Yorgunluğu' : (currentMood === 'ache' ? 'Bel Hassasiyeti' : 'Doğal Gebelik Yorgunluğu')}" hissettiğini kaydetti.`,
+    actionTitle: "Buse'yi sol yan yatışa geçirin, bacak arasına destek yastığı koyun ve 10 dk hafif bel masajı uygulayın",
+    actionType: "massage",
+    buttonText: "Bel Desteği Sağladım",
+    completed: false
+  });
+
+  // 3. Kardiyovasküler Denge Analizi (Buse'nin 90/60 Bazali)
+  const isBpSafe = latestBp.systolic <= 104 && latestBp.diastolic <= 70;
+  cards.push({
+    id: "cardio",
+    category: "Kardiyovasküler Bazal",
+    badge: isBpSafe ? "90/60 Bazal İle Uyumlu" : "Yükselme Sinyali",
+    badgeColor: isBpSafe ? "text-emerald-300 bg-emerald-950/60 border-emerald-400/30" : "text-rose-300 bg-rose-950/60 border-rose-400/30",
+    headline: `Son Ölçüm: ${latestBp.systolic}/${latestBp.diastolic} mmHg`,
+    insight: isBpSafe 
+      ? "Buse'nin sistolik ve diyastolik değerleri kendi doğal 90/60 bazal koridoru içinde seyrediyor. Anne kardiyak açıdan huzurlu ve güvende."
+      : "Buse'nin doğal bazaline (90/60) kıyasla sistolik değerde yükselme var. Buse'yi loş ve sakin bir odada 15 dakika sol yan pozisyonda dinlenmeye davet edin.",
+    actionTitle: isBpSafe ? "Ortamın sakinliğini ve loş ışığını koruyun" : "Buse'ye sessiz ve huzurlu bir dinlenme ortamı hazırlayın",
+    actionType: "cardio",
+    buttonText: "Dinginlik Sağlandı",
+    completed: isBpSafe
+  });
+
+  // 4. DMT1 Farmakoloji & Magnezyum Saati
+  cards.push({
+    id: "magnesium",
+    category: "DMT1 Mineral Zamanlaması",
+    badge: magnesiumTaken ? "Alındı" : "Saat 21:30 Bekleniyor",
+    badgeColor: magnesiumTaken ? "text-emerald-300 bg-emerald-950/60 border-emerald-400/30" : "text-amber-300 bg-amber-950/60 border-amber-400/30",
+    headline: "Magnimore Plus (Magnezyum Saşe)",
+    insight: "Demir ve kalsiyum ile yarışmaması için magnezyum akşam tok karnına alınmalıdır. Gece bacak kramplarını ve rahim miyometriyum kasılmalarını engeller.",
+    actionTitle: "Saat 21:30'da magnezyum saşesini 1 bardak ılık suyla karıştırıp Buse'ye ikram edin",
+    actionType: "magnesium",
+    buttonText: "Magnezyumu Hazırladım",
+    completed: !!magnesiumTaken
+  });
+
+  return cards;
+};
+
+window.completeFatherCareAction = function(actionType) {
+  if (actionType === "water") {
+    if (state.nurture.water.count < state.nurture.water.target) {
+      state.nurture.water.count++;
+    }
+    state.growth.points += 10;
+    triggerReaction("water", "Oğuz 1 bardak ılık su getirdi. Amniyotik sıvı tazelendi!");
+  } else if (actionType === "massage") {
+    state.growth.points += 15;
+    triggerReaction("magnesium", "Oğuz'un bel ve sırt desteğiyle Buse'nin pelvik gerginliği azaldı.");
+  } else if (actionType === "magnesium") {
+    const mag = state.prescriptions.find(p => p.id === "magnesium");
+    if (mag) {
+      mag.takenToday = true;
+      mag.takenTime = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    }
+    state.growth.points += 10;
+    triggerReaction("magnesium", "Oğuz Magnezyumu hazırladı. Buse takviyesini aldı.");
+  }
+
+  fetch('/api/partner/care-action', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: actionType })
+  }).catch(function(e) { console.log(e); });
+
+  saveState();
+  render();
+};
+
+window.switchSessionRole = function(role) {
+  if (!state.family) {
+    state.family = { name: "Ürem Ailesi", activeSession: "mother" };
+  }
+  state.family.activeSession = role;
+  if (role === "father") {
+    state.currentTab = "father";
+  } else {
+    state.currentTab = "home";
+  }
+  saveState();
+  render();
+};
+
+window.selectMaternalMood = function(moodId) {
+  state.healthData.selectedMood = moodId;
+  const moodResponses = {
+    serene: "Dingin ve huzurlusun. Bedenin Güneş'le mükemmel bir sükunette nefes alıyor.",
+    tired: "Yorgun hissetmen çok doğal; bedenin şu an mucizevi bir organ ve doku inşa ediyor. Dinlen.",
+    emotional: "Hormonlar yaşamın tatlı dalgalarıdır. 8.3 Hz sesimizle biraz baş başa kal.",
+    ache: "31. haftada pelvis bebeğe yer açıyor. Oğuz'dan 5 dk hafif bel masajı isteyelim mi?"
+  };
+  state.interactive.reactionText = moodResponses[moodId] || "Sen iyiysen Güneş de iyi.";
+  triggerHaptic([20, 20]);
+  saveState();
+  render();
+};
+
+window.quickWhisperToPartner = function(actionType) {
+  const pName = state.partner.shortName || "Oğuz";
+  let actionTitle = "Canlı Destek Fısıltısı";
+  let actionMsg = "";
+  if (actionType === "water") {
+    actionTitle = "💧 Ilık Su İsteği";
+    actionMsg = `Canım ${pName}, bana 1 bardak ılık su getirebilir misin? Buse & Güneş 🌱`;
+  } else if (actionType === "massage") {
+    actionTitle = "💆‍♂️ 5 Dk Bel Masajı";
+    actionMsg = `Canım ${pName}, biraz bel ağrım var, 5 dakika hafif masaj yapabilir misin? 💛`;
+  } else {
+    actionTitle = "💛 Sevgi Fısıltısı";
+    actionMsg = `Canım ${pName}, seni seviyoruz ve buradayız. Güneş'ten sana bir tekme var! 🐾`;
+  }
+
+  // Push to partner live feed immediately
+  if (!state.partner.liveFeed) state.partner.liveFeed = [];
+  state.partner.liveFeed.unshift({
+    id: Date.now(),
+    time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+    type: "whisper",
+    title: actionTitle,
+    text: actionMsg
+  });
+  if (state.partner.liveFeed.length > 8) state.partner.liveFeed.pop();
+
+  saveProfileToBackend(false);
+  triggerReaction("water", `${actionTitle} ${pName}'a iletildi!`);
+  
+  // Also offer WhatsApp modal
+  openWhatsAppModal("partner_pain", state.partner.name || "Oğuz Baltacıoğlu", state.partner.phone || "", actionMsg);
+};
+
+window.silentUpdateBaselineBP = function(sysVal, diaVal) {
+  if (sysVal !== null && sysVal !== undefined && sysVal !== "") {
+    const s = parseInt(sysVal, 10);
+    if (!isNaN(s) && s > 0) state.user.baselineSys = s;
+  }
+  if (diaVal !== null && diaVal !== undefined && diaVal !== "") {
+    const d = parseInt(diaVal, 10);
+    if (!isNaN(d) && d > 0) state.user.baselineDia = d;
+  }
+  state.user.baselineBP = `${state.user.baselineSys}/${state.user.baselineDia}`;
+  if (state.user.baselineSys <= 95) state.user.baselineCategory = 'low';
+  else if (state.user.baselineSys >= 125) state.user.baselineCategory = 'high';
+  else state.user.baselineCategory = 'normal';
+
+  const badge = document.getElementById("onbBpBadge");
+  if (badge) {
+    badge.textContent = `${state.user.baselineBP} mmHg`;
+    if (state.user.baselineSys <= 95) {
+      badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold border bg-emerald-500/20 text-emerald-300 border-emerald-400/30";
+    } else if (state.user.baselineSys >= 125) {
+      badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold border bg-amber-500/20 text-amber-200 border-amber-400/30";
+    } else {
+      badge.className = "px-2.5 py-1 rounded-full text-[10px] font-bold border bg-sky-500/20 text-sky-200 border-sky-400/30";
+    }
+  }
+
+  saveState();
+};
+
+window.quickSetBaselineBP = function(sys, dia, cat) {
+  state.user.baselineSys = sys;
+  state.user.baselineDia = dia;
+  state.user.baselineBP = `${sys}/${dia}`;
+  state.user.baselineCategory = cat;
+
+  const sysEl = document.getElementById("onbSysInput");
+  const diaEl = document.getElementById("onbDiaInput");
+  const badge = document.getElementById("onbBpBadge");
+  if (sysEl) sysEl.value = sys;
+  if (diaEl) diaEl.value = dia;
+  if (badge) {
+    badge.textContent = `${sys}/${dia} mmHg`;
+  }
+  triggerHaptic(15);
+  saveState();
+  render();
+};
+
+window.openWhatsAppModal = function(type, recipientName, recipientPhone, message) {
+  if (!state.whatsAppModal) state.whatsAppModal = {};
+  const cleanPhone = (recipientPhone || "").replace(/[^0-9]/g, '');
+  const encMsg = encodeURIComponent(message);
+  const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encMsg}` : `https://wa.me/?text=${encMsg}`;
+
+  let title = "WhatsApp Paylaşımı";
+  if (type === "partner_invite") title = "💌 Eş Daveti Gönder";
+  else if (type === "partner_pain") title = "🚨 Eşe Destek Çağrısı";
+  else if (type === "clinical_summary") title = "📋 Doktoruna İlet";
+
+  state.whatsAppModal = {
+    isOpen: true,
+    title: title,
+    recipientName: recipientName || state.partner.name || "Eşim",
+    recipientPhone: recipientPhone || state.partner.phone || "",
+    message: message,
+    waUrl: waUrl,
+    type: type
+  };
+  triggerHaptic([20, 30]);
+  render();
+};
+
+window.closeWhatsAppModal = function() {
+  if (!state.whatsAppModal) state.whatsAppModal = {};
+  state.whatsAppModal.isOpen = false;
+  triggerHaptic(15);
+  render();
+};
+
+window.copyWhatsAppMessage = function() {
+  if (state.whatsAppModal && state.whatsAppModal.message) {
+    navigator.clipboard.writeText(state.whatsAppModal.message).then(() => {
+      const btn = document.getElementById('waCopyStatus');
+      if (btn) btn.textContent = "Kopyalandı ✓";
+      triggerReaction("water", "Mesaj panoya kopyalandı.");
+      setTimeout(() => {
+        if (btn) btn.textContent = "Mesajı Kopyala";
+      }, 2000);
+    }).catch(() => {
+      triggerReaction("water", "Mesaj kopyalandı.");
+    });
+  }
+};
+
+window.onWhatsAppOpened = function() {
+  const banner = document.getElementById('waStatusBanner');
+  if (banner) {
+    banner.innerHTML = '<span>✅</span> <span><b>Mesaj WhatsApp\'a aktarıldı!</b> İşiniz bittiğinde yukarıdaki <b>‹ Geri Dön</b> butonuyla devam edebilirsiniz.</span>';
+    banner.className = 'p-2.5 bg-emerald-500/25 border border-emerald-400/50 rounded-xl text-[10px] text-emerald-100 flex items-center space-x-2';
+  }
+};
+
+function renderWhatsAppModal() {
+  const m = state.whatsAppModal;
+  if (!m || !m.isOpen) return '';
+
+  return `
+    <div id="whatsAppModalOverlay" class="fixed inset-0 z-[250] flex items-end sm:items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div class="w-full max-w-md bg-[#160E0A] border border-amber-400/40 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.9)] p-5 space-y-4 max-h-[92vh] overflow-y-auto text-white">
+        
+        <!-- ÜST GEZİNTİ VE GERİ DÖNÜŞ BARI (EN BELİRGİN GERİ TUŞU) -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <button onclick="closeWhatsAppModal()" class="px-3.5 py-1.5 bg-white/15 hover:bg-white/25 active:scale-95 border border-white/20 rounded-2xl text-xs font-bold text-white flex items-center space-x-1.5 transition shadow-sm" title="Uygulamaya Geri Dön">
+            <span class="text-sm">‹</span>
+            <span>Geri Dön</span>
+          </button>
+          
+          <div class="text-center">
+            <span class="text-xs font-bold text-amber-200 block">${m.title || 'WhatsApp Paylaşımı'}</span>
+            <span class="text-[9px] text-white/50">ToHUM Calm Tech</span>
+          </div>
+
+          <button onclick="closeWhatsAppModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white flex items-center justify-center text-xs" title="Kapat">
+            ✕
+          </button>
+        </div>
+
+        <!-- ALICI VE BİLGİ KARTI -->
+        <div class="p-3.5 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-lg">
+              💬
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">${m.recipientName || 'Eş / Doktor'}</div>
+              <div class="text-[10px] text-white/55 font-mono">${m.recipientPhone || 'Telefon Tanımlı'}</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            Hazır ✓
+          </span>
+        </div>
+
+        <!-- MESAJ ÖNİZLEME KUTUSU -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between items-center text-[10px]">
+            <span class="text-amber-200/90 font-semibold">Gönderilecek Mesajın Önizlemesi:</span>
+            <span class="text-white/45">Önizleme</span>
+          </div>
+          <div class="p-3.5 bg-black/60 border border-emerald-500/30 rounded-2xl text-xs text-white/90 leading-relaxed font-sans select-all whitespace-pre-wrap max-h-44 overflow-y-auto shadow-inner">
+${m.message}
+          </div>
+        </div>
+
+        <!-- BİLGİLENDİRME NOTU -->
+        <div id="waStatusBanner" class="p-2.5 bg-emerald-950/40 border border-emerald-400/30 rounded-xl text-[10px] text-emerald-200 flex items-center space-x-2">
+          <span>💡</span>
+          <span>WhatsApp açıldıktan sonra istediğiniz an üstteki <b>‹ Geri Dön</b> butonuyla uygulamaya dönebilirsiniz.</span>
+        </div>
+
+        <!-- İŞLEM BUTONLARI -->
+        <div class="space-y-2 pt-1">
+          <!-- WhatsApp'ı Aç Butonu -->
+          <a href="${m.waUrl}" target="_blank" onclick="onWhatsAppOpened()"
+            class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 active:scale-98 text-white font-bold text-xs rounded-2xl shadow-lg transition flex items-center justify-center space-x-2 text-center">
+            <span class="text-sm">💬</span>
+            <span>WhatsApp'ta Aç ve Gönder ➔</span>
+          </a>
+
+          <!-- İki İkincil Buton: Kopyala ve Geri Dön -->
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="copyWhatsAppMessage()"
+              class="py-2.5 px-3 bg-white/10 hover:bg-white/15 active:scale-95 border border-white/15 rounded-xl text-xs font-semibold text-white/85 flex items-center justify-center space-x-1.5 transition">
+              <span>📋</span>
+              <span id="waCopyStatus">Mesajı Kopyala</span>
+            </button>
+
+            <button onclick="closeWhatsAppModal()"
+              class="py-2.5 px-3 bg-white/10 hover:bg-white/15 active:scale-95 border border-white/15 rounded-xl text-xs font-semibold text-white/85 flex items-center justify-center space-x-1 transition">
+              <span>‹</span>
+              <span>ToHUM'a Geri Dön</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+}
+
+window.silentUpdateAuthName = function() {
+  const fEl = document.getElementById("regFirstNameInput");
+  const lEl = document.getElementById("regLastNameInput");
+  const fVal = fEl ? fEl.value : (state.auth.firstName || "");
+  const lVal = lEl ? lEl.value : (state.auth.lastName || "");
+  state.auth.firstName = fVal;
+  state.auth.lastName = lVal;
+  const full = `${fVal.trim()} ${lVal.trim()}`.trim();
+  if (full) {
+    state.user.name = full;
+    state.user.shortName = fVal.trim() || full.split(" ")[0];
+  }
+  saveState();
+};
+
+window.switchAuthModeTab = function(tabName) {
+  if (!state.auth) state.auth = {};
+  state.auth.authTab = tabName;
+  state.auth.authError = "";
+  triggerHaptic(10);
+  render();
+};
+
+window.openGoogleAccountModal = function() {
+  if (!state.auth) state.auth = {};
+  state.auth.googleModalOpen = true;
+  triggerHaptic(15);
+  render();
+};
+
+window.closeGoogleAccountModal = function() {
+  if (!state.auth) state.auth = {};
+  state.auth.googleModalOpen = false;
+  render();
+};
+
+window.completeGoogleAuth = function(firstName, lastName, email, nextScreen) {
+  if (!state.auth) state.auth = {};
+  state.auth.googleModalOpen = false;
+  state.auth.provider = "google";
+  state.auth.isAuthenticated = true;
+  state.auth.firstName = firstName;
+  state.auth.lastName = lastName;
+  state.auth.email = email;
+  const full = `${firstName} ${lastName}`.trim();
+  if (full) {
+    state.user.name = full;
+    state.user.shortName = firstName || full.split(" ")[0];
+  }
+  state.auth.screen = nextScreen || "onboarding";
+  state.auth.onboardingStep = 1;
+  triggerHaptic([20, 40]);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.completeCustomGoogleAuth = function() {
+  const fEl = document.getElementById("googleCustomFirst");
+  const lEl = document.getElementById("googleCustomLast");
+  const eEl = document.getElementById("googleCustomEmail");
+  const f = (fEl ? fEl.value : state.auth.firstName || "Buse Nur").trim();
+  const l = (lEl ? lEl.value : state.auth.lastName || "").trim();
+  const e = (eEl ? eEl.value : state.auth.email || "anne@gmail.com").trim();
+  window.completeGoogleAuth(f || "Anne", l, e || "anne@gmail.com", "onboarding");
+};
+
+window.submitEmailRegistration = function() {
+  window.silentUpdateAuthName();
+  const eEl = document.getElementById("regEmailInput");
+  const pEl = document.getElementById("regPasswordInput");
+  if (eEl) state.auth.email = eEl.value.trim();
+  if (pEl) state.auth.password = pEl.value;
+
+  if (!state.user.name || !state.auth.email) {
+    state.auth.authError = "Lütfen adınızı ve e-posta adresinizi girin.";
+    render();
+    return;
+  }
+  state.auth.authError = "";
+  state.auth.isAuthenticated = true;
+  state.auth.screen = "onboarding";
+  state.auth.onboardingStep = 1;
+  triggerHaptic([20, 40]);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.submitEmailLogin = function() {
+  const eEl = document.getElementById("loginEmailInput");
+  if (eEl && eEl.value.trim()) state.auth.email = eEl.value.trim();
+  state.auth.authError = "";
+  state.auth.isAuthenticated = true;
+  state.auth.screen = "app";
+  state.currentTab = "home";
+  triggerHaptic([20, 40]);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.setBabyNicknameQuick = function(nick) {
+  state.baby.name = nick;
+  saveState();
+  render();
+};
+
+window.saveProfileToBackend = function(showFeedback) {
+  saveState();
+  if (typeof fetch !== "undefined") {
+    fetch("/api/profile/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: (state.auth && state.auth.userId) || "buse_founder",
+        email: (state.auth && state.auth.email) || "busenur.baltacioglu@gmail.com",
+        user: state.user,
+        baby: { name: state.baby.name, week: state.baby.week, daysLeft: state.baby.daysLeft },
+        partner: state.partner
+      })
+    })
+      .then(r => r.json())
+      .then(() => {
+        if (state.auth) state.auth.syncStatus = "Sunucuya Kaydedildi ✓";
+        const bdg = document.getElementById("profileSyncBadge");
+        if (bdg) bdg.textContent = "Kaydedildi ✓";
+        if (showFeedback) {
+          triggerHaptic([20, 30]);
+          triggerReaction("folic", "Bilgileriniz başarıyla kaydedildi.");
+          render();
+        }
+      })
+      .catch(() => {});
+  }
+};
+
+window.openAuthWelcomeFlow = function() {
+  if (!state.auth) state.auth = { isAuthenticated: false, screen: "login", authTab: "register", onboardingStep: 1 };
+  state.auth.screen = "login";
+  state.isDrawerOpen = false;
+  triggerHaptic(15);
+  render();
+};
+
+window.openOnboardingWizardAtStep = function(stepNum) {
+  if (!state.auth) state.auth = { isAuthenticated: true, screen: "onboarding", onboardingStep: 1 };
+  state.auth.screen = "onboarding";
+  state.auth.onboardingStep = stepNum || 1;
+  state.isDrawerOpen = false;
+  triggerHaptic(15);
+  render();
+};
+
+window.setOnboardingStep = function(stepNum) {
+  if (!state.auth) state.auth = { isAuthenticated: true, screen: "onboarding", onboardingStep: 1 };
+  state.auth.onboardingStep = Math.max(1, Math.min(3, stepNum));
+  triggerHaptic(15);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.startLoginWithProvider = function(provider, targetMode) {
+  if (!state.auth) state.auth = {};
+  state.auth.provider = provider;
+  state.auth.isAuthenticated = true;
+
+  if (targetMode === "founder") {
+    state.auth.screen = "app";
+    state.currentTab = "home";
+    triggerHaptic([20, 40]);
+    saveProfileToBackend(false);
+    render();
+    return;
+  }
+
+  state.auth.screen = "onboarding";
+  state.auth.onboardingStep = 1;
+  triggerHaptic([20, 35]);
+  render();
+};
+
+window.connectAsPartnerWithCode = function() {
+  const code = (state.auth && state.auth.partnerCodeInput) || state.partner.inviteCode || "THM-31G-834";
+  state.partner.inviteCode = code.trim().toUpperCase();
+  state.partner.inviteStatus = "connected";
+  state.auth.screen = "app";
+  state.currentTab = "father";
+  triggerHaptic([25, 45, 25]);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.finishOnboardingAndStartApp = function() {
+  if (!state.auth) state.auth = {};
+  state.auth.screen = "app";
+  state.auth.isAuthenticated = true;
+  state.currentTab = "home";
+  triggerHaptic([30, 50, 30]);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.selectFirstBabyOption = function(isFirst) {
+  state.user.isFirstBaby = isFirst;
+  state.user.parity = isFirst
+    ? "G1P0 (İlk Gebelik · Primigravida)"
+    : "G2P1 (Çoklu Gebelik · Multigravida)";
+  triggerHaptic(15);
+  render();
+};
+
+window.selectBaselineBpCategory = function(catId, sysVal, diaVal) {
+  state.user.baselineCategory = catId;
+  state.user.baselineSys = sysVal;
+  state.user.baselineDia = diaVal;
+  state.user.baselineBP = `${sysVal}/${diaVal}`;
+  const latestBp = state.healthData.bloodPressureHistory[0];
+  if (latestBp && window.runAiSeedCoreAnalysis) {
+    window.runAiSeedCoreAnalysis(latestBp.systolic, latestBp.diastolic);
+  }
+  triggerHaptic(15);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.calculateWeekFromLmpDate = function(dateStr) {
+  if (!dateStr) return;
+  state.user.lmpDate = dateStr;
+  const lmp = new Date(dateStr);
+  if (!isNaN(lmp.getTime())) {
+    const refNow = new Date("2026-08-23T12:00:00");
+    const diffDays = Math.floor((refNow - lmp) / (1000 * 60 * 60 * 24));
+    const calcWeek = Math.max(4, Math.min(40, Math.floor(diffDays / 7)));
+    const due = new Date(lmp.getTime() + 280 * 24 * 60 * 60 * 1000);
+    state.user.dueDate = due.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+    if (window.changePregnancyWeek) {
+      window.changePregnancyWeek(calcWeek);
+    }
+  }
+  saveProfileToBackend(false);
+  render();
+};
+
+window.toggleSurveyArrayItem = function(listKey, itemId) {
+  if (!state.user.survey) {
+    state.user.survey = { waterHabit: "5-7", supplements: ["iron", "magnesium"], symptoms: [], specialConditions: [] };
+  }
+  const arr = state.user.survey[listKey] || [];
+  if (arr.includes(itemId)) {
+    state.user.survey[listKey] = arr.filter(x => x !== itemId);
+  } else {
+    state.user.survey[listKey] = [...arr, itemId];
+  }
+
+  if (listKey === "supplements") {
+    const catalog = {
+      iron: { id: "iron", name: "Ferro Sanol Duodenal (Demir)", shortName: "Demir Kapsülü", dose: "Günde 1 Kapsül · Sabah Aç", doctor: state.user.doctorName || "Dr. Ayşe Yılmaz", target: "Ferritin ve hemoglobin desteği", bioTip: "Portakal suyu (C vitamini) ile için, sütle almayın.", takenToday: false, takenTime: null, particleColor: "omega", badge: "Sabah Aç" },
+      magnesium: { id: "magnesium", name: "Magnimore Plus (Magnezyum)", shortName: "Magnezyum Saşe", dose: "Günde 1 Saşe · Akşam Tok", doctor: state.user.doctorName || "Dr. Ayşe Yılmaz", target: "Kas kramplarını önleme & rahim gevşetme", bioTip: "Demir ilacından en az 2 saat sonra (akşam) alın.", takenToday: false, takenTime: null, particleColor: "magnesium", badge: "Akşam Tok" },
+      folic: { id: "folic", name: "Folbiol / Aktif Folat (400 mcg)", shortName: "Folik Asit", dose: "Günde 1 Tablet · Sabah", doctor: state.user.doctorName || "Dr. Ayşe Yılmaz", target: "Nöral tüp ve hücre gelişimi", bioTip: "Her sabah aynı saatte suyla alın.", takenToday: false, takenTime: null, particleColor: "folic", badge: "Sabah" },
+      omega: { id: "omega", name: "Ocean Mummy (Multivitamin & DHA)", shortName: "Omega 3 & DHA", dose: "Günde 1 Kapsül · Öğle Tok", doctor: state.user.doctorName || "Dr. Ayşe Yılmaz", target: "Bebeğin beyin ve göz gelişimi", bioTip: "Öğle yemeğiyle birlikte tok karnına alın.", takenToday: false, takenTime: null, particleColor: "folic", badge: "Öğle Tok" },
+      d3: { id: "d3", name: "Coledan D3 Damla (1000 IU)", shortName: "D3 Vitamini Damlası", dose: "Günde 4 Damla · Sabah", doctor: state.user.doctorName || "Dr. Ayşe Yılmaz", target: "Kalsiyum emilimi ve kemik gelişimi", bioTip: "Kahvaltıda ekmek veya zeytinyağı ile alın.", takenToday: false, takenTime: null, particleColor: "water", badge: "Sabah" }
+    };
+    const selectedIds = state.user.survey.supplements || [];
+    state.prescriptions = selectedIds.map(id => {
+      const existing = (state.prescriptions || []).find(p => p.id === id);
+      return existing || catalog[id];
+    }).filter(Boolean);
+  }
+
+  triggerHaptic(12);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.setProfileSubtab = function(sub) {
+  state.profileSubtab = sub;
+  triggerHaptic(10);
+  render();
+};
+
+window.updateProfileField = function(field, val) {
+  if (field === "babyName") {
+    state.baby.name = val.trim() || "Güneş";
+  } else if (field === "baselineSys" || field === "baselineDia") {
+    const num = parseInt(val, 10);
+    if (!isNaN(num)) {
+      state.user[field] = num;
+      state.user.baselineBP = `${state.user.baselineSys}/${state.user.baselineDia}`;
+      const latestBp = state.healthData.bloodPressureHistory[0];
+      if (latestBp && window.runAiSeedCoreAnalysis) {
+        window.runAiSeedCoreAnalysis(latestBp.systolic, latestBp.diastolic);
+      }
+    }
+  } else if (field === "baselineHR" || field === "heightCm" || field === "age") {
+    const num = parseInt(val, 10);
+    if (!isNaN(num)) state.user[field] = num;
+  } else if (field === "startWeight" || field === "currentWeight") {
+    const num = parseFloat(val);
+    if (!isNaN(num)) state.user[field] = num;
+  } else {
+    state.user[field] = val;
+  }
+  triggerHaptic(15);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.updatePartnerField = function(field, val) {
+  state.partner[field] = val;
+  if (field === "name" && val.trim()) {
+    state.partner.shortName = val.trim().split(" ")[0];
+  }
+  triggerHaptic(15);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.togglePartnerPermission = function(key) {
+  if (!state.partner.permissions) {
+    state.partner.permissions = { shareVitals: true, shareSymptoms: true, shareSupplements: true, eveningMassage: true };
+  }
+  state.partner.permissions[key] = !state.partner.permissions[key];
+  triggerHaptic(15);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.regenerateInviteCode = function() {
+  const rnd = Math.floor(100 + Math.random() * 900);
+  state.partner.inviteCode = `THM-${state.baby.week}G-${rnd}`;
+  triggerHaptic([15, 25]);
+  triggerReaction("folic", `Yeni aile eşleştirme kodu üretildi: ${state.partner.inviteCode}`);
+  saveProfileToBackend(false);
+  render();
+};
+
+window.copyPartnerInviteCode = function() {
+  const code = state.partner.inviteCode || "THM-31G-834";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).catch(() => {});
+  }
+  triggerHaptic(15);
+  triggerReaction("water", `Eşleştirme kodu (${code}) panoya kopyalandı.`);
+};
+
+window.sendPartnerInviteWhatsApp = function() {
+  state.partner.inviteStatus = "pending";
+  const code = state.partner.inviteCode || "THM-31G-834";
+  const msg =
+    `Canım ${state.partner.shortName || 'Eşim'}, ToHUM'da ${state.baby.name}'in ${state.baby.week}. hafta gelişim ve sağlık çemberini kurdum. ` +
+    `Baba Destek Arayüzüne bağlanmak için Eşleştirme Kodumuz: ${code} 🌱\n\n` +
+    `Bağlantı: http://localhost:8080/index.html?tab=father`;
+  saveProfileToBackend(false);
+  openWhatsAppModal(
+    "partner_invite",
+    state.partner.name || "Oğuz Baltacıoğlu",
+    state.partner.phone || "+90 532 000 00 00",
+    msg
+  );
+};
+
+window.pushPartnerLiveSignal = function() {
+  if (!state.partner.liveFeed) state.partner.liveFeed = [];
+  const latestBp = state.healthData.bloodPressureHistory[0] || { systolic: 92, diastolic: 62 };
+  const m0 = window.computeM0BaselineProfile();
+  const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+  state.partner.liveFeed.unshift({
+    id: Date.now(),
+    time: nowStr,
+    type: "live",
+    title: `${state.user.shortName}'den Canlı M0 Durum Sinyali (${state.baby.week}.H)`,
+    text: `Tansiyon: ${latestBp.systolic}/${latestBp.diastolic} mmHg (Bazal ${state.user.baselineBP}) · Kilo Artışı: +${m0.actualGain} kg (${m0.weightStatusText}) · Duygu: ${state.healthData.selectedMood}.`
+  });
+  if (state.partner.liveFeed.length > 6) state.partner.liveFeed.pop();
+  state.partner.inviteStatus = "connected";
+  triggerHaptic([25, 40, 25]);
+  saveProfileToBackend(false);
+  navigateTab("father");
+};
+
+window.applyProfilePreset = function(presetName) {
+  const nowStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  if (presetName === "buse_default") {
+    state.user.baselineSys = 90;
+    state.user.baselineDia = 60;
+    state.user.baselineBP = "90/60";
+    state.user.baselineCategory = "low";
+    state.user.heightCm = 168;
+    state.user.startWeight = 58.0;
+    state.user.currentWeight = 65.0;
+    state.user.bloodGroup = "A Rh+";
+    state.partner.bloodGroup = "0 Rh+";
+    state.healthData.bloodPressureHistory[0] = {
+      id: 101,
+      date: `Bugün (${nowStr})`,
+      systolic: 92,
+      diastolic: 62,
+      note: "✓ Güvenli Koridor (90/60)",
+      isNormal: true
+    };
+    window.runAiSeedCoreAnalysis(92, 62);
+  } else if (presetName === "atypical_preeclampsia") {
+    state.user.baselineSys = 90;
+    state.user.baselineDia = 60;
+    state.user.baselineBP = "90/60";
+    state.user.baselineCategory = "low";
+    state.healthData.bloodPressureHistory[0] = {
+      id: 102,
+      date: `Bugün (${nowStr})`,
+      systolic: 118,
+      diastolic: 78,
+      note: "⚠️ Atipik Sıçrama (+28/+18 mmHg)",
+      isNormal: false
+    };
+    window.runAiSeedCoreAnalysis(118, 78, 52);
+  } else if (presetName === "rh_incompatibility") {
+    state.user.bloodGroup = "A Rh-";
+    state.partner.bloodGroup = "0 Rh+";
+    state.profileSubtab = "partner";
+  } else if (presetName === "rapid_weight_gain") {
+    state.user.heightCm = 168;
+    state.user.startWeight = 58.0;
+    state.user.currentWeight = 71.5;
+  }
+  triggerHaptic([20, 40]);
+  saveProfileToBackend(false);
+  render();
+};
 
 // GENEL ETKİLEŞİM İŞLEYİCİLERİ
 window.toggleDrawer = function() {
@@ -4005,11 +6345,15 @@ window.feedAction = function(type) {
     if (state.nurture.water.count < state.nurture.water.target) {
       state.nurture.water.count++;
       state.growth.points += 5;
-      spawnNutrientFlow("water", 45);
-      triggerReaction("water", "İçilen su amniyotik sıvıyı tazeledi. Güneş su dalgalarıyla ferahladı.");
-    } else {
-      triggerReaction("water", "Günün su hedefi tamamlandı. Güneş'in yaşam ortamı dengede.");
     }
+    spawnNutrientFlow("water", 45);
+    triggerReaction("water", "İçilen su amniyotik sıvıyı tazeledi. Güneş su dalgalarıyla ferahladı.");
+  } else if (type === "nutrient" || type === "meal") {
+    triggerHaptic([20, 30, 20]);
+    state.nurture.meal.taken = true;
+    state.growth.points += 10;
+    spawnNutrientFlow("omega", 45);
+    triggerReaction("omega", "Hücresel besin iletildi. Güneş büyüme enerjisiyle canlandı.");
   }
   render();
 };
@@ -4032,12 +6376,7 @@ window.handleQuizAnswer = function(idx) {
   render();
 };
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => { loadSavedState(); render(); });
-} else {
-  loadSavedState();
-  render();
-}
+// Initialization moved to end of file after all window.* handlers are registered
 
 // =========================================================================
 
@@ -4174,14 +6513,13 @@ window.openHospitalNavigation = function() {
 // OĞUZ'A AĞRI BİLDİRİMİ (WhatsApp deep link)
 window.sendPartnerPainAlert = function() {
   const week = state.baby.week;
-  const msg = encodeURIComponent(
-    "Oğuz, " + week + ". haftada karın ağrısı/dalga hissediyorum. " +
-    "Lütfen eve gel veya telefona bak. Buse 💛"
+  const msg = `${state.partner.shortName || 'Oğuz'}, ${week}. haftada dalga/kasılma hissediyorum. Lütfen telefona bak veya eve gel 🌱 (ToHUM)`;
+  openWhatsAppModal(
+    "partner_pain",
+    state.partner.name || "Oğuz Baltacıoğlu",
+    state.partner.phone || "+90 532 000 00 00",
+    msg
   );
-  const waUrl = "https://wa.me/" + state.partner.phone.replace(/[^0-9]/g, '') + "?text=" + msg;
-  triggerHaptic([30, 50, 30]);
-  triggerReaction("magnesium", "Oğuz'a WhatsApp mesajı hazırlanıyor...");
-  setTimeout(() => window.open(waUrl, '_blank'), 400);
 };
 
 // İLAÇ AL (Ana Sayfa kısayolu)
@@ -4603,41 +6941,43 @@ window.addFamilyObserver = function() {
 
 // 1. AI Seed Core Kardiyovasküler Dengesiz Veri & Preeklampsi Analiz Motoru (DEÜ Veri Bilimi Tezi)
 window.runAiSeedCoreAnalysis = function(systolic, diastolic, hrv, symptoms) {
-  const baseSys = 90;
-  const baseDia = 60;
+  const baseSys = Number(state.user.baselineSys) || 90;
+  const baseDia = Number(state.user.baselineDia) || 60;
+  const baseStr = `${baseSys}/${baseDia}`;
   const deltaSys = systolic - baseSys;
   const deltaDia = diastolic - baseDia;
   const hrvVal = (hrv !== undefined) ? hrv : (state.wearable ? state.wearable.hrv : 64);
   const syms = symptoms || (state.healthData ? state.healthData.selectedSymptoms : []);
   const hasEdema = syms.some(s => /ödem|şişlik/i.test(s));
   const hasHeadache = syms.some(s => /baş ağrısı|görme/i.test(s));
+  const docName = state.user.doctorName || "Dr. Ayşe Yılmaz";
 
-  let status = "optimal"; // optimal (yeşil), borderline (sarı), critical (kırmızı)
+  let status = "optimal"; // optimal (yeşil), watch (mavi/kehribar), borderline (sarı), critical (kırmızı)
   let riskScore = 8;
   let message = "";
-  let badgeText = "✓ Dengede (Bazal 90/60)";
+  let badgeText = `✓ Dengede (Bazal ${baseStr})`;
 
-  // Kurucunun Y.L. Tezi Kuralları:
+  // Kurucunun Y.L. Tezi Kuralları (Kişisel Bazal Referans Vektörü X_baseline):
   if (systolic >= 135 || diastolic >= 88 || (deltaSys >= 35 && deltaDia >= 25)) {
     status = "critical";
     riskScore = 94;
     badgeText = "🚨 Kardiyovasküler Stres";
-    message = `🚨 AI Seed Core Kritik Alarm: Kişisel bazaliniz 90/60 mmHg iken ${systolic}/${diastolic} mmHg (+${deltaSys}/+${deltaDia} mmHg) ölçüldü. Dengesiz veri sınıflandırıcısı preeklampsi riskini %94 olarak hesapladı. Dr. Ayşe Yılmaz'a derhal başvurunuz.`;
+    message = `🚨 AI Seed Core Kritik Alarm: Kişisel bazaliniz ${baseStr} mmHg iken ${systolic}/${diastolic} mmHg (${deltaSys >= 0 ? '+' : ''}${deltaSys}/${deltaDia >= 0 ? '+' : ''}${deltaDia} mmHg) ölçüldü. Dengesiz veri sınıflandırıcısı preeklampsi riskini %94 olarak hesapladı. ${docName}'a derhal başvurunuz.`;
   } else if ((deltaSys >= 25 && deltaDia >= 18) || (systolic >= 120 && hrvVal < 55) || (deltaSys >= 20 && hasEdema)) {
     status = "borderline";
     riskScore = 72;
     badgeText = "⚠️ Atipik Sıçrama (Gizli Preeklampsi)";
-    message = `⚠️ AI Seed Core Atipik Sıçrama Tespiti: 120/80 mmHg genel popülasyonda "normal" kabul edilir; ancak sizin 90/60 mmHg kişisel bazaliniz için +${deltaSys}/+${deltaDia} mmHg'lik kritik bir sıçramadır. Düşen HRV (${hrvVal} ms) vasküler yükü doğrulamaktadır. Dinlenin ve 1 saat sonra tekrar ölçün.`;
-  } else if (systolic >= 115 || deltaSys >= 15) {
+    message = `⚠️ AI Seed Core Atipik Sıçrama Tespiti: ${systolic}/${diastolic} mmHg genel popülasyonda "normal" sanılabilir; ancak sizin ${baseStr} mmHg kişisel bazaliniz için +${deltaSys}/+${deltaDia} mmHg'lik kritik bir sıçramadır. Otonom HRV (${hrvVal} ms) vasküler yükü doğrulamaktadır. Dinlenin ve 1 saat sonra tekrar ölçün.`;
+  } else if (deltaSys >= 15 || deltaDia >= 10 || systolic >= 118) {
     status = "watch";
     riskScore = 35;
     badgeText = "⚑ İzlem Koridoru";
-    message = `⚑ Kişisel İzlem: 90/60 bazalden +${deltaSys} mmHg hafif yükseliş. Sol yanınıza uzanıp ılık su için.`;
+    message = `⚑ Kişisel İzlem: ${baseStr} mmHg kişisel bazalinizden +${deltaSys}/+${deltaDia} mmHg hafif yükseliş. Sol yanınıza uzanıp ılık su için.`;
   } else {
     status = "optimal";
     riskScore = 8;
-    badgeText = "✓ Güvenli Koridor (90/60)";
-    message = `✓ Güvenli Koridor: Ölçümünüz (${systolic}/${diastolic} mmHg), 90/60 mmHg kişisel bazaliniz ve ${hrvVal} ms otonom HRV ile mükemmel uyumlu.`;
+    badgeText = `✓ Güvenli Koridor (${baseStr})`;
+    message = `✓ Güvenli Koridor: Ölçümünüz (${systolic}/${diastolic} mmHg), ${baseStr} mmHg kişisel bazaliniz ve ${hrvVal} ms otonom HRV ile tam uyumlu.`;
   }
 
   state.aiSeedCoreAnalysis = {
@@ -4702,22 +7042,27 @@ window.printClinicalPdfReport = function() {
 
 window.shareClinicalSummaryWhatsApp = function() {
   const curW = state.baby.week;
-  const bp = state.healthData.bloodPressureHistory[0];
+  const bp = state.healthData.bloodPressureHistory[0] || { systolic: 92, diastolic: 62 };
   const w = state.wearable;
-  const analysis = state.aiSeedCoreAnalysis || window.runAiSeedCoreAnalysis(bp.systolic, bp.diastolic);
-  
-  const text = encodeURIComponent(
-    `Sayın Dr. Ayşe Yılmaz (Manisa Şehir Hastanesi),\n` +
-    `Hasta: Buse Baltacıoğlu (31. Hafta Gebe - ToHUM Klinik Raporu)\n\n` +
-    `• Kişisel Bazal Tansiyon: 90/60 mmHg\n` +
-    `• Son Ölçüm: ${bp.systolic}/${bp.diastolic} mmHg (${analysis.badgeText})\n` +
-    `• Akıllı Saat (HealthKit): Nabız ${w.heartRate} bpm, HRV ${w.hrv} ms, SpO2 %${w.spo2}, Uyku ${w.sleepHours}\n` +
-    `• Cardiff 10 Fetal Tekme: Reaktif (2 saatte 10 tekme tamam)\n` +
-    `• Takviye/DMT1 Uyumu: %92 (Demir-Magnezyum 2s kuralı korundu)\n` +
-    `• Tahliller: Ferritin 21 ng/mL, Hb 11.4 g/dL, OGTT 135 mg/dL (Normal)\n` +
-    `Detaylı klinik PDF tablosu ekteki dosyada mevcuttur.`
+  const analysis = window.runAiSeedCoreAnalysis(bp.systolic, bp.diastolic);
+  const m0 = window.computeM0BaselineProfile();
+
+  const msg =
+    `*ToHUM Klinik & M0 Sağlık Özeti (${curW}. Hafta)*\n` +
+    `👤 Anne: ${state.user.name} (${state.user.bloodGroup})\n` +
+    `👶 Bebek: ${state.baby.name} (${curW}. Hafta · ${state.baby.weightGram}g)\n` +
+    `🩺 Güncel Tansiyon: ${bp.systolic}/${bp.diastolic} mmHg (Bazal: ${state.user.baselineBP})\n` +
+    `💓 Nabız: ${w.heartRate} bpm · HRV: ${w.hrv} ms\n` +
+    `⚖️ Kilo Artışı: +${m0.actualGain} kg (${m0.weightStatusText})\n` +
+    `🤖 AI Tohum Çekirdek Notu: ${analysis.message}\n` +
+    `_ToHUM Calm Tech Sağlık Takip Sistemi_ 🌱`;
+
+  openWhatsAppModal(
+    "clinical_summary",
+    state.user.doctorName ? `Dr. ${state.user.doctorName}` : "Doktorum / Eşim",
+    "",
+    msg
   );
-  window.open(`https://wa.me/?text=${text}`, '_blank');
 };
 
 function renderClinicalReportModal() {
@@ -4741,7 +7086,7 @@ function renderClinicalReportModal() {
               <span class="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.2 rounded-full font-semibold">Resmi Özet</span>
             </div>
             <h2 class="text-base font-serif font-bold text-white mt-1">Muayene Öncesi Klinik Özet</h2>
-            <p class="text-[10px] text-white/50">Dr. Ayşe Yılmaz · Manisa Şehir Hastanesi Kadın Doğum</p>
+            <p class="text-[10px] text-white/50">${state.user.doctorName || "Dr. Ayşe Yılmaz"} · ${state.user.hospitalName || "Manisa Şehir Hastanesi"} Kadın Doğum</p>
           </div>
           <button onclick="toggleClinicalReportModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white text-xs">✕</button>
         </div>
@@ -4757,11 +7102,11 @@ function renderClinicalReportModal() {
             <div class="grid grid-cols-3 gap-2 text-center text-[10px] pt-1 border-t border-white/5">
               <div>
                 <span class="text-white/40 block">Kişisel Bazal</span>
-                <span class="font-bold text-emerald-300 text-xs">90/60 mmHg</span>
+                <span class="font-bold text-emerald-300 text-xs">${state.user.baselineBP} mmHg</span>
               </div>
               <div>
                 <span class="text-white/40 block">Kilo / Artış</span>
-                <span class="font-bold text-white text-xs">${state.user.currentWeight} kg (+7.0)</span>
+                <span class="font-bold text-white text-xs">${state.user.currentWeight} kg (${(state.user.currentWeight - state.user.startWeight) >= 0 ? "+" : ""}${(state.user.currentWeight - state.user.startWeight).toFixed(1)})</span>
               </div>
               <div>
                 <span class="text-white/40 block">Hedef Doğum</span>
@@ -4889,4 +7234,49 @@ function renderClinicalReportModal() {
       </div>
     </div>
   `;
+}
+
+
+// =========================================================================
+// UYGULAMA BAŞLATICI VE URL DERİN BAĞLANTI (DEEP-LINK) DESTEĞİ
+// Örn: index.html?tab=profile&sub=baseline&preset=atypical_preeclampsia
+// =========================================================================
+function initTohumApp() {
+  loadSavedState();
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const flowParam = params.get("flow");
+    const stepParam = params.get("step");
+    const tabParam = params.get("tab");
+    const subParam = params.get("sub");
+    const presetParam = params.get("preset");
+    const sessionParam = params.get("session") || params.get("role");
+    if (sessionParam === "father" || tabParam === "father") {
+      if (state.family) state.family.activeSession = "father";
+      state.currentTab = "father";
+    } else if (sessionParam === "mother") {
+      if (state.family) state.family.activeSession = "mother";
+    }
+    if (flowParam === "welcome" || flowParam === "login") {
+      state.auth.screen = "login";
+    } else if (flowParam === "onboarding") {
+      state.auth.screen = "onboarding";
+      state.auth.onboardingStep = parseInt(stepParam || "1", 10) || 1;
+    } else if (tabParam) {
+      state.auth.screen = "app";
+      state.currentTab = tabParam;
+    }
+    if (subParam) state.profileSubtab = subParam;
+    if (presetParam && window.applyProfilePreset) {
+      window.applyProfilePreset(presetParam);
+      return;
+    }
+  } catch (e) {}
+  render();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initTohumApp);
+} else {
+  initTohumApp();
 }

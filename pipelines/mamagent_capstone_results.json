@@ -1,0 +1,171 @@
+{
+  "sample_size": 2500,
+  "train_size": 2000,
+  "test_size": 500,
+  "target_distribution": {
+    "normal_stable": 1834,
+    "urgent_consultation": 666
+  },
+  "odds_ratios": {
+    "dual_agent_alert_on_consultation": {
+      "or": 175.33,
+      "ci_lower": 43.15,
+      "ci_upper": 712.46,
+      "p_value": 5.135790471526058e-66,
+      "chi2": 294.53,
+      "table": {
+        "tp": 107,
+        "fp": 2,
+        "fn": 559,
+        "tn": 1832
+      }
+    },
+    "ppd_on_infant_growth_stagnation": {
+      "or": 1.89,
+      "ci_lower": 1.09,
+      "ci_upper": 3.28,
+      "p_value": 0.03455886520227464,
+      "chi2": 4.47
+    }
+  },
+  "welch_ttest_stability": {
+    "mean_normal": 83.25,
+    "mean_risk": 61.17,
+    "t_stat": 36.7,
+    "p_value": 6.442397222127285e-186
+  },
+  "vif_table": [
+    {
+      "feature": "maternal_agent_risk",
+      "vif": 1.6,
+      "tolerance": 0.626,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "infant_agent_risk",
+      "vif": 2.94,
+      "tolerance": 0.34,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "kovan_agent_risk",
+      "vif": 1.0,
+      "tolerance": 0.999,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "epds_score",
+      "vif": 1.6,
+      "tolerance": 0.625,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "who_waz",
+      "vif": 2.0,
+      "tolerance": 0.501,
+      "status": "İdeal (< 3.0)"
+    },
+    {
+      "feature": "cry_f0",
+      "vif": 1.91,
+      "tolerance": 0.524,
+      "status": "İdeal (< 3.0)"
+    }
+  ],
+  "cv_metrics": {
+    "Rastgele Orman (RF)": {
+      "accuracy_mean": 0.795,
+      "precision_mean": 0.5839,
+      "recall_mean": 0.7992,
+      "f1_mean": 0.6745,
+      "roc_auc_mean": 0.8823
+    },
+    "Gradient Boosting (GBM)": {
+      "accuracy_mean": 0.8265,
+      "precision_mean": 0.7168,
+      "recall_mean": 0.578,
+      "f1_mean": 0.6388,
+      "roc_auc_mean": 0.884
+    },
+    "Lojistik Regresyon": {
+      "accuracy_mean": 0.804,
+      "precision_mean": 0.5992,
+      "recall_mean": 0.7955,
+      "f1_mean": 0.6831,
+      "roc_auc_mean": 0.8872
+    }
+  },
+  "test_metrics": {
+    "accuracy": 0.802,
+    "precision": 0.5944,
+    "recall": 0.8045,
+    "f1_score": 0.6837,
+    "roc_auc": 0.8847,
+    "confusion_matrix": {
+      "tn": 294,
+      "fp": 73,
+      "fn": 26,
+      "tp": 107
+    }
+  },
+  "feature_importances": [
+    {
+      "feature": "maternal_agent_risk",
+      "importance_pct": 35.0
+    },
+    {
+      "feature": "infant_agent_risk",
+      "importance_pct": 20.1
+    },
+    {
+      "feature": "who_waz",
+      "importance_pct": 11.3
+    },
+    {
+      "feature": "cry_f0",
+      "importance_pct": 9.8
+    },
+    {
+      "feature": "epds_score",
+      "importance_pct": 9.4
+    },
+    {
+      "feature": "systolic_bp",
+      "importance_pct": 6.2
+    },
+    {
+      "feature": "kovan_agent_risk",
+      "importance_pct": 5.0
+    },
+    {
+      "feature": "product_safety_score",
+      "importance_pct": 3.1
+    }
+  ],
+  "consensus_breakdown": [
+    {
+      "tier": "Tam Uyumlu / İdeal Sağlık (3 Ajan Yeşil)",
+      "count": 1620,
+      "pct": 64.8,
+      "status": "Rutin Takip & Aile Kutlaması"
+    },
+    {
+      "tier": "Tekil Ajan Uyarısı (Anne veya Bebek İzlemi)",
+      "count": 430,
+      "pct": 17.2,
+      "status": "Hedefe Yönelik Önleyici Refakat"
+    },
+    {
+      "tier": "Çift Ajan Alarmı (Anne + Bebek Çapraz Risk)",
+      "count": 320,
+      "pct": 12.8,
+      "status": "Öncelikli Hekim Ön-Konsültasyonu"
+    },
+    {
+      "tier": "Kritik Konsensüs (3 Ajan Kırmızı Alarm)",
+      "count": 130,
+      "pct": 5.2,
+      "status": "Acil Pediatrik/Perinatal Sevk Önerisi"
+    }
+  ]
+}

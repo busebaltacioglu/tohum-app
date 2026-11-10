@@ -13,3 +13,7 @@ yarn-error.*
 DEPARK_*.md
 
 *.bak*
+
+scratch/
+__pycache__/
+*.pyc

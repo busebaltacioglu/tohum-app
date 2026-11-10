@@ -1,0 +1,152 @@
+{
+  "activeUserId": "buse_founder",
+  "users": {
+    "buse_founder": {
+      "id": "buse_founder",
+      "authProvider": "google",
+      "email": "buse.baltacioglu@tohum.app",
+      "onboardingCompleted": true,
+      "updatedAt": "2026-11-10T16:52:11.528928",
+      "user": {
+        "name": "Buse Nur Ürem",
+        "shortName": "Buse Nur",
+        "age": 32,
+        "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=250&q=80",
+        "role": "Kurucu & Veri Bilimci · Anne",
+        "city": "Manisa",
+        "district": "Yunusemre",
+        "neighborhood": "Muradiye",
+        "baselineSys": 90,
+        "baselineDia": 60,
+        "baselineBP": "90/60",
+        "baselineHR": 72,
+        "heightCm": 168,
+        "currentWeight": 50,
+        "startWeight": 50,
+        "startWaist": 68,
+        "waistCircumference": 98,
+        "fundalHeight": 31,
+        "parity": "G1P0 (İlk Gebelik · Primigravida)",
+        "pregnancyType": "Tekil Gebelik",
+        "lmpDate": "2026-01-17",
+        "dueDate": "24 Ekim 2026",
+        "bloodGroup": "A Rh-",
+        "doctorName": "Dr. Ayşe Yılmaz",
+        "hospitalName": "Manisa Şehir Hastanesi",
+        "nextCheckupDate": "10 Eylül 2026 · 14:30",
+        "baselineCategory": "low",
+        "isFirstBaby": true,
+        "survey": {
+          "waterHabit": "5-7",
+          "supplements": [
+            "iron",
+            "omega",
+            "d3",
+            "folic"
+          ],
+          "symptoms": [
+            "Hafif Bel Ağrısı",
+            "Akşam Yorgunluğu"
+          ],
+          "specialConditions": [
+            "Düşük Tansiyon Hassasiyeti (90/60)"
+          ]
+        }
+      },
+      "baby": {
+        "name": "Güneş",
+        "week": "6",
+        "daysLeft": 238
+      },
+      "partner": {
+        "name": "Oğuz Ürem",
+        "shortName": "Oğuz",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80",
+        "role": "Baba & Destekçi",
+        "phone": "+90 532 000 00 00",
+        "email": "oguz@tohum.app",
+        "bloodGroup": "A Rh+",
+        "inviteCode": "THM-31G-834",
+        "inviteStatus": "pending",
+        "permissions": {
+          "shareVitals": true,
+          "shareSymptoms": true,
+          "shareSupplements": true,
+          "eveningMassage": true
+        },
+        "liveFeed": [
+          {
+            "id": 1794318737643,
+            "time": "16:52",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794318735603,
+            "time": "16:52",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
+          {
+            "id": 1794318598322,
+            "time": "16:49",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794318596287,
+            "time": "16:49",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
+          {
+            "id": 1794318188170,
+            "time": "16:43",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794318186137,
+            "time": "16:43",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
+          {
+            "id": 1794317155933,
+            "time": "16:25",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794317153902,
+            "time": "16:25",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
+          {
+            "id": 1794316975062,
+            "time": "16:22",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794316973034,
+            "time": "16:22",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          }
+        ]
+      }
+    }
+  }
+}
