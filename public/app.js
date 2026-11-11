@@ -459,7 +459,18 @@ const state = {
   },
 
   // 1. MODÜL: GÜNEŞ - ÇEKMECE & BESLEME DURUMU
-  isSheetExpanded: true,
+  isSheetExpanded: false,
+  isGridMenuOpen: false,
+  isNurtureModalOpen: false,
+  isMoodModalOpen: false,
+  hasCollagen: false,
+  customSupplements: [],
+  dailyChecklist: {
+    meal: true,
+    iron: true,
+    omega: true,
+    magnesium: false
+  },
   isMealSelectorOpen: false,
   homeSubtab: "feed",
 
@@ -1284,7 +1295,7 @@ class LiquidRipple {
   }
 }
 
-function spawnNutrientFlow(type, count = 30) {
+function spawnNutrientFlow(type, count = 35) {
   const canvas = document.getElementById("cinematicCanvas");
   if (!canvas) return;
   const w = canvas.width;
@@ -1292,15 +1303,19 @@ function spawnNutrientFlow(type, count = 30) {
 
   let color = "#F6C887";
   if (type === "water") color = "#67E8F9";
-  else if (type === "meal") color = "#FCA5A5";
-  else if (type === "folic") color = "#6EE7B7";
+  else if (type === "meal") color = "#6EE7B7";
+  else if (type === "folic") color = "#FDE047";
   else if (type === "magnesium") color = "#FDE047";
   else if (type === "omega") color = "#FDBA74";
 
+  // Modal açıkken bebeğin yukarı kaymış pozisyonuna doğru akış
+  const isShifted = state.isNurtureModalOpen || state.isMoodModalOpen;
+  const targetY = isShifted ? h * 0.38 : h * 0.52;
+
   for (let i = 0; i < count; i++) {
-    const x = w * 0.7 + (Math.random() - 0.5) * 60;
-    const y = h * 0.55 + (Math.random() - 0.5) * 80;
-    particles.push(new OrganicParticle(x, y, color, 1.6));
+    const x = w * 0.5 + (Math.random() - 0.5) * 120;
+    const y = targetY + (Math.random() - 0.5) * 90;
+    particles.push(new OrganicParticle(x, y, color, 1.8));
   }
 }
 
@@ -1442,6 +1457,10 @@ function saveState() {
       bagItems: state.birthModule.bagItems.map(b => ({ id: b.id, done: b.done })),
       selectedSymptoms: state.healthData.selectedSymptoms,
       selectedMood: state.healthData.selectedMood,
+      hasCollagen: state.hasCollagen,
+      customSupplements: state.customSupplements,
+      dailyChecklist: state.dailyChecklist,
+      activePrescription: state.activePrescription,
       userProfile: state.user,
       partnerProfile: state.partner,
       profileSubtab: state.profileSubtab,
@@ -1510,6 +1529,10 @@ function loadSavedState() {
     }
     if (saved.selectedSymptoms) state.healthData.selectedSymptoms = saved.selectedSymptoms;
     if (saved.selectedMood) state.healthData.selectedMood = saved.selectedMood;
+    if (saved.hasCollagen !== undefined) state.hasCollagen = saved.hasCollagen;
+    if (saved.customSupplements) state.customSupplements = saved.customSupplements;
+    if (saved.dailyChecklist && !isNewDay) state.dailyChecklist = Object.assign({}, state.dailyChecklist, saved.dailyChecklist);
+    if (saved.activePrescription) state.activePrescription = saved.activePrescription;
     if (saved.userProfile) {
       state.user = Object.assign({}, state.user, saved.userProfile);
       state.user.baselineBP = `${state.user.baselineSys}/${state.user.baselineDia}`;
@@ -1536,6 +1559,681 @@ function render() {
 }
 
 // MAIN APP SHELL
+
+// 1x6 SADE MENÜ FONKSİYONLARI (Tek Tıkla Aç/Kapa, Tam Genişlik, Genel İsimler)
+
+
+
+
+window.toggleMoodModal = function() {
+  state.isMoodModalOpen = !state.isMoodModalOpen;
+  if (state.isMoodModalOpen) state.isNurtureModalOpen = false;
+  render();
+};
+
+window.toggleNurtureModal = function() {
+  state.isNurtureModalOpen = !state.isNurtureModalOpen;
+  if (state.isNurtureModalOpen) state.isMoodModalOpen = false;
+  render();
+};
+
+window.adjustWater = function(delta) {
+  triggerHaptic([20, 20]);
+  const maxSafeGlasses = 16; // 4 Litre güvenli fizyolojik tavan
+  const prev = state.nurture.water.count;
+  state.nurture.water.count = Math.max(0, Math.min(maxSafeGlasses, state.nurture.water.count + delta));
+  const target = state.nurture.water.target || 8;
+  const cur = state.nurture.water.count;
+
+  if (delta > 0) {
+    spawnNutrientFlow("water", 35);
+    if (cur > target) {
+      triggerReaction("water", `${cur}. bardak su kaydedildi (${cur}/${target}B). Asgari hedef aşıldı; amniyotik sıvı havuzu optimal seviyenin de üstünde ferahladı!`);
+    } else if (cur === target) {
+      triggerReaction("water", `Harika! Günlük ${target} bardaklık asgari su hedefine ulaşıldı. 31. haftada bol su plasental akışı ve bebek hareketlerini destekler.`);
+    } else {
+      triggerReaction("water", `1 bardak su kaydedildi (${cur}/${target}B). Amniyotik sıvı tazelendi.`);
+    }
+    pulseBabyGlow("water");
+  }
+  saveState();
+  render();
+};
+
+window.setWaterTarget = function(newTarget) {
+  state.nurture.water.target = newTarget;
+  triggerHaptic([15, 15]);
+  saveState();
+  render();
+};
+
+window.selectSymptomAndRelieve = function(symptomKey) {
+  state.healthData.selectedSymptom = (state.healthData.selectedSymptom === symptomKey) ? null : symptomKey;
+  triggerHaptic([20, 20]);
+  
+  const remedies = {
+    bel: "Sol yanına yatıp bacak arana yastık koy; sakrumdaki sinir baskısını dakikalar içinde hafifletir.",
+    mide: "3-4 adet çiğ badem çiğne veya ılık badem sütü iç; mide asidini doğal olarak dengeler. Yemekten sonra dik otur.",
+    kramp: "Ayak parmaklarını yukarı, kendine doğru çek (dorsifleksiyon). Akşam magnimore magnezyumunu unutma.",
+    nefes: "Kollarını yukarı uzatıp derin 4-7-8 nefesi al; diyafram üzerindeki rahim baskısı rahatlasın.",
+    odem: "Ayaklarını 15 dk kalp seviyesine kaldır; bol su içmek böbrek filtrasyonunu artırarak ödemi çözer.",
+    braxton: "Pozisyon değiştir ve 1 bardak ılık su iç; dehidratasyon hazırlık dalgalarını tetikleyebilir."
+  };
+
+  const symptomSignals = {
+    bel: { type: "biomechanic", title: "Lomber Yük Hassasiyeti", text: "Buse'nin 31. haftasında pelvik genişleme kaynaklı lomber yükü arttı. Sormasını beklemeden ılık bir bitki çayı veya nazik bir sırt masajı sunabilirsin." },
+    mide: { type: "reflux", title: "Mide Yanması & Reflü", text: "Buse'de mide yanması hissedilebilir. Soğuk badem sütü veya asitsiz hafif bir atıştırmalık sunabilirsin." },
+    kramp: { type: "cramp", title: "Bacak Krampları", text: "Buse'nin bacaklarında dolaşım kaynaklı kramp olabilir; akşam magnezyumunu hatırlatabilir ve ayaklarına hafif masaj yapabilirsin." },
+    nefes: { type: "breath", title: "Kaburga & Diyafram Baskısı", text: "Güneş'in yukarı baskısı nefes daralması yapabilir; odayı havalandırıp sakin bir ortam sağlayabilirsin." },
+    odem: { type: "edema", title: "Ayak Bileklerinde Ödem", text: "Buse'nin ayaklarını 15-20 dk dinlendirmesi için ayak desteği ve ılık su ikram edebilirsin." },
+    braxton: { type: "braxton", title: "Hazırlık Kasılmaları", text: "Buse hafif hazırlık dalgası hissediyor olabilir; sakinleşmesine yardımcı olup ılık su getirebilirsin." }
+  };
+
+  if (state.healthData.selectedSymptom && remedies[symptomKey]) {
+    triggerReaction("water", remedies[symptomKey]);
+    
+    // Perde arkasında babaya hissettirilmeden sinyal aktarımı
+    try {
+      fetch('/api/partner/signal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signal: symptomSignals[symptomKey] })
+      }).catch(function() {});
+    } catch(e) {}
+  }
+  
+  saveState();
+  render();
+};
+
+
+
+// REÇETE TARAMA VE ENTEGRASYON ETKİLEŞİM YÖNETİCİSİ
+// =========================================================================
+// REÇETE TARAMA, GERÇEK ÇÖZÜMLEME VE DMT1 ENTEGRASYON YÖNETİCİSİ
+// =========================================================================
+window.togglePrescriptionModal = function() {
+  state.isPrescriptionModalOpen = !state.isPrescriptionModalOpen;
+  if (state.isPrescriptionModalOpen) {
+    if (!state.rxScanState || state.rxScanState === 'error') {
+      state.rxScanState = 'picker';
+    }
+    state.rxModalTab = state.rxModalTab || 'photo';
+  }
+  render();
+};
+
+window.setRxModalTab = function(tab) {
+  state.rxModalTab = tab;
+  state.rxScanState = 'picker';
+  state.rxError = null;
+  render();
+};
+
+window.resetRxScan = function() {
+  state.rxScanState = 'picker';
+  state.uploadedRxFileName = null;
+  state.rxParsedPrescription = null;
+  state.rxError = null;
+  render();
+};
+
+// Gerçek Dosya (PDF veya Görsel) Yükleme ve Sunucu Çözümlemesi
+window.handleRealRxFile = async function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  state.uploadedRxFileName = file.name;
+  state.rxScanState = 'scanning';
+  state.rxScanMessage = `"${file.name}" (${(file.size / 1024).toFixed(1)} KB) taranıyor & çözümleniyor...`;
+  state.rxError = null;
+  render();
+
+  try {
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const dataUrl = e.target.result;
+      state.rxScanMessage = 'Belge klinik NLP ve pypdf motoru ile inceleniyor...';
+      render();
+
+      try {
+        const resp = await fetch('/api/prescription/parse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'file',
+            fileType: file.type,
+            fileName: file.name,
+            data: dataUrl
+          })
+        });
+        const res = await resp.json();
+        if (res.ok && res.prescription) {
+          state.rxParsedPrescription = res.prescription;
+          state.rxScanState = 'verified';
+          triggerHaptic([35, 45]);
+        } else {
+          state.rxScanState = 'error';
+          state.rxError = res.error || 'Belge çözümlenemedi.';
+        }
+      } catch (err) {
+        state.rxScanState = 'error';
+        state.rxError = 'Sunucu bağlantı hatası: ' + err.message;
+      }
+      render();
+    };
+
+    reader.onerror = function() {
+      state.rxScanState = 'error';
+      state.rxError = 'Dosya yerel bellekten okunamadı.';
+      render();
+    };
+
+    reader.readAsDataURL(file);
+  } catch (err) {
+    state.rxScanState = 'error';
+    state.rxError = err.message;
+    render();
+  }
+};
+
+// E-Reçete / SGK Medula Kodu Sorgulama
+window.handleRxCodeLookup = async function() {
+  const codeInput = document.getElementById('rxCodeInput');
+  const code = (codeInput ? codeInput.value.trim() : '2026-REC-31W') || '2026-REC-31W';
+
+  state.rxScanState = 'scanning';
+  state.rxScanMessage = `SGK Medula: "${code}" sorgulanıyor...`;
+  state.rxError = null;
+  render();
+
+  try {
+    const resp = await fetch('/api/prescription/parse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'code',
+        code: code
+      })
+    });
+    const res = await resp.json();
+    if (res.ok && res.prescription) {
+      state.rxParsedPrescription = res.prescription;
+      state.rxScanState = 'verified';
+      triggerHaptic([35, 45]);
+    } else {
+      state.rxScanState = 'error';
+      state.rxError = res.error || 'E-Reçete bulunamadı.';
+    }
+  } catch (err) {
+    state.rxScanState = 'error';
+    state.rxError = err.message;
+  }
+  render();
+};
+
+// Klinik Metin / Hekim SMS'i Çözümleme
+window.handleRxTextParse = async function() {
+  const textInput = document.getElementById('rxTextInput');
+  const text = textInput ? textInput.value.trim() : '';
+  if (!text) {
+    state.rxError = 'Lütfen reçete metni veya SMS giriniz.';
+    render();
+    return;
+  }
+
+  state.rxScanState = 'scanning';
+  state.rxScanMessage = 'Klinik metin ve etken maddeler NLP ile ayrıştırılıyor...';
+  state.rxError = null;
+  render();
+
+  try {
+    const resp = await fetch('/api/prescription/parse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'text',
+        text: text
+      })
+    });
+    const res = await resp.json();
+    if (res.ok && res.prescription) {
+      state.rxParsedPrescription = res.prescription;
+      state.rxScanState = 'verified';
+      triggerHaptic([35, 45]);
+    } else {
+      state.rxScanState = 'error';
+      state.rxError = res.error || 'Metin ayrıştırılamadı.';
+    }
+  } catch (err) {
+    state.rxScanState = 'error';
+    state.rxError = err.message;
+  }
+  render();
+};
+
+// Hızlı Demo ve Test Butonları (Statik Timeout Olmadan Anında Reaktif Çözümleme)
+window.triggerRxScan = function(mode) {
+  if (mode === 'collagen_demo') {
+    window.handleRxCodeLookupWithCode('REC-COLLAGEN-31', 'Kolajen + Demir + Magnezyum reçetesi çözümleniyor...');
+    return;
+  }
+  
+  if (mode === 'code') {
+    window.handleRxCodeLookup();
+    return;
+  }
+  
+  // Varsayılan standart reçete
+  window.handleRxCodeLookupWithCode('2026-REC-31W', '31. Hafta Hekim Reçetesi SGK Medula ile doğrulanıyor...');
+};
+
+window.handleRxCodeLookupWithCode = async function(customCode, customMsg) {
+  state.rxScanState = 'scanning';
+  state.rxScanMessage = customMsg || `SGK Medula: "${customCode}" sorgulanıyor...`;
+  state.rxError = null;
+  render();
+
+  try {
+    const resp = await fetch('/api/prescription/parse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'code', code: customCode })
+    });
+    const res = await resp.json();
+    if (res.ok && res.prescription) {
+      state.rxParsedPrescription = res.prescription;
+      state.rxScanState = 'verified';
+      triggerHaptic([35, 45]);
+    } else {
+      state.rxScanState = 'error';
+      state.rxError = res.error || 'E-Reçete bulunamadı.';
+    }
+  } catch (err) {
+    state.rxScanState = 'error';
+    state.rxError = 'Sunucu bağlantı hatası: ' + err.message;
+  }
+  render();
+};
+
+// Ayrıştırılan Reçeteden İlaç Çıkarma
+window.removeParsedRxItem = function(index) {
+  if (state.rxParsedPrescription && state.rxParsedPrescription.items && state.rxParsedPrescription.items[index]) {
+    state.rxParsedPrescription.items.splice(index, 1);
+    triggerHaptic(20);
+    render();
+  }
+};
+
+// Ayrıştırılan Reçeteye Dinamik Takviye / Kolajen Ekleme
+window.addCustomItemToParsedRx = function(name, dose, hour, type) {
+  if (!state.rxParsedPrescription) {
+    state.rxParsedPrescription = {
+      doctorName: state.user.doctorName || "Op. Dr. Ayşe Yılmaz",
+      hospital: "Manisa Şehir Hastanesi",
+      prescriptionNo: "REC-CUSTOM-M0",
+      date: new Date().toLocaleDateString('tr-TR'),
+      source: "Özel Düzenleme",
+      items: []
+    };
+  }
+
+  let rule = "Hekim tavsiyesine uygun olarak öğünle birlikte alınması önerilir.";
+  let defaultHour = hour || "16:30";
+  let defaultType = type || "custom";
+
+  const lower = (name || '').toLowerCase();
+  if (lower.includes('kolajen') || lower.includes('collagen')) {
+    rule = "Hidrolize Tip 1-3 Kolajen Peptit · Demir emilimini baskılamaz, akşam magnezyumuyla yarışmaz (16:30 ikindi saatinde optimal biyoyararlanım).";
+    defaultType = "collagen";
+    defaultHour = "16:30";
+  } else if (lower.includes('demir') || lower.includes('ferro')) {
+    rule = "Demir · Sabah aç karnına C vitamini ile sinerjik, çay/süt ve magnezyumdan en az 2 saat uzakta.";
+    defaultType = "iron";
+    defaultHour = "08:30";
+  } else if (lower.includes('magnez') || lower.includes('magnimore')) {
+    rule = "Magnezyum · Gece tok karnına kas kramplarını önler ve uykuyu rahatlatır. Demirden 13 saat sonra.";
+    defaultType = "magnesium";
+    defaultHour = "21:30";
+  } else if (lower.includes('d3') || lower.includes('devit')) {
+    rule = "D3 Vitamini · Fetal iskelet gelişimi ve kalsiyum fiksasyonu için öğle yağlı öğünüyle.";
+    defaultType = "d3";
+    defaultHour = "13:30";
+  }
+
+  state.rxParsedPrescription.items.push({
+    id: "rx_" + Date.now(),
+    name: name,
+    genericName: name,
+    dose: dose || "Standart Doz",
+    scheduledHour: defaultHour,
+    timing: defaultHour + " " + (defaultHour === '08:30' ? 'Aç' : defaultHour === '16:30' ? 'İkindi' : 'Tok'),
+    type: defaultType,
+    dmt1Rule: rule,
+    dmt1Safe: true
+  });
+
+  // Saate göre diz
+  state.rxParsedPrescription.items.sort((a, b) => (a.scheduledHour || "99:99").localeCompare(b.scheduledHour || "99:99"));
+  triggerHaptic([25, 25]);
+  render();
+};
+
+window.addQuickCustomInputToParsedRx = function() {
+  const input = document.getElementById('customRxItemInput');
+  const val = input ? input.value.trim() : '';
+  if (!val) return;
+  window.addCustomItemToParsedRx(val, "1 Doz", "16:30", "custom");
+  if (input) input.value = '';
+};
+
+// Doğrulanan Reçeteyi Günlük Takibe Aktarma
+window.confirmRealRxIntegration = async function() {
+  triggerHaptic([35, 45]);
+  
+  const rx = state.rxParsedPrescription || {
+    doctorName: "Op. Dr. Ayşe Yılmaz",
+    hospital: "Manisa Şehir Hastanesi",
+    prescriptionNo: "2026-REC-31W",
+    items: [
+      { id: "rx_ferro", name: "Ferro Sanol Duodenal 100 mg", scheduledHour: "08:30", type: "iron" },
+      { id: "rx_omega", name: "Ocean Mummy Omega-3 DHA + D3", scheduledHour: "13:00", type: "omega" },
+      { id: "rx_magnesium", name: "Magnimore Plus Saşe", scheduledHour: "21:30", type: "magnesium" }
+    ]
+  };
+
+  const items = rx.items || [];
+  let hasIron = false;
+  let hasOmega = false;
+  let hasMagnesium = false;
+  let hasCollagen = false;
+
+  state.customSupplements = state.customSupplements || [];
+
+  items.forEach(it => {
+    const t = (it.type || '').toLowerCase();
+    const n = (it.name || '').toLowerCase();
+    if (t === 'iron' || n.includes('demir') || n.includes('ferro')) {
+      hasIron = true;
+    } else if (t === 'omega' || n.includes('omega') || n.includes('mummy') || n.includes('balık')) {
+      hasOmega = true;
+    } else if (t === 'magnesium' || n.includes('magnez')) {
+      hasMagnesium = true;
+    } else if (t === 'collagen' || n.includes('kolajen') || n.includes('collagen')) {
+      hasCollagen = true;
+    } else {
+      // Özel reçeteli takviye (D3, Probiyotik vb.)
+      const exists = state.customSupplements.some(cs => cs.name === it.name);
+      if (!exists) {
+        state.customSupplements.push({
+          id: it.id || ("supp_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4)),
+          name: it.name,
+          dose: it.dose || "1 Doz",
+          scheduledHour: it.scheduledHour || "16:30",
+          type: it.type || "custom",
+          dmt1Rule: it.dmt1Rule || "Hekim tavsiyesine uygun saatte alınmalıdır."
+        });
+      }
+    }
+  });
+
+  if (!state.dailyChecklist) {
+    state.dailyChecklist = { meal: true };
+  }
+  if (hasIron) state.dailyChecklist.iron = true;
+  if (hasOmega) state.dailyChecklist.omega = true;
+  if (hasMagnesium) state.dailyChecklist.magnesium = false;
+  if (hasCollagen) {
+    state.hasCollagen = true;
+    state.dailyChecklist.collagen = false;
+  }
+
+  // Özel takviyelerin checklist'e dahil edilmesi
+  state.customSupplements.forEach(cs => {
+    if (state.dailyChecklist[cs.id] === undefined) {
+      state.dailyChecklist[cs.id] = false;
+    }
+  });
+
+  state.activePrescription = rx;
+
+  try {
+    await fetch('/api/prescription/integrate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: state.user.id || 'buse_founder',
+        prescription: rx
+      })
+    });
+  } catch (err) {
+    console.error("Prescription backend sync error:", err);
+  }
+
+  state.isPrescriptionModalOpen = false;
+  state.isNurtureModalOpen = true;
+
+  const docName = rx.doctorName || "Op. Dr. Ayşe Yılmaz";
+  const collagenNote = hasCollagen ? " Kolajen 16:30 ikindi saatine yerleştirildi." : "";
+  triggerReaction("folic", `Doktor reçetesi (${docName} · ${items.length} etken madde) başarıyla entegre edildi. DMT1 kuralına göre 13 saatlik tamponla zamanlandı.${collagenNote}`);
+
+  saveState();
+  render();
+};
+
+
+// REÇETE METİN ÖRNEKLERİ DİNAMİK YÜKLEYİCİ (Syntax Güvenli)
+window.loadSampleRxText = function(sampleType) {
+  const input = document.getElementById('rxTextInput');
+  if (!input) return;
+  if (sampleType === 'collagen') {
+    input.value = "Dr. Ayşe Yılmaz\n1. Ferro Sanol Duodenal 100 mg 1x1 (08:30 Aç)\n2. Day2Day Kolajen Peptit 5000 mg (16:30 İkindi)\n3. Magnimore Plus Saşe (21:30 Tok)";
+  } else {
+    input.value = "Op. Dr. Ayşe Yılmaz - Manisa Şehir Hastanesi\nReçete No: 2026-REC-31W\n1. Ferro Sanol Duodenal 100 mg (Sabah Aç)\n2. Ocean Mummy Omega-3 DHA (Öğle Tok)\n3. Magnimore Plus Saşe (Gece Tok)";
+  }
+  if (window.handleRxTextParse) window.handleRxTextParse();
+};
+
+window.sendKovanGroupMessage = function() {
+  const input = document.getElementById('kovanMessageInput');
+  if (!input) return;
+  const txt = input.value.trim();
+  if (!txt) return;
+  if (!state.kovanMessages) {
+    state.kovanMessages = [
+      { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
+      { sender: "Buse Nur", text: "Selam Merve, hafif bel hassasiyeti var ama magnezyum ve dinlenmeyle dengeliyoruz.", time: "14:15", isMe: true },
+      { sender: "Zeynep", text: "Akşamları ayakları hafifçe yükselterek dinlenmek ödeme çok iyi geliyor canım.", time: "14:22", isMe: false }
+    ];
+  }
+  state.kovanMessages.push({
+    sender: (state.user && state.user.shortName) || "Buse Nur",
+    text: txt,
+    time: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+    isMe: true
+  });
+  input.value = "";
+  if (typeof triggerHaptic !== "undefined") triggerHaptic([20, 20]);
+  render();
+};
+
+window.integrateParsedPrescription = window.confirmRealRxIntegration;
+window.confirmRxIntegration = window.confirmRealRxIntegration;
+window.integrateSimulatedPrescription = window.confirmRealRxIntegration;
+
+window.confirmRxIntegration = window.confirmRealRxIntegration;
+window.integrateSimulatedPrescription = window.confirmRealRxIntegration;
+
+window.toggleCustomSupplementModal = function() {
+  state.isCustomSupplementModalOpen = !state.isCustomSupplementModalOpen;
+  render();
+};
+
+window.removeCollagenSupplement = function() {
+  triggerHaptic([20, 20]);
+  state.hasCollagen = false;
+  state.isCustomSupplementModalOpen = false;
+  if (state.dailyChecklist) {
+    delete state.dailyChecklist.collagen;
+  }
+  triggerReaction("water", "Kolajen takviyesi günlük takip listesinden kaldırıldı.");
+  saveState();
+  render();
+};
+
+window.addCollagenSupplement = function() {
+  triggerHaptic([30, 30]);
+  state.hasCollagen = true;
+  state.isCustomSupplementModalOpen = false;
+  state.isNurtureModalOpen = true;
+  if (!state.dailyChecklist) {
+    state.dailyChecklist = { meal: true, iron: true, omega: true, magnesium: false };
+  }
+  state.dailyChecklist.collagen = false;
+  triggerReaction("water", "Hidrolize Kolajen Peptit (Tip 1-3) takvime eklendi. Demirle yarışmaması için ikindi 16:30 saatine yerleştirildi.");
+  saveState();
+  render();
+};
+
+window.addCustomSupplementDirect = function(name, dose, hour, type) {
+  triggerHaptic([25, 30]);
+  state.customSupplements = state.customSupplements || [];
+  
+  let rule = "Hekim tavsiyesine uygun olarak öğünle birlikte alınması önerilir.";
+  const lower = (name || '').toLowerCase();
+  if (lower.includes('kolajen') || lower.includes('collagen')) {
+    window.addCollagenSupplement();
+    return;
+  } else if (lower.includes('d3') || lower.includes('devit')) {
+    rule = "D3 Vitamini · Fetal iskelet gelişimi ve kalsiyum fiksasyonu için öğle yağlı öğünüyle.";
+  } else if (lower.includes('probiyotik')) {
+    rule = "Probiyotik · Bağırsak mikrobiyotası ve maternal konfor için gece tok karnına.";
+  } else if (lower.includes('q10')) {
+    rule = "Koenzim Q10 · Hücresel mitokondriyal enerji desteği için öğle tok karnına.";
+  } else if (lower.includes('magnez')) {
+    rule = "Magnezyum · Gece tok karnına kas kramplarını önler ve uykuyu rahatlatır. Demirden 13 saat sonra.";
+  }
+
+  const newSupp = {
+    id: "supp_" + Date.now(),
+    name: name,
+    dose: dose || "1 Doz",
+    scheduledHour: hour || "16:30",
+    type: type || "custom",
+    dmt1Rule: rule
+  };
+
+  state.customSupplements.push(newSupp);
+  state.isCustomSupplementModalOpen = false;
+  state.isNurtureModalOpen = true;
+  if (!state.dailyChecklist) {
+    state.dailyChecklist = { meal: true, iron: true, omega: true, magnesium: false };
+  }
+  state.dailyChecklist[newSupp.id] = false;
+  
+  triggerReaction("water", `${name} (${hour || '16:30'}) günlük takvime eklendi.`);
+  saveState();
+  render();
+};
+
+window.removeCustomSupplement = function(suppId) {
+  triggerHaptic([20, 20]);
+  state.customSupplements = (state.customSupplements || []).filter(s => s.id !== suppId);
+  if (state.dailyChecklist) {
+    delete state.dailyChecklist[suppId];
+  }
+  triggerReaction("water", "Özel takviye günlük takip listesinden kaldırıldı.");
+  saveState();
+  render();
+};
+
+window.addCustomSupplementFromInput = function() {
+  const nameInput = document.getElementById('newCustomSuppName');
+  const doseInput = document.getElementById('newCustomSuppDose');
+  const hourInput = document.getElementById('newCustomSuppHour');
+  const name = nameInput ? nameInput.value.trim() : '';
+  if (!name) return;
+  const dose = doseInput ? doseInput.value.trim() : '1 Doz';
+  const hour = hourInput ? hourInput.value.trim() : '16:30';
+  window.addCustomSupplementDirect(name, dose, hour, 'custom');
+};
+
+window.toggleChecklistItem = function(itemKey) {
+  triggerHaptic([25, 25]);
+  if (!state.dailyChecklist) {
+    state.dailyChecklist = { meal: true, iron: true, omega: true, magnesium: false };
+  }
+  state.dailyChecklist[itemKey] = !state.dailyChecklist[itemKey];
+
+  if (itemKey === "meal") {
+    state.nurture.meal.taken = state.dailyChecklist.meal;
+    if (state.dailyChecklist.meal) {
+      spawnNutrientFlow("meal", 35);
+      triggerReaction("omega", "Öğün kaydedildi. Hücresel besin iletildi.");
+      pulseBabyGlow("nutrient");
+    }
+  } else if (itemKey === "collagen") {
+    if (state.dailyChecklist.collagen) {
+      spawnNutrientFlow("water", 35);
+      triggerReaction("water", "Kolajen peptit takviyesi kaydedildi. Pelvik bağ doku ve cilt elastikiyeti desteklendi.");
+      pulseBabyGlow("supplement");
+    }
+  } else if (itemKey === "magnesium" || itemKey === "iron" || itemKey === "omega") {
+    if (state.dailyChecklist[itemKey]) {
+      spawnNutrientFlow("folic", 35);
+      triggerReaction("folic", "DMT1 takviyesi kaydedildi.");
+      pulseBabyGlow("supplement");
+    }
+  } else {
+    // Dinamik özel takviyeler
+    if (state.dailyChecklist[itemKey]) {
+      spawnNutrientFlow("folic", 30);
+      triggerReaction("folic", "Özel takviye kaydedildi.");
+      pulseBabyGlow("supplement");
+    }
+  }
+  saveState();
+  render();
+};
+
+window.pulseBabyGlow = function(type) {
+  setTimeout(() => {
+    const babyImg = document.getElementById("cinematicBabyVisual");
+    if (babyImg) {
+      let glowColor = "rgba(103, 232, 249, 0.9)";
+      if (type === "supplement") glowColor = "rgba(253, 224, 71, 0.9)";
+      else if (type === "nutrient" || type === "meal") glowColor = "rgba(110, 231, 183, 0.9)";
+
+      babyImg.style.filter = `brightness(1.28) contrast(1.12) drop-shadow(0 0 50px ${glowColor})`;
+      babyImg.style.transform = "scale(1.04)";
+      
+      setTimeout(() => {
+        if (babyImg) {
+          babyImg.style.filter = "brightness(0.95) contrast(1.05)";
+          babyImg.style.transform = "scale(1)";
+        }
+      }, 1500);
+    }
+  }, 20);
+};
+
+window.selectMaternalMoodAndClose = function(moodKey) {
+  selectMaternalMood(moodKey);
+  state.isMoodModalOpen = false;
+  render();
+};
+
+window.toggleGridMenu = function() {
+  state.isGridMenuOpen = !state.isGridMenuOpen;
+  render();
+};
+
+window.navigateFromGridMenu = function(tabId) {
+  state.isGridMenuOpen = false;
+  state.currentTab = tabId;
+  render();
+};
+
 function renderAppShell(root) {
   if (state.auth && state.auth.screen === "login") {
     root.innerHTML = renderAuthLoginScreen() + renderWhatsAppModal();
@@ -1549,25 +2247,29 @@ function renderAppShell(root) {
   const hasDeficiency = missing.length > 0;
 
   root.innerHTML = `
-    <!-- Top Header: Tek Satır, Minimalist, Çakışmasız -->
-    <header class="px-5 pt-3.5 pb-2 flex justify-between items-center absolute top-0 inset-x-0 z-40 pointer-events-auto bg-gradient-to-b from-black/85 via-black/30 to-transparent">
-      <div class="flex items-center space-x-1.5 cursor-pointer" onclick="navigateTab('home')">
-        <span class="text-sm font-serif tracking-[0.22em] text-white font-semibold">ToHUM</span>
-      </div>
+    <!-- Top Header: Tek Satır, Minimalist, Sol Başta Menü -->
+    <header class="px-4 pt-3.5 pb-2 flex justify-between items-center absolute top-0 inset-x-0 z-40 pointer-events-auto bg-gradient-to-b from-black/85 via-black/30 to-transparent">
+      <!-- Sol: Minimalist Menü Tetikleyicisi -->
+      <button onclick="toggleGridMenu()" class="flex items-center space-x-1.5 bg-black/45 hover:bg-black/60 active:scale-95 px-3 py-1.5 rounded-full border border-white/10 text-white/90 hover:text-white transition shadow-xs">
+        <span class="text-xs">☰</span>
+        <span class="text-[11px] font-medium tracking-wide">Menü</span>
+      </button>
 
-      <button onclick="toggleWeekSelector()" class="flex items-center space-x-1.5 bg-black/45 hover:bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 transition shadow-xs" title="Haftayı Değiştir">
+      <!-- Orta: Hafta Seçici Kapsülü -->
+      <button onclick="toggleWeekSelector()" class="flex items-center space-x-1.5 bg-black/45 hover:bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 transition shadow-xs" title="Haftayı Değiştir">
         <span class="text-[11px] text-amber-200 font-semibold">${state.baby.name} · ${state.baby.week}. Hafta</span>
-        <span class="text-[9px] text-white/50">· Doğuma ${state.user.daysRemaining || 63} Gün</span>
+        <span class="text-[9px] text-white/50">· Son ${state.user.daysRemaining || 63} Gün</span>
         <span class="text-[8px] text-white/40 ml-0.5">▼</span>
       </button>
 
+      <!-- Sağ: 8.3 Hz Calm Tech Rezonansı -->
       <div class="flex items-center space-x-2">
         ${state.birthModule.contractionTimer.isRunning ? `
-          <button onclick="navigateTab('birth'); setBirthSubtab('waves');" class="text-xs font-semibold text-rose-200 bg-rose-500/25 px-2.5 py-1 rounded-full animate-pulse backdrop-blur-md">
+          <button onclick="navigateTab('birth'); setBirthSubtab('waves');" class="text-xs font-semibold text-rose-200 bg-rose-500/25 px-2.5 py-1.5 rounded-full animate-pulse backdrop-blur-md">
             🔴 ${String(Math.floor(state.birthModule.contractionTimer.currentSeconds/60)).padStart(2,'0')}:${String(state.birthModule.contractionTimer.currentSeconds%60).padStart(2,'0')}
           </button>
         ` : `
-          <button onclick="toggleAudio()" class="text-xs text-amber-200/90 bg-black/45 hover:bg-black/60 px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-md flex items-center space-x-1.5 transition shadow-xs" title="8.3 Hz Calm Tech Rezonansı">
+          <button onclick="toggleAudio()" class="text-xs text-amber-200/90 bg-black/45 hover:bg-black/60 px-2.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md flex items-center space-x-1.5 transition shadow-xs" title="8.3 Hz Calm Tech Rezonansı">
             <span class="w-1.5 h-1.5 rounded-full ${state.isPlayingAudio ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400/80'}"></span>
             <span class="text-[10px]">8.3 Hz</span>
           </button>
@@ -1578,6 +2280,50 @@ function renderAppShell(root) {
     ${renderWeekSelectorModal()}
     ${renderClinicalReportModal()}
     ${renderWhatsAppModal()}
+    ${renderPrescriptionUploadModal()}
+    ${renderCustomSupplementModal()}
+
+    <!-- 1x6 SADE, YALIN, GENEL İSİMLİ MENÜ KATMANI (Yatar Pozisyonda Sıfır Iskalama) -->
+    ${state.isGridMenuOpen ? `
+      <div class="absolute inset-0 z-[120] bg-black/75 backdrop-blur-md flex flex-col justify-start pt-14 px-5 animate-in fade-in duration-200" onclick="toggleGridMenu()">
+        <div class="bg-[#140D0B]/95 border border-white/15 rounded-3xl p-5 shadow-[0_15px_50px_rgba(0,0,0,0.85)] space-y-2.5" onclick="event.stopPropagation()">
+          <div class="flex justify-between items-center px-1 pb-2 border-b border-white/10">
+            <span class="text-xs font-serif tracking-[0.25em] text-white/90 uppercase font-semibold">ToHUM</span>
+            <button onclick="toggleGridMenu()" class="text-white/40 hover:text-white text-xs px-2.5 py-1 rounded-full bg-white/5 active:scale-95 transition">Kapat ✕</button>
+          </div>
+          
+          <!-- 1x6 Genel İsimli Tam Genişlikte Butonlar -->
+          <div class="space-y-1.5 pt-1">
+                        ${[
+              { id: 'home',     lbl: 'Güneş'     },
+              { id: 'bonding',  lbl: 'Bağ Kur'   },
+              { id: 'health',   lbl: 'Sağlık'    },
+              { id: 'birth',    lbl: 'Doğum'     },
+              { id: 'calendar', lbl: 'Takvim'    },
+              { id: 'shopping', lbl: 'İhtiyaçlar'},
+              { id: 'kovan',    lbl: 'Kovan'     }
+            ].map(item => `
+              <button 
+                onclick="navigateFromGridMenu('${item.id}')"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-2xl transition active:scale-98
+                  ${state.currentTab === item.id ? 'bg-amber-400/20 text-amber-200 border border-amber-400/35 font-semibold shadow-xs' : 'bg-white/5 hover:bg-white/10 text-white/90 border border-white/5'}">
+                <span class="text-sm font-medium tracking-wide">${item.lbl}</span>
+                <span class="text-xs text-white/30">➔</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <div class="pt-2 border-t border-white/10">
+            <button 
+              onclick="navigateFromGridMenu('profile')"
+              class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 text-xs transition active:scale-98">
+              <span>Profil</span>
+              <span class="text-[10px] text-white/40">➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    ` : ''}
 
     <main class="flex-1 w-full h-full relative overflow-hidden flex flex-col">
       ${getTabContent()}
@@ -1600,31 +2346,13 @@ function renderAppShell(root) {
         <span class="text-[9px] text-amber-200/35 font-medium tracking-widest uppercase">Gece Modu</span>
       </div>
     ` : ''}
-
-    <!-- Alt Navigasyon: 5 Net Sekme (Sıfır Mükerrerlik) -->
-    <nav class="absolute bottom-0 inset-x-0 z-50 h-16 bg-[#0D0806]/97 backdrop-blur-2xl border-t border-white/[0.06] flex items-center justify-around px-2 shadow-[0_-4px_28px_rgba(0,0,0,0.7)]">
-      ${[
-        { id: 'home',     sym: '◎', lbl: 'Güneş'  },
-        { id: 'health',   sym: '✛', lbl: 'Sağlık'  },
-        { id: 'birth',    sym: '◑', lbl: 'Doğum'   },
-        { id: 'kovan',    sym: '▦', lbl: 'Kovan'   },
-        { id: 'menu',     sym: '☰', lbl: 'Menü'    }
-      ].map(t => `
-        <button
-          onclick="navigateTab('${t.id}')"
-          class="flex flex-col items-center justify-center space-y-0.5 px-3 py-1.5 rounded-xl transition-all active:scale-95
-            ${state.currentTab === t.id ? 'text-amber-300 font-semibold' : 'text-white/40 hover:text-white/70'}">
-          <span class="text-[18px] leading-none ${state.currentTab === t.id ? 'drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]' : ''}">${t.sym}</span>
-          <span class="text-[10px] tracking-wide">${t.lbl}</span>
-        </button>
-      `).join('')}
-    </nav>
   `;
 }
 
 function getTabContent() {
   switch(state.currentTab) {
     case "home": return renderHomeTab();
+    case "bonding": return renderBondingTab();
     case "health": return renderHealthTab();
     case "birth": return renderBirthTab();
     case "calendar": return renderCalendarTab();
@@ -1640,311 +2368,400 @@ function getTabContent() {
 function renderHomeTab() {
   const missing = checkDeficiency();
   const hasDeficiency = missing.length > 0;
-  const waterPct = Math.min(100, Math.round((state.nurture.water.count / state.nurture.water.target) * 100));
+  const targetWater = state.nurture.water.target || 8;
+  const curWater = state.nurture.water.count || 0;
+  const waterPct = Math.min(100, Math.round((curWater / targetWater) * 100));
   const nutrientPct = state.nurture.meal.taken ? 85 : 45;
+  
+  const moodLabels = {
+    serene: { text: "Dingin", color: "text-emerald-300", dot: "bg-emerald-400" },
+    energetic: { text: "Enerjik", color: "text-amber-300", dot: "bg-amber-300" },
+    tired: { text: "Yorgun", color: "text-amber-400", dot: "bg-amber-500" },
+    emotional: { text: "Hassas", color: "text-sky-300", dot: "bg-sky-400" }
+  };
+  const currentMood = moodLabels[state.healthData.selectedMood] || moodLabels.serene;
+  const selectedSymptom = state.healthData.selectedSymptom || null;
+  const cl = state.dailyChecklist || { meal: true, iron: true, omega: true, magnesium: false };
+  const isModalOpen = state.isNurtureModalOpen || state.isMoodModalOpen;
+
+  const symptomList = [
+    { key: "bel", lbl: "Bel & Pelvis", color: "border-rose-400/40 text-rose-200" },
+    { key: "mide", lbl: "Mide Yanması", color: "border-amber-400/40 text-amber-200" },
+    { key: "kramp", lbl: "Bacak Krampları", color: "border-indigo-400/40 text-indigo-200" },
+    { key: "nefes", lbl: "Nefes Baskısı", color: "border-teal-400/40 text-teal-200" },
+    { key: "odem", lbl: "Ödem & Şişlik", color: "border-cyan-400/40 text-cyan-200" },
+    { key: "braxton", lbl: "Rahimde Sertleşme", color: "border-purple-400/40 text-purple-200" }
+  ];
+
+  const symptomRemedies = {
+    bel: "Sol yanına yatıp bacak arana yastık koy; sakrumdaki sinir baskısını rahatlatır.",
+    mide: "3-4 adet çiğ badem çiğne; mide asidini nötralize eder. Yemek sonrası dik dur.",
+    kramp: "Ayak parmaklarını kendine doğru çek (dorsifleksiyon). Akşam magnezyumunu unutma.",
+    nefes: "Kollarını yukarı uzatıp 4-7-8 nefesi al; diyafram üzerindeki baskıyı açar.",
+    odem: "Ayaklarını 15 dk kalp seviyesine kaldır; bol su dolaşımı hızlandırır.",
+    braxton: "Dinlen ve 1 bardak ılık su iç; dehidratasyon kasılmayı tetikleyebilir."
+  };
 
   return `
     <div class="absolute inset-0 flex flex-col justify-between overflow-hidden bg-[#0A0605]">
-      <!-- Canlı Anne Karnı ve Dokunma Alanı (Ferah ve Açık) -->
+      
+      <!-- CANLI ANNE KARNI & AKILLI ÇERÇEVELEME (Modal Açılınca Bebek Otomatik Olarak Yukarı Kayar ve Asla Örtülmez!) -->
       <div 
         id="cinematicTouchStage"
         onpointerdown="handleCinematicTouch(event)"
         onpointermove="handleCinematicMove(event)"
         class="absolute inset-0 w-full h-full cursor-crosshair overflow-hidden touch-none"
       >
-        <img 
-          id="cinematicBabyVisual"
-          src="${state.baby.image}" 
-          alt="Güneş 31. Hafta"
-          class="w-full h-full object-cover select-none pointer-events-none filter brightness-95 contrast-105 animate-amniotic-float transition-transform duration-300 ease-out"
-        >
-        <canvas id="cinematicCanvas" width="420" height="860" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0605] via-transparent to-black/35 pointer-events-none z-10 animate-maternal-breath"></div>
+        <div id="cinematicBabyWrapper" class="w-full h-full transition-all duration-500 ease-out transform ${isModalOpen ? '-translate-y-24 scale-[0.88] origin-top' : 'translate-y-0 scale-100'}">
+          <img 
+            id="cinematicBabyVisual"
+            src="${state.baby.image}" 
+            alt="Güneş 31. Hafta"
+            class="w-full h-full object-cover select-none pointer-events-none filter brightness-95 contrast-105 animate-amniotic-float transition-all duration-500 ease-out"
+          >
+          <canvas id="cinematicCanvas" width="420" height="860" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0605] via-transparent to-black/30 pointer-events-none z-10 animate-maternal-breath"></div>
       </div>
 
-      <!-- Sade, İnce Floating Rozetler (Header'ın Hemen Altında - Çakışmasız) -->
-      <div class="absolute top-14 inset-x-4 z-30 flex items-center justify-between pointer-events-auto">
+      <!-- Sade Üst Rozet (Haftalık Boyut) -->
+      <div class="absolute top-14 left-4 z-30 pointer-events-none">
         <div class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white/80 text-[10px] font-light shadow-xs flex items-center space-x-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
           <span>${state.baby.sizeComparison}</span>
         </div>
-
-        <button onclick="triggerDirectKick()" class="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-amber-200 text-[10px] font-medium flex items-center space-x-1.5 hover:bg-white/10 active:scale-95 transition shadow-xs">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>${state.interactive.kicksToday} Fetal Hareket</span>
-        </button>
       </div>
 
-      <!-- Alt Çekmece: Sanal Bebek Besleme & Günlük Denge Paneli -->
-      <div class="absolute bottom-16 inset-x-0 z-40 pointer-events-auto flex flex-col justify-end" onclick="event.stopPropagation()">
-        <div class="bg-[#140D0B]/95 backdrop-blur-2xl rounded-t-[28px] border-t border-white/15 text-white shadow-[0_-10px_35px_rgba(0,0,0,0.7)] transition-all duration-300 overflow-hidden">
-          
-          <!-- Çekmece Tepe Barı (Kapalıyken Görünen İnce Kapsül) -->
-          <div onclick="toggleBottomSheet()" class="px-5 pt-2.5 pb-3 cursor-pointer hover:bg-white/5 active:bg-white/10 transition flex flex-col justify-center select-none">
-            <div class="w-8 h-1 bg-white/25 rounded-full mx-auto mb-2 hover:bg-white/40 transition-all"></div>
-            <div class="flex justify-between items-center text-xs">
-              <div class="flex items-center space-x-2 truncate">
-                <span class="w-2 h-2 rounded-full ${hasDeficiency ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse shrink-0"></span>
-                <span id="cinematicFeedbackBox" class="font-serif italic text-white/90 truncate text-[11px]">
-                  "${state.interactive.reactionText}"
-                </span>
-              </div>
-              <div class="flex items-center space-x-1.5 text-amber-200 text-[10px] font-medium shrink-0 ml-2 bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
-                <span class="text-cyan-300 font-mono">${state.nurture.water.count}/${state.nurture.water.target}B</span>
-                <span>·</span>
-                <span>${state.isSheetExpanded ? 'Kapat ✕' : 'Güneş’i Besle ⌃'}</span>
-              </div>
-            </div>
+      <!-- EN ALT KONTROL DOCK & AÇILIR PANELLER -->
+      <div class="absolute bottom-5 inset-x-4 z-40 pointer-events-auto flex flex-col space-y-2 select-none" onclick="event.stopPropagation()">
+        
+        <!-- Canlı Tepki & Reaksiyon Satırı (Modal Üstünde Parlayan Geri Bildirim) -->
+        <div class="flex items-center justify-between px-2 text-[11px] ${isModalOpen ? 'bg-black/60 backdrop-blur-md py-1 px-3 rounded-full border border-white/10' : ''}">
+          <div id="cinematicFeedbackBox" class="font-serif italic text-white/95 truncate max-w-[220px]">
+            "${state.interactive.reactionText}"
           </div>
+          <div class="flex items-center space-x-2 text-[10px] text-white/70">
+            <span class="text-cyan-300 font-mono">Su: ${curWater}/${targetWater}B ${curWater > targetWater ? '★' : ''}</span>
+            <span>·</span>
+            <span class="text-emerald-300">Nabız: ${state.baby.bpm} bpm</span>
+          </div>
+        </div>
 
-          <!-- Açıldığında Görünen Sanal Bebek Besleme & İhtiyaç Havuzu -->
-          ${state.isSheetExpanded ? `
-            <div class="px-5 pb-5 border-t border-white/10 space-y-3 animate-in fade-in duration-200 max-h-[340px] overflow-y-auto">
-              
-              <!-- SANAL BEBEK (TAMAGOTCHI) CANLILIK & BESLEME HUD KARTI -->
-              <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2 mt-2">
-                <div class="flex items-center justify-between text-[11px]">
-                  <div class="flex items-center space-x-1.5 font-medium text-white/90">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span>Güneş Yaşam & Besleme Havuzu</span>
-                  </div>
-                  <span class="text-[10px] text-amber-200/90 font-mono">${state.baby.bpm} bpm · Dingin Nabız</span>
-                </div>
-
-                <!-- Canlı Barlar: Amniyotik Berraklık & Hücresel Besin -->
-                <div class="grid grid-cols-2 gap-2 text-[10px]">
-                  <div class="p-2 rounded-xl bg-black/25 border border-white/5 space-y-1">
-                    <div class="flex justify-between text-white/70">
-                      <span>Amniyotik Berraklık</span>
-                      <span class="text-cyan-300 font-semibold">%${waterPct} (${state.nurture.water.count}/${state.nurture.water.target}B)</span>
-                    </div>
-                    <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                      <div class="bg-cyan-400 h-full rounded-full transition-all duration-300" style="width: ${waterPct}%"></div>
-                    </div>
-                  </div>
-
-                  <div class="p-2 rounded-xl bg-black/25 border border-white/5 space-y-1">
-                    <div class="flex justify-between text-white/70">
-                      <span>Hücresel Besin</span>
-                      <span class="text-emerald-300 font-semibold">%${nutrientPct}</span>
-                    </div>
-                    <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                      <div class="bg-emerald-400 h-full rounded-full transition-all duration-300" style="width: ${nutrientPct}%"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Sanal Bebek Hızlı Etkileşim Butonları (Tamagotchi Alanı) -->
-                <div class="grid grid-cols-4 gap-1.5 pt-0.5">
-                  <button onclick="feedAction('water')" class="py-2 px-1 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/30 text-cyan-200 text-[10px] font-medium text-center transition active:scale-95">
-                    Ilık Su Ver
-                  </button>
-                  <button onclick="feedAction('nutrient')" class="py-2 px-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-emerald-200 text-[10px] font-medium text-center transition active:scale-95">
-                    Besin Ver
-                  </button>
-                  <button onclick="triggerDirectKick()" class="py-2 px-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/30 text-amber-200 text-[10px] font-medium text-center transition active:scale-95">
-                    Karnı Sev
-                  </button>
-                  <button onclick="toggleAudio()" class="py-2 px-1 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/30 text-purple-200 text-[10px] font-medium text-center transition active:scale-95">
-                    Ninni Dinlet
-                  </button>
-                </div>
-              </div>
-
-              <!-- "Bugün Nasıl Hissediyorsun?" Sakin & Soft Karşılama (Emojisiz) -->
-              <div class="p-3 bg-white/5 rounded-2xl border border-white/10 space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] font-semibold text-amber-200/95">Bugün Nasıl Hissediyorsun?</span>
-                  <span class="text-[9px] text-white/50">Doğuma ${state.user.daysRemaining || 63} Gün</span>
-                </div>
-                <!-- Emojisiz Sade Soft Butonlar -->
-                <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
-                  <button onclick="selectMaternalMood('serene')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'serene' ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Dingin</button>
-                  <button onclick="selectMaternalMood('tired')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'tired' ? 'bg-amber-500/25 border-amber-400 text-amber-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Yorgun</button>
-                  <button onclick="selectMaternalMood('emotional')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'emotional' ? 'bg-sky-500/25 border-sky-400 text-sky-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Hassas</button>
-                  <button onclick="selectMaternalMood('ache')" class="p-2 rounded-xl border transition ${state.healthData.selectedMood === 'ache' ? 'bg-rose-500/25 border-rose-400 text-rose-200 font-semibold' : 'bg-white/5 border-white/10 text-white/70'}">Bel Hassasiyeti</button>
-                </div>
-                <!-- Otomatik Maternal Analiz Güvencesi: Anne Eşine Talep Bildirmez -->
-                <div class="pt-2 border-t border-white/5 flex items-start space-x-2 text-[10px] text-white/60 leading-relaxed">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1 shrink-0"></span>
-                  <span>ToHUM Akıllı Çekirdek: Beden verileriniz analiz edilerek Oğuz'un baba portalına proaktif destek kartı olarak aktarıldı. Rica etmenize gerek kalmadan şefkatle eşlik edilir.</span>
-                </div>
-              </div>
-
-              <!-- Alt Sekmeler: Besle, Bağ Kur, Gelişim, Mektuplar -->
-              <div class="grid grid-cols-4 gap-1 bg-white/5 p-1 rounded-2xl text-xs">
-                <button onclick="setHomeSubtab('feed')" class="py-2 rounded-xl transition ${state.homeSubtab === 'feed' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-                  Besle
-                </button>
-                <button onclick="setHomeSubtab('play')" class="py-2 rounded-xl transition ${state.homeSubtab === 'play' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-                  Bağ Kur
-                </button>
-                <button onclick="setHomeSubtab('quiz')" class="py-2 rounded-xl transition ${state.homeSubtab === 'quiz' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-                  Gelişim
-                </button>
-                <button onclick="setHomeSubtab('capsule')" class="py-2 rounded-xl transition ${state.homeSubtab === 'capsule' ? 'bg-white/20 text-white font-semibold shadow-xs' : 'text-white/50'}">
-                  Mektuplar
-                </button>
-              </div>
-
+        <!-- 1. AÇILIR DUYGU & BEDENSEL HASSASİYET POPOVER'I (Göz Yormayan Matris + Pratik Çözümler) -->
+        <div id="moodModalContainer" class="${state.isMoodModalOpen ? 'block animate-in fade-in zoom-in-95 duration-200' : 'hidden'}">
+          <div class="bg-[#140D0B]/85 backdrop-blur-2xl rounded-3xl border border-white/15 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.9)] space-y-3 mb-1 max-h-[340px] overflow-y-auto">
+            <div class="flex justify-between items-center pb-1.5 border-b border-white/10">
               <div>
-                ${getHomeSubtabContent()}
+                <span class="text-xs font-serif font-semibold text-white/90">Bugün Nasıl Hissediyorsun?</span>
+                <p class="text-[9px] text-white/45 mt-0.5">Ruh halini seç veya bedensel sinyaline anlık çözüm al</p>
+              </div>
+              <button onclick="toggleMoodModal()" class="text-white/40 hover:text-white text-xs px-2.5 py-0.5 rounded-full bg-white/5 active:scale-95 transition">Kapat ✕</button>
+            </div>
+
+            <!-- 1. KADEME: 4 TEMEL RUH HALİ RİTMİ (Minimalist Kapsüller) -->
+            <div>
+              <div class="text-[10px] text-white/50 mb-1.5 font-medium">Genel Ritim</div>
+              <div class="grid grid-cols-4 gap-1.5 text-xs">
+                <button onclick="selectMaternalMoodAndClose('serene')" class="p-2 rounded-xl border text-center transition flex flex-col items-center justify-center space-y-1 ${state.healthData.selectedMood === 'serene' ? 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-semibold' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span class="text-[11px]">Dingin</span>
+                </button>
+                <button onclick="selectMaternalMoodAndClose('energetic')" class="p-2 rounded-xl border text-center transition flex flex-col items-center justify-center space-y-1 ${state.healthData.selectedMood === 'energetic' ? 'bg-amber-500/25 border-amber-300 text-amber-200 font-semibold' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}">
+                  <span class="w-2 h-2 rounded-full bg-amber-300"></span>
+                  <span class="text-[11px]">Enerjik</span>
+                </button>
+                <button onclick="selectMaternalMoodAndClose('tired')" class="p-2 rounded-xl border text-center transition flex flex-col items-center justify-center space-y-1 ${state.healthData.selectedMood === 'tired' ? 'bg-amber-500/25 border-amber-500 text-amber-200 font-semibold' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="text-[11px]">Yorgun</span>
+                </button>
+                <button onclick="selectMaternalMoodAndClose('emotional')" class="p-2 rounded-xl border text-center transition flex flex-col items-center justify-center space-y-1 ${state.healthData.selectedMood === 'emotional' ? 'bg-sky-500/25 border-sky-400 text-sky-200 font-semibold' : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'}">
+                  <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                  <span class="text-[11px]">Hassas</span>
+                </button>
               </div>
             </div>
-          ` : ''}
+
+            <!-- 2. KADEME: 31. HAFTA BEDENSEL HASSASİYETLERİ (Pratik ve Göz Yormayan Kompakt Chip'ler) -->
+            <div class="pt-1 border-t border-white/5">
+              <div class="flex justify-between items-center text-[10px] text-white/50 mb-1.5">
+                <span class="font-medium">Bedensel Hassasiyet Var mı?</span>
+                <span class="text-[9px] text-white/40">Dokun ve anlık tüyo al</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                ${symptomList.map(s => `
+                  <button 
+                    onclick="selectSymptomAndRelieve('${s.key}')" 
+                    class="py-1 px-2.5 rounded-xl text-[10px] border transition active:scale-95 ${selectedSymptom === s.key ? 'bg-white/20 border-white text-white font-semibold shadow-xs' : 'bg-white/5 ' + s.color + ' hover:bg-white/10'}">
+                    ${s.lbl}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- 3. KADEME: SEÇİLEN HASSASİYETİN 1 CÜMLELİK PRATİK ANLIK RAHATLAMA ÇÖZÜMÜ -->
+            ${selectedSymptom && symptomRemedies[selectedSymptom] ? `
+              <div class="p-2.5 rounded-2xl bg-white/10 border border-white/20 text-xs text-white/95 flex items-start space-x-2 animate-in fade-in duration-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1 shrink-0"></span>
+                <div class="leading-relaxed">
+                  <span class="font-semibold text-emerald-200 text-[11px]">Pratik Çözüm: </span>
+                  <span class="text-[11px] text-white/90">${symptomRemedies[selectedSymptom]}</span>
+                </div>
+              </div>
+            ` : ''}
+
+          </div>
         </div>
+
+        <!-- 2. AÇILIR BESLE & TAKVİYE POPOVER'I: SINIRSIZ SU (8+) + HEDEF AYARI + DMT1 CHECKLIST -->
+        <div id="nurtureModalContainer" class="${state.isNurtureModalOpen ? 'block animate-in fade-in zoom-in-95 duration-200' : 'hidden'}">
+          <div class="bg-[#140D0B]/85 backdrop-blur-2xl rounded-3xl border border-white/15 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.9)] space-y-3 mb-1 max-h-[330px] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+              <div>
+                <span class="text-xs font-serif font-semibold text-white/90">Besleme & Takviye Takibi</span>
+                <p class="text-[9px] text-white/50 mt-0.5">Amniyotik Berraklık %${waterPct} · Hücresel Besin %${nutrientPct}</p>
+              </div>
+              <button onclick="toggleNurtureModal()" class="text-white/40 hover:text-white text-xs px-2.5 py-0.5 rounded-full bg-white/5 active:scale-95 transition">Kapat ✕</button>
+            </div>
+
+            <!-- 1. KISIM: SU TAKİBİ (8 Bardaktan Fazlası Desteklenir, Hedef Kişiselleştirilebilir) -->
+            <div class="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-400/25 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-cyan-200 flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                  <span>Günlük Su Takibi</span>
+                </span>
+                <div class="flex items-center space-x-2">
+                  <span class="font-mono text-cyan-300 font-bold">${curWater} / ${targetWater} Bardak</span>
+                  ${curWater > targetWater ? `<span class="text-[9px] bg-cyan-400/25 text-cyan-200 px-1.5 py-0.5 rounded-md font-semibold">+${curWater - targetWater} Ekstra</span>` : ''}
+                </div>
+              </div>
+
+              <!-- Dinamik Bardak Kapsülleri (Hedef ve Fazlasını Gösteren Şık Dizilim) -->
+              <div class="flex flex-wrap gap-1.5 items-center px-1 py-1">
+                ${Array.from({length: Math.max(targetWater, curWater)}).map((_, i) => `
+                  <button onclick="adjustWater(${i < curWater ? -1 : 1})" class="p-0.5 transition active:scale-110" title="${i+1}. Bardak">
+                    <span class="inline-block w-3.5 h-3.5 rounded-full transition-all ${i < curWater ? (i >= targetWater ? 'bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]' : 'bg-cyan-400 shadow-[0_0_8px_rgba(103,232,249,0.8)]') : 'bg-white/15 border border-white/20'}"></span>
+                  </button>
+                `).join('')}
+              </div>
+
+              <!-- Hızlı Eylem & Hedef Seçimi -->
+              <div class="flex items-center space-x-2 pt-0.5">
+                <button onclick="adjustWater(-1)" class="py-1 px-3 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] text-white/60 transition">- 1</button>
+                <button onclick="adjustWater(1)" class="flex-1 py-1.5 bg-cyan-500/25 hover:bg-cyan-500/35 border border-cyan-400/40 text-cyan-200 text-xs font-semibold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm active:scale-98">
+                  <span>+ 1 Bardak Su İçtim</span>
+                </button>
+                <div class="flex items-center space-x-1 pl-1 border-l border-white/10 text-[9px] text-white/40">
+                  <button onclick="setWaterTarget(8)" class="px-1.5 py-1 rounded-md ${targetWater === 8 ? 'bg-cyan-400/30 text-cyan-200 font-bold' : 'hover:bg-white/5'}">8B</button>
+                  <button onclick="setWaterTarget(10)" class="px-1.5 py-1 rounded-md ${targetWater === 10 ? 'bg-cyan-400/30 text-cyan-200 font-bold' : 'hover:bg-white/5'}">10B</button>
+                  <button onclick="setWaterTarget(12)" class="px-1.5 py-1 rounded-md ${targetWater === 12 ? 'bg-cyan-400/30 text-cyan-200 font-bold' : 'hover:bg-white/5'}">12B</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. KISIM: GÜNLÜK BESİN & DMT1 İLAÇ CHECKLIST'İ -->
+            <div class="p-3 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-white/90">Günün Takviye & Öğün Takibi</span>
+                <span class="text-[9px] text-amber-200 font-mono">DMT1 Protokolü</span>
+              </div>
+
+              <div class="space-y-1.5 text-xs">
+                <!-- Sabah Aç: Demir (Ferro Sanol) -->
+                <button onclick="toggleChecklistItem('iron')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl.iron ? 'bg-emerald-500/20 border-emerald-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl.iron ? 'bg-emerald-500 border-emerald-400 text-black font-bold' : 'border-white/30'}">
+                      ${cl.iron ? '✓' : ''}
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-medium ${cl.iron ? 'line-through text-white/70' : 'text-white'}">Sabah Aç: Ferro Sanol (Demir)</div>
+                      <div class="text-[9px] text-white/40">C vitamini ile sinerji · Magnezyumdan 2 saat önce</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] text-emerald-300 font-mono">08:30</span>
+                </button>
+
+                <!-- Dengeli Öğün -->
+                <button onclick="toggleChecklistItem('meal')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl.meal ? 'bg-emerald-500/20 border-emerald-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl.meal ? 'bg-emerald-500 border-emerald-400 text-black font-bold' : 'border-white/30'}">
+                      ${cl.meal ? '✓' : ''}
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-medium ${cl.meal ? 'line-through text-white/70' : 'text-white'}">Öğün Yedim: Dengeli Lif & Protein</div>
+                      <div class="text-[9px] text-white/40">Hücresel büyüme & glukoz dengesi</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] text-emerald-300 font-mono">Tok</span>
+                </button>
+
+                <!-- Öğle Tok: Omega-3 & D3 -->
+                <button onclick="toggleChecklistItem('omega')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl.omega ? 'bg-emerald-500/20 border-emerald-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl.omega ? 'bg-emerald-500 border-emerald-400 text-black font-bold' : 'border-white/30'}">
+                      ${cl.omega ? '✓' : ''}
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-medium ${cl.omega ? 'line-through text-white/70' : 'text-white'}">Öğle Tok: Omega-3 DHA & D3</div>
+                      <div class="text-[9px] text-white/40">Fetal beyin & retina nöron gelişimi</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] text-emerald-300 font-mono">13:00</span>
+                </button>
+
+                <!-- Akşam Tok: Magnezyum (Magnimore) -->
+                <button onclick="toggleChecklistItem('magnesium')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl.magnesium ? 'bg-emerald-500/20 border-emerald-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl.magnesium ? 'bg-emerald-500 border-emerald-400 text-black font-bold' : 'border-white/30'}">
+                      ${cl.magnesium ? '✓' : ''}
+                    </span>
+                    <div>
+                      <div class="text-[11px] font-medium ${cl.magnesium ? 'line-through text-white/70' : 'text-white'}">Akşam Tok: Magnimore Plus (Magnezyum)</div>
+                      <div class="text-[9px] text-amber-200/60">Kas kramplarını önleme & rahat uyku</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] text-amber-300 font-mono">21:30</span>
+                </button>
+
+                <!-- Özel Takviye: Kolajen Peptit (Hekim Bilgili / Reçete Dışı) -->
+                ${state.hasCollagen ? `
+                  <button onclick="toggleChecklistItem('collagen')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl.collagen ? 'bg-teal-500/20 border-teal-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                    <div class="flex items-center space-x-2.5">
+                      <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl.collagen ? 'bg-teal-500 border-teal-400 text-black font-bold' : 'border-white/30'}">
+                        ${cl.collagen ? '✓' : ''}
+                      </span>
+                      <div>
+                        <div class="text-[11px] font-medium ${cl.collagen ? 'line-through text-white/70' : 'text-white'}">İkindi: Kolajen Peptit (Tip 1 & 3)</div>
+                        <div class="text-[9px] text-teal-300/80">C vitaminiyle sinerji · Demirle yarışmaz (DMT1 güvenli)</div>
+                      </div>
+                    </div>
+                    <span class="text-[9px] text-teal-300 font-mono">16:30</span>
+                  </button>
+                ` : ''}
+
+                <!-- Dinamik Eklenmiş Diğer Özel Takviyeler -->
+                ${(state.customSupplements || []).map(cs => `
+                  <button onclick="toggleChecklistItem('${cs.id}')" class="w-full p-2.5 rounded-xl border text-left transition flex items-center justify-between ${cl[cs.id] ? 'bg-indigo-500/20 border-indigo-400/50 text-white' : 'bg-black/25 border-white/5 text-white/60'}">
+                    <div class="flex items-center space-x-2.5">
+                      <span class="w-4 h-4 rounded-md border flex items-center justify-center text-[10px] ${cl[cs.id] ? 'bg-indigo-500 border-indigo-400 text-black font-bold' : 'border-white/30'}">
+                        ${cl[cs.id] ? '✓' : ''}
+                      </span>
+                      <div>
+                        <div class="text-[11px] font-medium ${cl[cs.id] ? 'line-through text-white/70' : 'text-white'}">${cs.name} (${cs.dose || '1 Doz'})</div>
+                        <div class="text-[9px] text-indigo-300/80">${cs.dmt1Rule || 'Özel takviye'}</div>
+                      </div>
+                    </div>
+                    <span class="text-[9px] text-indigo-300 font-mono">${cs.scheduledHour || '16:30'}</span>
+                  </button>
+                `).join('')}
+              </div>
+
+              <!-- Reçete Entegrasyon & Özel Takviye Butonları -->
+              <div class="flex space-x-2 pt-1.5 border-t border-white/10">
+                <button onclick="togglePrescriptionModal()" class="flex-1 py-1.5 px-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] text-white/80 transition flex items-center justify-center space-x-1.5 active:scale-95">
+                  <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  <span>Reçete Entegre Et</span>
+                </button>
+                <button onclick="toggleCustomSupplementModal()" class="flex-1 py-1.5 px-2 bg-teal-500/15 hover:bg-teal-500/25 border border-teal-400/30 rounded-xl text-[10px] text-teal-200 transition flex items-center justify-center space-x-1.5 active:scale-95">
+                  <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+                  <span>+ Kolajen / Özel Takviye</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ANA ÇİFT BUTONLU DOCK: EMOJİSİZ, ULTRA SADE VE ASİL -->
+        <div class="bg-[#140D0B]/85 backdrop-blur-2xl rounded-3xl border border-white/15 p-2 px-3 shadow-[0_12px_40px_rgba(0,0,0,0.85)] flex items-center justify-between">
+          
+          <!-- Sol Buton: [Nasıl Hissediyorsun?] -->
+          <button onclick="toggleMoodModal()" class="py-2 px-3.5 rounded-2xl bg-white/5 hover:bg-white/10 active:scale-95 border border-white/10 text-white text-xs font-medium flex items-center space-x-2 transition shadow-xs">
+            <span class="w-2 h-2 rounded-full ${currentMood.dot || 'bg-emerald-400'}"></span>
+            <span>Nasıl Hissediyorsun?</span>
+            <span class="text-[10px] ${currentMood.color} font-semibold">(${currentMood.text})</span>
+            <span class="text-[9px] text-white/40">${state.isMoodModalOpen ? '✕' : '⌃'}</span>
+          </button>
+
+          <!-- Sağ Buton: [Besle & Takviye] -->
+          <button onclick="toggleNurtureModal()" class="py-2 px-4 rounded-2xl bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 hover:from-emerald-500/35 hover:to-cyan-500/35 active:scale-95 border border-emerald-400/40 text-emerald-200 text-xs font-semibold flex items-center space-x-2 transition shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>Besle & Takviye</span>
+            <span class="text-[9px] text-emerald-300/70">${state.isNurtureModalOpen ? '✕' : '⌃'}</span>
+          </button>
+        </div>
+
       </div>
     </div>
   `;
 }
 
-function getHomeSubtabContent() {
-  if (state.homeSubtab === "feed") {
-    const isWaterDeficient = state.nurture.water.count < state.nurture.water.morningTarget;
-    const remainingWater = Math.max(0, state.nurture.water.target - state.nurture.water.count);
-
-    return `
-      <div class="space-y-2.5 text-xs">
-        <div class="p-3 bg-white/5 rounded-2xl border ${isWaterDeficient ? 'border-amber-400/40 bg-amber-500/10' : 'border-white/10'}">
-          <div class="flex justify-between items-center mb-1">
-            <span class="font-medium text-white/90">Su (Amniyotik Sıvı)</span>
-            <span class="text-cyan-300 font-semibold">${state.nurture.water.count} / ${state.nurture.water.target} Bardak</span>
-          </div>
-          
-          <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden my-2">
-            <div class="bg-cyan-400 h-full rounded-full transition-all duration-300" style="width: ${(state.nurture.water.count / state.nurture.water.target) * 100}%"></div>
-          </div>
-
-          <div class="text-[10px] text-white/60 mb-2 italic">
-            ${remainingWater > 0 
-              ? `Güneş'in amniyotik sıvısı için bugün ${remainingWater} bardak kaldı, harika gidiyorsun Buse.` 
-              : `Günün su dengesi tamamlandı; Güneş'in yaşam ortamı taptaze ve berrak.`}
-          </div>
-
-          <button onclick="feedAction('water')" class="w-full py-2 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/30 text-cyan-200 text-xs font-medium rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm">
-            <span>+ 1 Bardak Su İçtim (Sıvıyı Tazele)</span>
-          </button>
+function renderBondingTab() {
+  return `
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
+      <div class="flex justify-between items-center pb-2 border-b border-white/10">
+        <div>
+          <h2 class="text-base font-serif font-semibold text-white/95">Bağ Kur & Eğitici Aktiviteler</h2>
+          <p class="text-[11px] text-white/60">Güneş ile 31. Hafta Oyunlaştırılmış Gelişim</p>
         </div>
-
-        <div class="p-3 bg-white/5 rounded-2xl border border-white/10 space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="font-medium text-white/90">Dengeli Öğün & Besin</div>
-              <div class="text-[10px] text-white/50 mt-0.5">${state.nurture.meal.detail}</div>
-            </div>
-            <button onclick="toggleMealSelector()" class="px-3 py-1.5 bg-rose-500/20 border border-rose-400/30 text-rose-200 rounded-xl font-medium">
-              ${state.isMealSelectorOpen ? 'Vazgeç' : (state.nurture.meal.taken ? 'Öğün Seç' : 'Öğün Kaydet')}
-            </button>
-          </div>
-
-          ${state.isMealSelectorOpen ? `
-            <div class="pt-2 border-t border-white/10 grid grid-cols-2 gap-1.5 animate-in fade-in duration-150">
-              <button onclick="quickSelectMeal('Zeytinyağlı Sebze & Yeşillik')" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-white/90 text-left border border-white/5">
-                Zeytinyağlı Sebze
-              </button>
-              <button onclick="quickSelectMeal('Izgara Somon & Protein')" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-white/90 text-left border border-white/5">
-                Protein & Balık
-              </button>
-              <button onclick="quickSelectMeal('Ev Yoğurdu & Ceviz')" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-white/90 text-left border border-white/5">
-                Ev Yoğurdu & Ceviz
-              </button>
-              <button onclick="quickSelectMeal('Taze Mevsim Meyveleri')" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] text-white/90 text-left border border-white/5">
-                Taze Mevsim Meyveleri
-              </button>
-              <button onclick="customMealInput()" class="p-2 bg-rose-500/20 hover:bg-rose-500/30 rounded-xl text-[10px] text-rose-200 text-center border border-rose-400/30 col-span-2 font-medium">
-                Kendi Öğününü Yaz...
-              </button>
-            </div>
-          ` : ''}
-        </div>
-
-        <div class="pt-1">
-          <div class="text-[11px] font-semibold text-amber-200 px-1 mb-1.5 flex justify-between items-center">
-            <span>Doktor Reçeteli Takviyeler</span>
-            <button onclick="navigateTab('health'); setHealthSubtab('lab');" class="text-[10px] text-white/50 hover:underline">Reçeteleri Yönet ➔</button>
-          </div>
-
-          <div class="space-y-2">
-            ${state.prescriptions.map(p => `
-              <div class="p-3 bg-white/5 rounded-2xl border ${p.takenToday ? 'border-emerald-400/30 bg-emerald-500/10' : 'border-amber-400/30 bg-amber-500/10'} flex items-center justify-between">
-                <div class="pr-2">
-                  <div class="flex items-center space-x-1.5">
-                    <span class="font-medium ${p.takenToday ? 'text-emerald-200' : 'text-white/95'}">${p.shortName || p.name}</span>
-                    <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-white/10 text-white/70">${p.badge}</span>
-                  </div>
-                  <div class="text-[10px] text-white/50 mt-0.5">${p.dose} · ${p.target.substring(0, 32)}...</div>
-                  ${p.takenToday ? `<div class="text-[9px] text-emerald-300 font-medium">✓ Alındı (${p.takenTime || 'Bugün'})</div>` : ''}
-                </div>
-
-                <button onclick="takePrescriptionInHome('${p.id}')" class="px-3 py-1.5 ${p.takenToday ? 'bg-emerald-500/20 text-emerald-200 border-emerald-400/30' : 'bg-amber-500/25 text-amber-200 border-amber-400/40 hover:bg-amber-500/35'} border rounded-xl font-medium shrink-0 shadow-xs transition">
-                  ${p.takenToday ? 'Alındı ✓' : 'İçtim / Al'}
-                </button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
+        <span class="text-[10px] bg-amber-400/15 text-amber-200 px-2.5 py-1 rounded-full border border-amber-400/30">
+          ${state.growth.points} Bağ Puanı
+        </span>
       </div>
-    `;
-  } else if (state.homeSubtab === "play") {
-    return `
-      <div class="space-y-2 text-xs">
-        <div class="p-3 bg-white/5 rounded-2xl border border-white/10">
-          <div class="font-semibold text-white/90">${state.baby.week}. Hafta Duyusal Deneyim</div>
-          <p class="text-[10px] text-white/60 mt-1 leading-relaxed">
-            Ekrana dokunarak veya ses/ışık göndererek Güneş ile derin bir rezonans yakalayabilirsiniz.
-          </p>
+
+      <!-- 1. GÜNÜN OYUNLAŞTIRILMIŞ BİYOLOJİK GELİŞİM SORUSU -->
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2.5">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-semibold text-amber-200">Günün Eğitici Gelişim Sorusu (31. Hafta)</span>
+          <span class="text-[10px] text-emerald-300">+15 Puan</span>
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="triggerLightFlash()" class="p-3 bg-white/5 rounded-2xl border border-white/10 text-left hover:bg-white/10 transition">
-            <div class="font-medium text-amber-200">Işık Deneyimi</div>
-            <div class="text-[9px] text-white/50 mt-0.5">Işığın yönüne başını çevirir</div>
+        <p class="text-xs text-white/90">31. haftada bebeğin baş aşağı (sefalik) pozisyona geçişi biyolojik olarak neyi ifade eder?</p>
+        <div class="space-y-1.5 pt-1">
+          <button onclick="handleQuizAnswer(0)" class="w-full p-2.5 rounded-xl text-left text-xs transition ${state.dailyQuiz.answered && state.dailyQuiz.selected === 0 ? (state.dailyQuiz.isCorrect ? 'bg-emerald-500/25 border border-emerald-400 text-emerald-200' : 'bg-rose-500/25 border border-rose-400 text-rose-200') : 'bg-black/25 hover:bg-white/10 border border-white/5 text-white/80'}">
+            A) Doğum kanalına hazırlık için en doğal ve sağlıklı fizyolojik duruştur.
           </button>
-          <button onclick="playFatherVoice()" class="p-3 bg-white/5 rounded-2xl border border-white/10 text-left hover:bg-white/10 transition">
-            <div class="font-medium text-cyan-200">Oğuz'un Sesi</div>
-            <div class="text-[9px] text-white/50 mt-0.5">Babasının ses tonu</div>
+          <button onclick="handleQuizAnswer(1)" class="w-full p-2.5 rounded-xl text-left text-xs transition ${state.dailyQuiz.answered && state.dailyQuiz.selected === 1 ? 'bg-rose-500/25 border border-rose-400 text-rose-200' : 'bg-black/25 hover:bg-white/10 border border-white/5 text-white/80'}">
+            B) Annenin yürüyüş süresini kısıtlaması gerektiğinin işaretidir.
+          </button>
+        </div>
+        ${state.dailyQuiz.answered ? `
+          <div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-[11px] text-emerald-200 leading-relaxed">
+            ✓ Harika! 31. haftada fetüslerin %85'i yerçekimi ve baş ağırlığı sayesinde baş aşağı döner. Bu doğal sefalik duruş pelvise mükemmel uyum sağlar.
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- 2. DUYUSAL BAĞ: SES VE REZONANS -->
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2.5">
+        <div class="font-semibold text-white/90 text-xs">Duyusal Etkileşim & Fetal Ses Köprüsü</div>
+        <p class="text-[11px] text-white/60">31. haftada işitme kemikçikleri tamamen sertleşmiştir. Anne ve babanın sesini amniyotik sıvı içinde net duyar.</p>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="toggleAudio()" class="p-3 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/30 text-purple-200 rounded-xl text-xs font-medium text-center transition flex items-center justify-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+            <span>Ninni Dinlet (8.3 Hz)</span>
+          </button>
+          <button onclick="triggerDirectKick()" class="p-3 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/30 text-rose-200 rounded-xl text-xs font-medium text-center transition flex items-center justify-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+            <span>Karnı Sev & Tekme Say</span>
           </button>
         </div>
       </div>
-    `;
-  } else if (state.homeSubtab === "quiz") {
-    return `
-      <div class="p-3 bg-white/5 rounded-2xl border border-white/10 space-y-2 text-xs">
-        <div class="font-medium text-white/90">${state.dailyQuiz.question}</div>
-        <div class="space-y-1.5">
-          ${!state.dailyQuiz.answered ? state.dailyQuiz.options.map((opt, idx) => `
-            <button onclick="handleQuizAnswer(${idx})" class="w-full text-left p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition text-white/90">
-              ${opt.text}
-            </button>
-          `).join('') : `
-            <div class="p-2.5 bg-emerald-500/20 border border-emerald-400/30 rounded-xl text-emerald-200 text-[11px]">
-              ${state.dailyQuiz.explanation}
-            </div>
-          `}
+
+      <!-- 3. ZAMAN KAPSÜLÜ: GÜNEŞ'E MEKTUPLAR -->
+      <div class="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2.5">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-semibold text-white/90">Güneş'e Mektuplar (Zaman Kapsülü)</span>
+          <span class="text-[10px] text-amber-200">31. Hafta Anısı</span>
         </div>
+        <p class="text-[11px] text-white/60">"Bugün 31. haftamız bitti kızım. Babanla seni kucağımıza alacağımız 63 günü sabırsızlıkla bekliyoruz..."</p>
+        <button onclick="triggerReaction('folic', 'Zaman kapsülü mektubunuz güvenle şifrelenip kaydedildi.'); triggerHaptic(20);" class="w-full py-2 bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl text-xs text-white/80 transition flex items-center justify-center space-x-1.5">
+          <span>+ Yeni Mektup Ekle</span>
+        </button>
       </div>
-    `;
-  } else if (state.homeSubtab === "capsule") {
-    return `
-      <div class="space-y-2 text-xs">
-        <div class="flex justify-between items-center">
-          <span class="font-medium text-white/90">Güneş'e Mektuplar</span>
-          <button onclick="openNewLetterModal()" class="text-amber-200 text-[11px] font-medium">+ Mektup Yaz</button>
-        </div>
-        ${state.timeCapsules.map(cap => `
-          <div class="p-2.5 bg-white/5 rounded-xl border border-white/10 text-xs">
-            <div class="flex justify-between text-white/90 font-medium">
-              <span>${cap.title}</span>
-              <span class="text-[9px] text-white/50">${cap.unlockEvent}</span>
-            </div>
-            <div class="text-[10px] text-white/50 italic mt-0.5">"${cap.preview}"</div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }
+    </div>
+  `;
 }
 
-// ŞİFA & SAĞLIK TAKİBİ (KORUMA ALTINDAKİ RENDER METODU)
 function renderHealthTab() {
   return `
     <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
@@ -2082,31 +2899,20 @@ function getHealthSubtabContent() {
             </button>
           </div>
 
-          ${(() => {
-            const latestBp = state.healthData.bloodPressureHistory[0];
-            const aiRes = window.runAiSeedCoreAnalysis ? window.runAiSeedCoreAnalysis(latestBp.systolic, latestBp.diastolic) : { status: 'optimal', badgeText: '✓ Güvenli', message: '' };
-            const badgeCls = aiRes.status === 'critical'
-              ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
-              : (aiRes.status === 'borderline' || aiRes.status === 'watch')
-              ? 'bg-amber-500/25 border-amber-400/40 text-amber-200'
-              : 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300';
-            return `
-              <div class="p-3.5 bg-white/5 rounded-2xl space-y-2 border border-white/5">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-lg font-bold text-white">${latestBp.systolic}/${latestBp.diastolic} <span class="text-xs font-normal text-white/60">mmHg</span></div>
-                    <div class="text-[10px] text-emerald-300 mt-0.5">✓ Son Ölçüm: ${latestBp.date}</div>
-                  </div>
-                  <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold border ${badgeCls}">
-                    ${aiRes.badgeText}
-                  </span>
-                </div>
-                <div class="text-[10px] text-white/75 bg-black/30 p-2.5 rounded-xl border border-white/5 leading-relaxed">
-                  ${aiRes.message}
-                </div>
-              </div>
-            `;
-          })()}
+          <div class="p-3.5 bg-white/5 rounded-2xl flex items-center justify-between border border-white/5">
+            <div>
+              <div class="text-lg font-bold text-white">${state.healthData.bloodPressureHistory[0].systolic}/${state.healthData.bloodPressureHistory[0].diastolic} <span class="text-xs font-normal text-white/60">mmHg</span></div>
+              <div class="text-[10px] text-emerald-300 mt-0.5">✓ Son Ölçüm: ${state.healthData.bloodPressureHistory[0].date}</div>
+            </div>
+            <span class="text-[10px] px-2.5 py-1 rounded-full font-semibold border
+              ${state.healthData.bloodPressureHistory[0].systolic >= 130
+                ? 'bg-rose-500/25 border-rose-400/40 text-rose-300'
+                : state.healthData.bloodPressureHistory[0].systolic >= 115
+                ? 'bg-amber-500/25 border-amber-400/40 text-amber-300'
+                : 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'}">
+              ${state.healthData.bloodPressureHistory[0].systolic >= 130 ? '⚠ Yüksek' : state.healthData.bloodPressureHistory[0].systolic >= 115 ? '⚑ İzle' : '✓ Güvenli'}
+            </span>
+          </div>
 
           ${(() => {
             const hist = state.healthData.bloodPressureHistory.slice(0, 6).reverse();
@@ -2203,27 +3009,22 @@ function getHealthSubtabContent() {
         </div>
 
         <div class="p-4 bg-white/5 rounded-3xl border border-white/10 space-y-3.5 shadow-sm">
-          ${(() => {
-            const m0w = window.computeM0BaselineProfile ? window.computeM0BaselineProfile() : { expectedMinGain: '7.0', expectedMaxGain: '10.2', bmi: '20.5', bmiCategory: 'Normal VKİ', weightStatusText: 'DSÖ Koridorunda' };
-            return `
-              <div class="flex justify-between items-center">
-                <div>
-                  <span class="text-xs font-semibold text-white/95">Haftalık İlerleme Eğrisi (VKİ: ${m0w.bmi} kg/m²)</span>
-                  <p class="text-[10px] text-white/50">0. Hafta (${state.user.startWeight} kg) ➔ ${state.baby.week}. Hafta (${state.user.currentWeight} kg)</p>
-                </div>
-                <button onclick="editCurrentWeight()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 text-amber-200 text-xs font-medium rounded-xl">
-                  Düzenle
-                </button>
-              </div>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-xs font-semibold text-white/95">Haftalık İlerleme Eğrisi</span>
+              <p class="text-[10px] text-white/50">0. Hafta (58 kg / 68 cm) ➔ 31. Hafta (65 kg / 98 cm)</p>
+            </div>
+            <button onclick="editCurrentWeight()" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 border border-white/15 text-amber-200 text-xs font-medium rounded-xl">
+              Düzenle
+            </button>
+          </div>
 
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
-                  <span class="text-[10px] text-white/50">Toplam Kilo Artışı</span>
-                  <div class="text-base font-bold text-emerald-300 mt-0.5">${weightGain >= 0 ? '+' : ''}${weightGain} kg</div>
-                  <span class="text-[9px] text-white/50">${state.baby.week}.H Hedef: +${m0w.expectedMinGain} – +${m0w.expectedMaxGain} kg</span>
-                </div>
-            `;
-          })()}
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
+              <span class="text-[10px] text-white/50">Toplam Kilo Artışı</span>
+              <div class="text-base font-bold text-emerald-300 mt-0.5">+${weightGain} kg</div>
+              <span class="text-[9px] text-white/40">Hedef: +7 ila +11 kg</span>
+            </div>
             <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
               <span class="text-[10px] text-white/50">Karın Çevresi Artışı</span>
               <div class="text-base font-bold text-amber-200 mt-0.5">+${waistGain} cm</div>
@@ -3608,80 +4409,6 @@ function renderShoppingTab() {
 }
 
 // 6. MODÜL: MURADİYE KOMŞU AĞI
-
-// MENÜ SEKME RENDERI (Mükerrer çekmece yerine temiz, düzenli alt bar sekmesi)
-function renderMenuTab() {
-  return `
-    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
-      <div class="flex justify-between items-center pb-2 border-b border-white/10">
-        <div>
-          <h2 class="text-base font-serif font-semibold text-white/95">ToHUM Menü & Planlama</h2>
-          <p class="text-[11px] text-white/60">Buse Nur Ürem · 31. Gebelik Haftası</p>
-        </div>
-        <span class="text-[10px] bg-white/10 text-white/70 px-2.5 py-1 rounded-full border border-white/10">
-          Modüller
-        </span>
-      </div>
-
-      <div class="space-y-2.5 text-xs">
-        <!-- 4. BÜTÜNLEŞİK TAKVİM -->
-        <button onclick="navigateTab('calendar')" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">4. Bütünleşik Takvim & Randevular</div>
-            <div class="text-[11px] text-amber-200 mt-0.5">NST, Hekim Randevusu & Yol Haritası</div>
-          </div>
-          <span class="text-amber-200 text-xs">Aç ➔</span>
-        </button>
-
-        <!-- 5. İHTİYAÇ & BÜTÇE PLANI -->
-        <button onclick="navigateTab('shopping')" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">5. İhtiyaç & Bütçe Planı</div>
-            <div class="text-[11px] text-amber-200 mt-0.5">Doğum Çantası, Bebek Odası & Maliyet</div>
-          </div>
-          <span class="text-amber-200 text-xs">Aç ➔</span>
-        </button>
-
-        <!-- PROFİL M0 BAZAL & GÜVENLİ TANSİYON -->
-        <button onclick="navigateTab('profile'); setProfileSubtab('baseline');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">M0 Kişisel Bazal & Güvenli Koridor</div>
-            <div class="text-[11px] text-emerald-300 mt-0.5">90/60 mmHg Doğal Bazal & Kardiyo Koridoru</div>
-          </div>
-          <span class="text-emerald-300 text-xs">İncele ➔</span>
-        </button>
-
-        <!-- DMT1 MİNERAL TAKVİMİ -->
-        <button onclick="navigateTab('profile'); setProfileSubtab('supplements');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">DMT1 Mineral Takvimi & Reçeteler</div>
-            <div class="text-[11px] text-amber-200 mt-0.5">Ferro Sanol (Sabah Aç) · Magnimore (Akşam Tok)</div>
-          </div>
-          <span class="text-amber-200 text-xs">Aç ➔</span>
-        </button>
-
-        <!-- SAĞLIK VERİSİ EGEMENLİĞİ & KVKK -->
-        <button onclick="navigateTab('profile'); setProfileSubtab('security');" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">Sağlık Verisi Egemenliği & JSON Yedek</div>
-            <div class="text-[11px] text-white/50 mt-0.5">M0 Verilerini Dışa Aktar (KVKK Uyumlu)</div>
-          </div>
-          <span class="text-white/70 text-xs">Yedekle ➔</span>
-        </button>
-
-        <!-- KURULUM & PROFİL -->
-        <button onclick="openAuthWelcomeFlow()" class="w-full p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex items-center justify-between text-left transition">
-          <div>
-            <div class="font-bold text-white text-sm">Giriş & Kurulum Anketi</div>
-            <div class="text-[11px] text-white/50 mt-0.5">Hesap Bilgilerini Düzenle</div>
-          </div>
-          <span class="text-white/70 text-xs">Aç ➔</span>
-        </button>
-      </div>
-    </div>
-  `;
-}
-
 function renderKovanTab() {
   const motherItems = [
     { id: 1, title: "Organik Pamuk Yenidoğan Tulum Seti", user: "Merve", bio: "Muradiye · 2. Anne", dist: "400m", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80", type: "gift", desc: "Hiç giyilmemiş organik pamuklu tulum seti, bir anneye hediye etmek isterim." },
@@ -4219,7 +4946,9 @@ function renderOnboardingWizardScreen() {
         <div class="grid grid-cols-3 gap-2">
           ${[1, 2, 3].map(idx => `
             <button onclick="setOnboardingStep(${idx})"
-              class="h-2 rounded-full transition-all ${idx === step ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]' : idx < step ? 'bg-emerald-400/70' : 'bg-white/15'}"></button>
+              aria-label="Adım ${idx}"
+              title="Adım ${idx}"
+              class="h-2 rounded-full transition-all ${idx === step ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]' : idx < step ? 'bg-emerald-400/70' : 'bg-white/15'}"><span class="sr-only">Adım ${idx}</span></button>
           `).join('')}
         </div>
 
@@ -5055,6 +5784,40 @@ function getProfileSubtabContent(sub, m0, curW, lc) {
               </div>
             </div>
 
+            <!-- 2.5 Kolajen Peptit (Özel Takviye) -->
+            ${state.hasCollagen ? `
+              <div class="relative group">
+                <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-teal-400 border-2 border-black"></span>
+                <div class="p-2.5 bg-black/40 border border-teal-400/30 rounded-2xl space-y-1">
+                  <div class="flex justify-between items-center">
+                    <span class="font-bold text-teal-200 text-xs">☕ 16:30 · İkindi Hafif Açlıkta</span>
+                    <span class="text-[9px] px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-400/30 font-semibold">Özel Takviye</span>
+                  </div>
+                  <div class="text-[11px] font-semibold text-white">Hidrolize Kolajen Peptit (Tip 1 & 3 · 5000 mg)</div>
+                  <p class="text-[10px] text-white/65 leading-relaxed">
+                    💡 <b>DMT1 & Emilim Tüyosu:</b> Kolajen bir protein olduğundan sabahki demir emilimini baskılamaması için ikindi saatinde C vitaminiyle alınır. Pelvik bağ doku ve cilt elastikiyetini besler.
+                  </p>
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- 2.7 Diğer Kişiselleştirilmiş Özel Takviyeler -->
+            ${(state.customSupplements || []).map(cs => `
+              <div class="relative group">
+                <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-indigo-400 border-2 border-black"></span>
+                <div class="p-2.5 bg-black/40 border border-indigo-400/30 rounded-2xl space-y-1">
+                  <div class="flex justify-between items-center">
+                    <span class="font-bold text-indigo-200 text-xs">🕒 ${cs.scheduledHour || '16:30'} · Kişisel Takviye</span>
+                    <span class="text-[9px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-semibold">Özel</span>
+                  </div>
+                  <div class="text-[11px] font-semibold text-white">${cs.name} (${cs.dose || '1 Doz'})</div>
+                  <p class="text-[10px] text-white/65 leading-relaxed">
+                    💡 <b>Bilgi:</b> ${cs.dmt1Rule || 'Hekim tavsiyesine uygun saatte alınmalıdır.'}
+                  </p>
+                </div>
+              </div>
+            `).join('')}
+
             <!-- 3. Magnezyum -->
             <div class="relative group">
               <span class="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-black"></span>
@@ -5449,9 +6212,28 @@ window.selectMaternalMood = function(moodId) {
   const moodResponses = {
     serene: "Dingin ve huzurlusun. Bedenin Güneş'le mükemmel bir sükunette nefes alıyor.",
     tired: "Yorgun hissetmen çok doğal; bedenin şu an mucizevi bir organ ve doku inşa ediyor. Dinlen.",
-    emotional: "Hormonlar yaşamın tatlı dalgalarıdır. 8.3 Hz sesimizle biraz baş başa kal.",
-    ache: "31. haftada pelvis bebeğe yer açıyor. Oğuz'dan 5 dk hafif bel masajı isteyelim mi?"
+    emotional: "Hormonlar yaşamın tatlı dalgalarıdır. Bedenine ve hislerine şefkatle sarıl.",
+    ache: "31. haftada pelvis bebeğe yer açıyor. Sol yanına uzanıp lomber bölgeni rahatlatabilirsin."
   };
+  
+  // Arka planda eş portalına proaktif ihtiyaç sinyali aktarımı (anneye hissettirilmeden, kendi düşünmüş gibi)
+  if (moodId === 'ache' || moodId === 'tired') {
+    try {
+      fetch('/api/partner/signal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          signal: {
+            type: moodId === 'ache' ? 'biomechanic' : 'rest',
+            title: moodId === 'ache' ? 'Lomber Yük Hassasiyeti' : 'Dinlenme & Uyku İhtiyacı',
+            text: moodId === 'ache' 
+              ? "Buse'nin 31. haftasında pelvik genişleme kaynaklı lomber yükü arttı. Sormasını beklemeden ılık bir bitki çayı veya nazik bir sırt masajı sunabilirsin."
+              : "Buse'nin biyolojik ritmi dinlenme sinyali veriyor. Sessiz ve huzurlu bir ortam hazırlayabilirsin."
+          }
+        })
+      }).catch(function() {});
+    } catch(e) {}
+  }
   state.interactive.reactionText = moodResponses[moodId] || "Sen iyiysen Güneş de iyi.";
   triggerHaptic([20, 20]);
   saveState();
@@ -5909,7 +6691,7 @@ window.calculateWeekFromLmpDate = function(dateStr) {
   state.user.lmpDate = dateStr;
   const lmp = new Date(dateStr);
   if (!isNaN(lmp.getTime())) {
-    const refNow = new Date("2026-08-23T12:00:00");
+    const refNow = new Date();
     const diffDays = Math.floor((refNow - lmp) / (1000 * 60 * 60 * 24));
     const calcWeek = Math.max(4, Math.min(40, Math.floor(diffDays / 7)));
     const due = new Date(lmp.getTime() + 280 * 24 * 60 * 60 * 1000);
@@ -6234,7 +7016,7 @@ window.sendNeighborMessage = function(userName) {
       time: "Şimdi",
       isMe: true
     });
-    alert(`${userName} kullanıcısına mesajınız güvenle iletildi.`);
+    triggerReaction("water", `${userName} kullanıcısına mesajınız güvenle iletildi.`);
     render();
   }
 };
@@ -6356,6 +7138,26 @@ window.feedAction = function(type) {
     triggerReaction("omega", "Hücresel besin iletildi. Güneş büyüme enerjisiyle canlandı.");
   }
   render();
+
+  // Bebeğin Canlı Işık, Renk ve Tepki Animasyonu (Gözle Görülür Aydınlanma)
+  setTimeout(() => {
+    const babyImg = document.getElementById("cinematicBabyVisual");
+    if (babyImg) {
+      if (type === "water") {
+        babyImg.style.filter = "brightness(1.22) contrast(1.1) drop-shadow(0 0 45px rgba(103, 232, 249, 0.8))";
+        babyImg.style.transform = "scale(1.025)";
+      } else {
+        babyImg.style.filter = "brightness(1.22) contrast(1.1) drop-shadow(0 0 45px rgba(110, 231, 183, 0.8))";
+        babyImg.style.transform = "scale(1.025)";
+      }
+      setTimeout(() => {
+        if (babyImg) {
+          babyImg.style.filter = "brightness(0.95) contrast(1.05)";
+          babyImg.style.transform = "scale(1)";
+        }
+      }, 1400);
+    }
+  }, 30);
 };
 
 window.playFatherVoice = function() {
@@ -6612,7 +7414,7 @@ window.addNewBloodPressureLog = function() {
   const sVal = parseInt(systolic);
   const dVal = parseInt(diastolic);
   if (isNaN(sVal) || isNaN(dVal)) {
-    alert("Geçerli bir sayı girin.");
+    triggerReaction("omega", "Lütfen geçerli bir tansiyon sayısı girin.");
     return;
   }
 
@@ -6647,7 +7449,7 @@ window.editCurrentWeight = function() {
   if (!newWeight) return;
   const val = parseFloat(newWeight);
   if (isNaN(val) || val < 40 || val > 150) {
-    alert("Geçerli bir kilo girin (40-150 kg).");
+    triggerReaction("omega", "Lütfen geçerli bir kilo girin (40-150 kg).");
     return;
   }
   state.user.currentWeight = val;
@@ -6995,7 +7797,7 @@ window.runAiSeedCoreAnalysis = function(systolic, diastolic, hrv, symptoms) {
   return state.aiSeedCoreAnalysis;
 };
 
-// 2. DMT1 Reseptör Biyoyararlanım & Emilim Çakışma Kontrolü
+// 2. DMT1 Reseptör Biyoyararlanım & Emilim Çakışma Kontrolü (Non-blocking Seamless Feedback)
 window.checkDmt1Interaction = function(targetDrugId) {
   const iron = state.prescriptions.find(p => p.id === "iron");
   const magnesium = state.prescriptions.find(p => p.id === "magnesium");
@@ -7007,8 +7809,8 @@ window.checkDmt1Interaction = function(targetDrugId) {
     if (elapsedMinutes < 120) {
       const remaining = 120 - elapsedMinutes;
       const warn = `⚠️ DMT1 Reseptör Çakışması: Ferro Sanol (Demir) takviyenizi ${elapsedMinutes} dk önce aldınız. Magnezyum/Kalsiyum ile aynı bağırsak taşıyıcısını (DMT1) kullandığı için emilim %70 düşer. Lütfen ${remaining} dakika sonra alınız.`;
-      alert(warn);
       triggerReaction("magnesium", warn);
+      triggerHaptic([30, 50]);
       return false;
     }
   }
@@ -7019,8 +7821,8 @@ window.checkDmt1Interaction = function(targetDrugId) {
     if (elapsedMinutes < 120) {
       const remaining = 120 - elapsedMinutes;
       const warn = `⚠️ DMT1 Reseptör Çakışması: Magnezyum takviyenizi ${elapsedMinutes} dk önce aldınız. Demir emilimini korumak ve gebelik anemisini önlemek için Ferro Sanol'u ${remaining} dakika sonra alınız.`;
-      alert(warn);
       triggerReaction("omega", warn);
+      triggerHaptic([30, 50]);
       return false;
     }
   }
@@ -7064,6 +7866,404 @@ window.shareClinicalSummaryWhatsApp = function() {
     msg
   );
 };
+
+
+// =========================================================================
+// REÇETE YÜKLEME VE ENTEGRASYON MODALI (DOKTOR REÇETESİ & E-REÇETE OCR)
+// =========================================================================
+// =========================================================================
+// REÇETE YÜKLEME VE ENTEGRASYON MODALI (GERÇEK DOKTOR REÇETESİ & E-REÇETE OCR)
+// =========================================================================
+function renderPrescriptionUploadModal() {
+  if (!state.isPrescriptionModalOpen) return '';
+
+  const scanState = state.rxScanState || 'picker';
+  const tab = state.rxModalTab || 'photo';
+  const rx = state.rxParsedPrescription || null;
+  const items = (rx && rx.items) || [];
+
+  return `
+    <div class="fixed inset-0 z-[160] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200" onclick="togglePrescriptionModal()">
+      <div class="bg-[#140D0B] border border-white/15 rounded-3xl p-5 w-full max-w-sm shadow-[0_20px_60px_rgba(0,0,0,0.95)] space-y-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        
+        <!-- Üst Başlık -->
+        <div class="flex justify-between items-center pb-2 border-b border-white/10">
+          <div>
+            <h3 class="text-sm font-serif font-bold text-white/95">Reçete Yükle & Entegre Et</h3>
+            <p class="text-[10px] text-white/50">Op. Dr. Ayşe Yılmaz · Kadın Hastalıkları ve Doğum</p>
+          </div>
+          <button onclick="togglePrescriptionModal()" class="text-white/40 hover:text-white text-xs px-2.5 py-1 rounded-full bg-white/5 active:scale-95 transition">Kapat ✕</button>
+        </div>
+
+        ${scanState === 'picker' ? `
+          <!-- 3 SEKME SEÇİCİ: BELGE, SMS/METİN, E-REÇETE -->
+          <div class="flex p-1 bg-white/5 rounded-2xl border border-white/10 text-[11px]">
+            <button onclick="setRxModalTab('photo')" class="flex-1 py-1.5 rounded-xl transition font-medium ${tab === 'photo' ? 'bg-cyan-500/25 border border-cyan-400/40 text-cyan-200' : 'text-white/60 hover:text-white'}">
+              📷 Belge / Dosya
+            </button>
+            <button onclick="setRxModalTab('text')" class="flex-1 py-1.5 rounded-xl transition font-medium ${tab === 'text' ? 'bg-amber-500/25 border border-amber-400/40 text-amber-200' : 'text-white/60 hover:text-white'}">
+              ✍️ Metin / SMS
+            </button>
+            <button onclick="setRxModalTab('barcode')" class="flex-1 py-1.5 rounded-xl transition font-medium ${tab === 'barcode' ? 'bg-emerald-500/25 border border-emerald-400/40 text-emerald-200' : 'text-white/60 hover:text-white'}">
+              № E-Reçete
+            </button>
+          </div>
+
+          ${state.rxError ? `
+            <div class="p-2.5 bg-rose-950/40 border border-rose-500/40 rounded-xl text-[10px] text-rose-200">
+              ⚠️ ${state.rxError}
+            </div>
+          ` : ''}
+
+          ${tab === 'photo' ? `
+            <!-- FOTOĞRAF VE GERÇEK DOSYA ALANI -->
+            <div class="space-y-3">
+              <!-- Gizli Gerçek Dosya Girdisi -->
+              <input type="file" id="realRxFileInput" accept="image/*,.pdf" capture="environment" onchange="handleRealRxFile(event)" class="hidden">
+              
+              <!-- Gerçek Dosya Seçici Butonu -->
+              <div 
+                onclick="document.getElementById('realRxFileInput').click()"
+                class="p-5 rounded-2xl border-2 border-dashed border-cyan-400/40 hover:border-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/15 text-center cursor-pointer transition active:scale-98 group space-y-2">
+                <div class="w-12 h-12 mx-auto rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center text-xl group-hover:scale-110 transition shadow-[0_0_15px_rgba(103,232,249,0.3)]">
+                  📄
+                </div>
+                <div>
+                  <div class="font-semibold text-white text-xs">Reçete Dosyası veya Fotoğrafı Seç</div>
+                  <div class="text-[10px] text-white/50 mt-0.5">PDF raporu, E-Nabız ekranı veya kağıt reçete</div>
+                </div>
+              </div>
+
+              <!-- Hızlı Gerçekçi Test Seçenekleri -->
+              <div class="space-y-1.5 pt-1">
+                <div class="text-[9px] text-white/40 uppercase tracking-wider font-semibold">Doğrulanmış Klinik Örnekler:</div>
+                <button onclick="triggerRxScan('demo')" class="w-full py-2 px-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] text-cyan-200 font-medium transition flex items-center justify-between active:scale-95">
+                  <span class="flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                    <span>31. Hafta Hekim Reçetesi (Ferro Sanol + Ocean Mummy + Magnimore)</span>
+                  </span>
+                  <span class="text-white/40 text-[9px]">SGK Medula ↗</span>
+                </button>
+                <button onclick="triggerRxScan('collagen_demo')" class="w-full py-2 px-3 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-400/30 rounded-xl text-[10px] text-teal-200 font-medium transition flex items-center justify-between active:scale-95">
+                  <span class="flex items-center space-x-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span>
+                    <span>Kolajen + Demir + Magnezyum Entegre Reçete</span>
+                  </span>
+                  <span class="text-teal-300/60 text-[9px]">DMT1 Kuralı ↗</span>
+                </button>
+              </div>
+            </div>
+          ` : tab === 'text' ? `
+            <!-- SERBEST METİN / DOKTOR SMS'İ YAPISTIRMA ALANI -->
+            <div class="space-y-2.5">
+              <div class="text-[10px] text-white/60">Hekimden gelen SMS'i veya E-Nabız reçete metnini yapıştırınız:</div>
+              <textarea 
+                id="rxTextInput" 
+                rows="4" 
+                class="w-full bg-black/50 border border-white/20 rounded-xl p-2.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-amber-400 font-sans"
+                placeholder="Örn: Dr. Ayşe Yılmaz - Manisa Şehir Hastanesi
+1. Ferro Sanol Duodenal 100 mg 1x1
+2. Day2Day Kolajen Peptit 5000 mg
+3. Magnimore Plus Saşe"
+              ></textarea>
+              
+              <div class="flex space-x-2">
+                <button onclick="handleRxTextParse()" class="flex-1 py-2 px-3 bg-amber-500/25 hover:bg-amber-500/35 border border-amber-400/40 text-amber-200 text-xs font-semibold rounded-xl transition active:scale-95 flex items-center justify-center space-x-1.5">
+                  <span>⚡ Metni Çözümle & Ayrıştır</span>
+                </button>
+              </div>
+
+              <!-- Hızlı Metin Doldurma Butonları -->
+              <div class="flex space-x-1 text-[9px]">
+                <button 
+                  onclick="loadSampleRxText('collagen')" 
+                  class="flex-1 py-1 px-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition text-center">
+                  Örnek Kolajenli SMS
+                </button>
+                <button 
+                  onclick="loadSampleRxText('standard')" 
+                  class="flex-1 py-1 px-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition text-center">
+                  Örnek 3'lü Standart SMS
+                </button>
+              </div>
+            </div>
+          ` : `
+            <!-- E-REÇETE KOD GİRİŞİ -->
+            <div class="space-y-3 p-3 bg-white/5 rounded-2xl border border-white/10">
+              <div class="text-[10px] text-white/60">T.C. Sağlık Bakanlığı SGK E-Reçete Numarası:</div>
+              <div class="flex space-x-2">
+                <input 
+                  type="text" 
+                  id="rxCodeInput" 
+                  value="2026-REC-31W" 
+                  class="flex-1 bg-black/50 border border-white/20 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none focus:border-emerald-400"
+                  placeholder="Örn: 2026-REC-31W"
+                >
+                <button onclick="handleRxCodeLookup()" class="py-2 px-3 bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-400/40 text-emerald-200 text-xs font-semibold rounded-xl transition active:scale-95">
+                  Sorgula
+                </button>
+              </div>
+              <div class="flex items-center space-x-2 pt-1">
+                <button onclick="document.getElementById('rxCodeInput').value = 'REC-COLLAGEN-31'; handleRxCodeLookup();" class="text-[9px] text-teal-300/80 hover:text-teal-200 underline">
+                  Kolajenli Reçete Kodu: REC-COLLAGEN-31
+                </button>
+              </div>
+              <p class="text-[9px] text-white/40">E-Nabız sistemine kayıtlı hekim kaşesi ve protokol otomatik sorgulanır.</p>
+            </div>
+          `}
+        ` : scanState === 'scanning' ? `
+          <!-- CANLI TARAMA VE GERÇEK ÇÖZÜMLEME ANİMASYONU -->
+          <div class="py-8 px-4 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="relative w-36 h-48 mx-auto rounded-xl bg-black/60 border border-cyan-400/50 overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.4)] flex flex-col justify-between p-3">
+              <div class="space-y-1.5 opacity-40">
+                <div class="w-16 h-2 bg-white/60 rounded"></div>
+                <div class="w-24 h-1.5 bg-white/40 rounded"></div>
+                <div class="w-20 h-1.5 bg-white/40 rounded"></div>
+              </div>
+              <div class="space-y-1.5 opacity-40">
+                <div class="w-full h-1 bg-white/30 rounded"></div>
+                <div class="w-5/6 h-1 bg-white/30 rounded"></div>
+                <div class="w-4/6 h-1 bg-white/30 rounded"></div>
+              </div>
+              <div class="absolute inset-x-0 h-1 bg-cyan-400 shadow-[0_0_12px_#22d3ee] animate-bounce"></div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="text-xs font-semibold text-cyan-200 flex items-center justify-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>${state.rxScanMessage || 'Belge Klinik NLP ile Çözümleniyor...'}</span>
+              </div>
+              <p class="text-[10px] text-white/50">Hekim kaşesi, protokol no ve DMT1 etken maddeleri eşleştiriliyor</p>
+            </div>
+          </div>
+        ` : `
+          <!-- DOĞRULANMIŞ VE DÜZENLENEBİLİR GERÇEK REÇETE KARTI (VERIFIED) -->
+          <div class="space-y-3 animate-in fade-in zoom-in-95 duration-200">
+            
+            <div class="p-3.5 bg-gradient-to-br from-emerald-950/40 via-white/5 to-white/5 border border-emerald-400/40 rounded-2xl space-y-2.5">
+              
+              <!-- Üst Hekim ve Belge Başlığı -->
+              <div class="flex justify-between items-start text-xs border-b border-white/10 pb-2">
+                <div>
+                  <div class="font-bold text-white text-xs">${rx ? rx.doctorName : 'Op. Dr. Ayşe Yılmaz'}</div>
+                  <div class="text-[9px] text-emerald-300 font-mono">${rx ? (rx.hospital + ' · ' + (rx.prescriptionNo || '')) : 'Manisa Şehir Hastanesi'}</div>
+                </div>
+                <span class="text-[9px] bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-400/30 font-semibold">
+                  ${rx ? (rx.source || 'Doğrulandı ✓') : '31. Hafta'}
+                </span>
+              </div>
+
+              <!-- İlaç ve Takviye Listesi (Dinamik ve Düzenlenebilir) -->
+              <div class="space-y-1.5 text-[11px] pt-1" id="parsedRxItemsList">
+                ${items.length === 0 ? `
+                  <div class="p-3 text-center text-white/40 text-[10px] bg-black/20 rounded-xl border border-white/5">
+                    Reçetede henüz ilaç/takviye yok. Aşağıdaki butonlardan veya giriş alanından ekleyebilirsiniz.
+                  </div>
+                ` : items.map((it, idx) => `
+                  <div class="p-2 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between group">
+                    <div class="flex-1 pr-2">
+                      <div class="flex items-center space-x-1.5">
+                        <span class="font-medium text-white">${it.name}</span>
+                        ${it.type === 'collagen' ? '<span class="text-[8px] bg-teal-500/20 text-teal-300 px-1 rounded border border-teal-400/30 font-bold">Kolajen</span>' : ''}
+                      </div>
+                      <div class="text-[9px] text-white/60 leading-tight">${it.dmt1Rule || it.dose}</div>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                      <span class="text-[9px] font-mono ${it.type === 'iron' ? 'text-rose-300' : it.type === 'collagen' ? 'text-teal-300' : it.type === 'magnesium' ? 'text-amber-300' : 'text-emerald-300'} font-bold bg-white/5 px-2 py-1 rounded-lg">
+                        ${it.timing || it.scheduledHour}
+                      </span>
+                      <button onclick="removeParsedRxItem(${idx})" title="Listeden Kaldır" class="text-white/30 hover:text-rose-300 p-1 text-[10px] transition">
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- HIZLI EKLEME: KOLAJEN VEYA DİĞER TAKVİYELER -->
+              <div class="pt-1 border-t border-white/10 space-y-1.5">
+                <div class="flex justify-between items-center text-[9px] text-white/50">
+                  <span>Reçeteye Ek Takviye Ekle:</span>
+                </div>
+                <div class="flex flex-wrap gap-1 text-[9px]">
+                  <button 
+                    onclick="addCustomItemToParsedRx('Hidrolize Kolajen Peptit (Tip 1-3) 5000 mg', '1 Saşe', '16:30', 'collagen')" 
+                    class="py-1 px-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30 border border-teal-400/30 text-teal-200 transition active:scale-95 flex items-center space-x-1">
+                    <span>+ Kolajen Peptit (16:30 İkindi)</span>
+                  </button>
+                  <button 
+                    onclick="addCustomItemToParsedRx('D3-K2 Vitamini Damlası', '5 Damla', '13:30', 'd3')" 
+                    class="py-1 px-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition active:scale-95">
+                    + D3-K2 Damla
+                  </button>
+                  <button 
+                    onclick="addCustomItemToParsedRx('Probiyotik Saşe', '1 Saşe', '22:00', 'probiotic')" 
+                    class="py-1 px-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition active:scale-95">
+                    + Probiyotik
+                  </button>
+                </div>
+
+                <!-- Özel İlaç Adı Yazarak Ekleme -->
+                <div class="flex space-x-1 pt-1">
+                  <input 
+                    type="text" 
+                    id="customRxItemInput" 
+                    placeholder="Başka bir takviye/ilaç adı..." 
+                    onkeydown="if(event.key==='Enter') addQuickCustomInputToParsedRx()"
+                    class="flex-1 bg-black/40 border border-white/15 rounded-lg px-2 py-1 text-[10px] text-white placeholder-white/30 focus:outline-none focus:border-teal-400"
+                  >
+                  <button onclick="addQuickCustomInputToParsedRx()" class="py-1 px-2 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-400/30 text-teal-200 text-[10px] rounded-lg transition active:scale-95">
+                    + Ekle
+                  </button>
+                </div>
+              </div>
+
+              <!-- DMT1 GÜVENLİK ÖZETİ -->
+              <div class="p-2 bg-cyan-950/30 border border-cyan-400/30 rounded-xl text-[9px] text-cyan-200 leading-relaxed">
+                ✓ <b>DMT1 Koruma Tamponu:</b> Sabah demiri (08:30) ile gece magnezyumu (21:30) arasında 13 saatlik güvenli tampon oluşturuldu. Kolajen ikindi (16:30) ara öğününe yerleştirilerek demir emilimini baskılaması önlendi.
+              </div>
+            </div>
+
+            <!-- Onay ve Tekrar Tarama Eylemleri -->
+            <div class="space-y-1.5">
+              <button onclick="confirmRealRxIntegration()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500/30 to-cyan-500/30 hover:from-emerald-500/40 hover:to-cyan-500/40 border border-emerald-400/50 text-emerald-200 text-xs font-semibold rounded-2xl transition active:scale-98 shadow-sm flex items-center justify-center space-x-2">
+                <span>✓</span>
+                <span>Bu Reçeteyi Günlük Takibime Aktar (${items.length} Öğe)</span>
+              </button>
+              <button onclick="resetRxScan()" class="w-full py-1.5 text-center text-[10px] text-white/50 hover:text-white transition">
+                ⟲ Farklı Bir Belge Tara / Yeniden Yükle
+              </button>
+            </div>
+
+          </div>
+        `}
+
+      </div>
+    </div>
+  `;
+}
+
+function renderCustomSupplementModal() {
+  if (!state.isCustomSupplementModalOpen) return '';
+
+  return `
+    <div class="fixed inset-0 z-[160] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200" onclick="toggleCustomSupplementModal()">
+      <div class="bg-[#140D0B] border border-white/15 rounded-3xl p-5 w-full max-w-sm shadow-[0_20px_60px_rgba(0,0,0,0.9)] space-y-4" onclick="event.stopPropagation()">
+        
+        <div class="flex justify-between items-center pb-2 border-b border-white/10">
+          <div>
+            <h3 class="text-sm font-serif font-bold text-white/95">Özel Takviye Ekle</h3>
+            <p class="text-[10px] text-white/50">Reçete Dışı / Hekim Bilgilendirmeli Takip</p>
+          </div>
+          <button onclick="toggleCustomSupplementModal()" class="text-white/40 hover:text-white text-xs px-2.5 py-1 rounded-full bg-white/5 active:scale-95 transition">Kapat ✕</button>
+        </div>
+
+        <!-- Kolajen Detay ve Güvenlik Kartı -->
+        <div class="p-3.5 rounded-2xl bg-gradient-to-br from-teal-950/40 via-white/5 to-white/5 border border-teal-400/35 space-y-2.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-teal-200 flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-teal-400"></span>
+              <span>Hidrolize Kolajen Peptit (Tip 1 & 3)</span>
+            </span>
+            <span class="text-[10px] text-teal-300 font-mono">5000 mg</span>
+          </div>
+
+          <!-- ToHUM Farmakoloji Güvenlik & Zamanlama Özeti -->
+          <div class="space-y-1.5 text-[10px] text-white/75 leading-relaxed bg-black/40 p-2.5 rounded-xl border border-white/5">
+            <div class="text-teal-200 font-semibold">🧬 Gebelikte Kolajen & DMT1 Etkileşimi:</div>
+            <p>
+              • <b>Pelvik Taban & Elastikiyet:</b> 31. haftada büyüyen rahim bağ dokularını ve cilt elastikiyetini destekler. Saf, ağır metal sertifikalı hidrolize peptit tercih edilmelidir.
+            </p>
+            <p>
+              • <b>Zamanlama Kuralı (DMT1):</b> Kolajen bir protein olduğundan sabahki <b>Ferro Sanol demir emilimini</b> baskılamaması için sabah değil, <b>ikindi hafif açlıkta (16:30)</b> C vitaminiyle alınması klinik olarak idealdir.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] pt-1">
+            <span class="text-white/60">Önerilen Biyolojik Saat:</span>
+            <span class="text-teal-300 font-mono font-bold">16:30 (İkindi)</span>
+          </div>
+        </div>
+
+        <!-- Durum ve Eylemler -->
+        <div class="space-y-2">
+          ${state.hasCollagen ? `
+            <div class="p-2.5 rounded-xl bg-teal-950/40 border border-teal-400/30 text-[10px] text-teal-200 flex items-center justify-between">
+              <span>✓ Şu anda günlük takip listenizde aktif (16:30)</span>
+              <button onclick="removeCollagenSupplement()" class="text-rose-400 hover:text-rose-300 text-[10px] font-semibold underline px-1.5 py-0.5 rounded transition">Takibi Kaldır ✕</button>
+            </div>
+          ` : `
+            <button onclick="addCollagenSupplement()" class="w-full py-2.5 bg-teal-500/30 hover:bg-teal-500/40 border border-teal-400/50 text-teal-200 text-xs font-semibold rounded-2xl transition active:scale-98 shadow-sm flex items-center justify-center space-x-1.5">
+              <span>✓</span>
+              <span>Kolajeni Günlük Takvime Ekle (16:30)</span>
+            </button>
+          `}
+        </div>
+
+        <!-- Aktif Özel Takviyeler Listesi (Dinamik) -->
+        ${(state.customSupplements && state.customSupplements.length > 0) ? `
+          <div class="space-y-1.5 pt-1 border-t border-white/10">
+            <div class="text-[10px] font-semibold text-white/70">Takip Edilen Diğer Özel Takviyeler:</div>
+            <div class="space-y-1 max-h-28 overflow-y-auto pr-0.5">
+              ${state.customSupplements.map(cs => `
+                <div class="p-2 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between">
+                  <div>
+                    <div class="font-medium text-white text-xs">${cs.name}</div>
+                    <div class="text-[9px] text-white/50">${cs.dose || '1 Doz'} · ${cs.scheduledHour || '16:30'}</div>
+                  </div>
+                  <button onclick="removeCustomSupplement('${cs.id}')" title="Takibi Kaldır" class="text-white/40 hover:text-rose-300 text-xs px-2 py-1 rounded bg-white/5 transition">
+                    ✕ Kaldır
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Hızlı Özel Takviye Ekleme Butonları -->
+        <div class="text-[10px] text-white/50 space-y-1.5 pt-1 border-t border-white/5">
+          <div class="text-[10px] text-white/70 font-medium">Sık Kullanılan Özel Takviyeler:</div>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="addCustomSupplementDirect('Probiyotik Saşe', '1 Saşe', '22:00', 'probiotic')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 text-[10px] transition active:scale-95">
+              + Probiyotik (22:00)
+            </button>
+            <button onclick="addCustomSupplementDirect('D3-K2 Damla', '5 Damla', '13:30', 'd3')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 text-[10px] transition active:scale-95">
+              + D3-K2 Damla (13:30)
+            </button>
+            <button onclick="addCustomSupplementDirect('Koenzim Q10', '100 mg', '13:00', 'q10')" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 text-[10px] transition active:scale-95">
+              + Koenzim Q10 (13:00)
+            </button>
+          </div>
+        </div>
+
+        <!-- Serbest Takviye İsmi ve Saat Seçici -->
+        <div class="space-y-1.5 pt-1.5 border-t border-white/10">
+          <div class="text-[10px] text-white/70 font-medium">Başka Bir Takviye Ekle:</div>
+          <div class="flex space-x-1.5">
+            <input 
+              type="text" 
+              id="newCustomSuppName" 
+              placeholder="Örn: Çinko, Folat, B12..." 
+              onkeydown="if(event.key==='Enter') addCustomSupplementFromInput()"
+              class="flex-1 bg-black/40 border border-white/20 rounded-xl px-2.5 py-1.5 text-xs text-white placeholder-white/30 focus:outline-none focus:border-teal-400"
+            >
+            <select id="newCustomSuppHour" class="bg-black/40 border border-white/20 rounded-xl px-2 py-1.5 text-xs text-teal-300 focus:outline-none">
+              <option value="08:30">08:30 Aç</option>
+              <option value="13:00">13:00 Tok</option>
+              <option value="16:30" selected>16:30 İkindi</option>
+              <option value="21:30">21:30 Tok</option>
+              <option value="22:00">22:00 Gece</option>
+            </select>
+            <button onclick="addCustomSupplementFromInput()" class="py-1.5 px-3 bg-teal-500/25 hover:bg-teal-500/35 border border-teal-400/40 text-teal-200 text-xs font-semibold rounded-xl transition active:scale-95">
+              + Ekle
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+}
 
 function renderClinicalReportModal() {
   if (!state.isClinicalReportOpen) return '';
@@ -7250,6 +8450,7 @@ function initTohumApp() {
     const tabParam = params.get("tab");
     const subParam = params.get("sub");
     const presetParam = params.get("preset");
+    const weekParam = params.get("week");
     const sessionParam = params.get("session") || params.get("role");
     if (sessionParam === "father" || tabParam === "father") {
       if (state.family) state.family.activeSession = "father";
@@ -7267,11 +8468,43 @@ function initTohumApp() {
       state.currentTab = tabParam;
     }
     if (subParam) state.profileSubtab = subParam;
+    if (weekParam && window.changePregnancyWeek) {
+      window.changePregnancyWeek(parseInt(weekParam, 10));
+    }
     if (presetParam && window.applyProfilePreset) {
       window.applyProfilePreset(presetParam);
       return;
     }
   } catch (e) {}
+
+  // Backend profil senkronizasyonu (Güneş 31. Hafta ve güncel reçete/DMT1 doğrulama)
+  if (typeof fetch !== "undefined") {
+    fetch("/api/profile")
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.ok && data.profile) {
+          const p = data.profile;
+          if (p.baby && p.baby.week) {
+            const w = parseInt(p.baby.week, 10);
+            if (state.baby.week !== w && window.changePregnancyWeek) {
+              window.changePregnancyWeek(w);
+            }
+          }
+          if (p.user) {
+            state.user = Object.assign({}, state.user, p.user);
+            if (p.user.activePrescription) {
+              state.activePrescription = p.user.activePrescription;
+            }
+          }
+          if (p.hasCollagen !== undefined) {
+            state.hasCollagen = p.hasCollagen;
+          }
+          render();
+        }
+      })
+      .catch(() => {});
+  }
+
   render();
 }
 

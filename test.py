@@ -16,9 +16,11 @@ import urllib.request
 import urllib.parse
 from datetime import datetime, timedelta
 import subprocess
+import tempfile
+import shutil
 
 # Ensure UTF-8 terminal encoding
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
 
 BASE_URL = "http://localhost:8080"
 TEST_RESULTS = []
@@ -105,6 +107,44 @@ def test_backend_api():
             record_result("Backend API", "POST /api/partner/care-action Şefkatli Destek Kaydı", passed)
     except Exception as e:
         record_result("Backend API", "POST /api/partner/care-action Şefkatli Destek Kaydı", False, str(e))
+
+    # 1.6 POST /api/prescription/parse
+    try:
+        rx_payload = json.dumps({
+            "code": "2026-REC-31W"
+        }).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/prescription/parse", data=rx_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            passed = data.get("ok") is True and len(data.get("prescription", {}).get("items", [])) >= 3
+            record_result("Backend API", "POST /api/prescription/parse Gerçek Reçete Çözümleme", passed)
+    except Exception as e:
+        record_result("Backend API", "POST /api/prescription/parse Gerçek Reçete Çözümleme", False, str(e))
+
+    # 1.7 POST /api/prescription/integrate
+    try:
+        rx_integ = json.dumps({
+            "userId": "buse_founder",
+            "prescription": {
+                "doctorName": "Op. Dr. Ayşe Yılmaz",
+                "hospital": "Manisa Şehir Hastanesi",
+                "prescriptionNo": "REC-COLLAGEN-31",
+                "items": [
+                    {"name": "Ferro Sanol Duodenal 100 mg", "type": "iron"},
+                    {"name": "Ocean Mummy Omega-3", "type": "omega"},
+                    {"name": "Day2Day Kolajen Peptit 5000 mg", "type": "collagen"},
+                    {"name": "Magnimore Plus Saşe", "type": "magnesium"}
+                ]
+            }
+        }).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/prescription/integrate", data=rx_integ, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            passed = data.get("ok") is True and data.get("hasCollagen") is True
+            record_result("Backend API", "POST /api/prescription/integrate Reçete & DMT1 Kolajen Kaydı", passed)
+    except Exception as e:
+        record_result("Backend API", "POST /api/prescription/integrate Reçete & DMT1 Kolajen Kaydı", False, str(e))
+
 
 
 # =========================================================================
@@ -251,41 +291,56 @@ def test_headless_ui():
         ("Profil M0 Bazal & Koridor", "http://localhost:8080/index.html?tab=profile&sub=baseline", ["Kişisel bazal değerim", "Güvenli Tansiyon"]),
         ("Profil DMT1 Takvim", "http://localhost:8080/index.html?tab=profile&sub=supplements", ["DMT1", "Ferro Sanol", "Magnimore Plus"]),
         ("Profil Veri Egemenliği / KVKK", "http://localhost:8080/index.html?tab=profile&sub=security", ["Sağlık Verisi Egemenliği", "downloadM0DataJson"]),
-        ("Anne Arayüzü (Sanal Bebek & Besleme)", "http://localhost:8080/index.html?tab=home", ["Amniyotik Berraklık", "Hücresel Besin", "Ilık Su Ver", "Besin Ver", "Karnı Sev", "Ninni Dinlet"]),
+        ("Anne Arayüzü (Güneş & Günlük Anne Takibi)", "http://localhost:8080/index.html?tab=home", ["Amniyotik Berraklık", "Hücresel Besin", "Su İçtim", "Öğün Yedim", "Takviye", "Nasıl Hissediyorsun"]),
+        ("Bağ Kur (Oyunlaştırılmış Aktiviteler & Mektuplar)", "http://localhost:8080/index.html?tab=bonding", ["Bağ Kur", "Ninni Dinlet", "Karnı Sev", "Zaman Kapsülü", "Gelişim"]),
         ("Anne Kovanı (Kadınlar Çemberi)", "http://localhost:8080/index.html?tab=kovan", ["Muradiye Anne Kovanı", "Kadınlar Çemberi", "Kadın Kullanıcılara Özel Mahrem Alan", "Lansinoh"]),
         ("Baba Arayüzü (Bağımsız Baba Portali & AI Analiz)", "http://localhost:8080/baba.html?tab=analysis", ["ToHUM Baba Portali", "Oğuz Ürem", "ToHUM Anne İhtiyaç Analiz Motoru", "Amniyotik Hidrasyon", "Biomekanik", "Kardiyovasküler Bazal", "DMT1 Mineral Zamanlaması", "Ilık Su Götürdüm"]),
         ("Baba Kovanı (Babalar Ocağı - Sadece Erkekler)", "http://localhost:8080/baba.html?tab=kovan", ["Muradiye Baba Kovanı", "Babalar Ocağı", "Babalar ve Erkeklere Özel Alan", "Maxi-Cosi"])
     ]
 
-    for title, url, patterns in pages_to_test:
-        cmd = [edge_path, "--headless", "--dump-dom", "--virtual-time-budget=2000", url]
+    temp_dir = tempfile.mkdtemp(prefix="tohum_edge_ui_")
+
+    def run_edge(url):
+        cmd = [
+            edge_path,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--user-data-dir={temp_dir}",
+            "--dump-dom",
+            url
+        ]
+        return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=25)
+
+    try:
+        for title, url, patterns in pages_to_test:
+            try:
+                res = run_edge(url)
+                dom = res.stdout
+                matched_all = all(p in dom for p in patterns)
+                record_result("Headless UI", f"{title} DOM & Bileşen Kontrolü", matched_all)
+            except Exception as e:
+                record_result("Headless UI", f"{title} Testi Hatası", False, str(e))
+
+        # 7.8 Negatif Test: Anne Arayüzünde Manuel "Oğuz'a Fısılda" Olmamalı (Otomatik Analiz Güvencesi)
         try:
-            res = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=25)
-            dom = res.stdout
-            matched_all = all(p in dom for p in patterns)
-            record_result("Headless UI", f"{title} DOM & Bileşen Kontrolü", matched_all)
+            res1 = run_edge("http://localhost:8080/index.html?tab=home")
+            has_whisper = "Oğuz'a Fısılda" in res1.stdout
+            record_result("Calm Tech Mahremiyet", "Anne Arayüzünde 'Oğuz'a Fısılda' Kaldırıldı (Otomatik AI Analizi)", not has_whisper)
+            has_switch = "switchSessionRole" in res1.stdout
+            record_result("Bağımsız Arayüzler", "Anne Arayüzünde Baba Oturumuna Geçiş Butonu Yoktur (İzole Deneyim)", not has_switch)
         except Exception as e:
-            record_result("Headless UI", f"{title} Testi Hatası", False, str(e))
+            record_result("Calm Tech Mahremiyet", "Anne Arayüzü Negatif Test Hatası", False, str(e))
 
-    # 7.8 Negatif Test: Anne Arayüzünde Manuel "Oğuz'a Fısılda" Olmamalı (Otomatik Analiz Güvencesi)
-    cmd_neg1 = [edge_path, "--headless", "--dump-dom", "--virtual-time-budget=2000", "http://localhost:8080/index.html?tab=home"]
-    try:
-        res1 = subprocess.run(cmd_neg1, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=25)
-        has_whisper = "Oğuz'a Fısılda" in res1.stdout
-        record_result("Calm Tech Mahremiyet", "Anne Arayüzünde 'Oğuz'a Fısılda' Kaldırıldı (Otomatik AI Analizi)", not has_whisper)
-        has_switch = "switchSessionRole" in res1.stdout
-        record_result("Bağımsız Arayüzler", "Anne Arayüzünde Baba Oturumuna Geçiş Butonu Yoktur (İzole Deneyim)", not has_switch)
-    except Exception as e:
-        record_result("Calm Tech Mahremiyet", "Anne Arayüzü Negatif Test Hatası", False, str(e))
-
-    # 7.9 Negatif Test: Baba Arayüzünde Anneye Geçiş Butonu Olmamalı (Bağımsız Portal)
-    cmd_neg2 = [edge_path, "--headless", "--dump-dom", "--virtual-time-budget=2000", "http://localhost:8080/baba.html"]
-    try:
-        res2 = subprocess.run(cmd_neg2, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=25)
-        has_mother_switch = "Anne Oturumu" in res2.stdout
-        record_result("Bağımsız Arayüzler", "Baba Arayüzünde Anneye Geçiş Butonu Yoktur (İzole Portal)", not has_mother_switch)
-    except Exception as e:
-        record_result("Bağımsız Arayüzler", "Baba Arayüzü Negatif Test Hatası", False, str(e))
+        # 7.9 Negatif Test: Baba Arayüzünde Anneye Geçiş Butonu Olmamalı (Bağımsız Portal)
+        try:
+            res2 = run_edge("http://localhost:8080/baba.html")
+            has_mother_switch = "Anne Oturumu" in res2.stdout
+            record_result("Bağımsız Arayüzler", "Baba Arayüzünde Anneye Geçiş Butonu Yoktur (İzole Portal)", not has_mother_switch)
+        except Exception as e:
+            record_result("Bağımsız Arayüzler", "Baba Arayüzü Negatif Test Hatası", False, str(e))
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
 
 # =========================================================================
 # ANA ÇALIŞTIRICI VE YÖNETİCİ ÖZETİ RAPORU

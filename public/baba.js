@@ -174,6 +174,7 @@ window.playFatherVoice = function() {
 
 window.setBabaTab = function(tabId) {
   babaState.activeTab = tabId;
+  renderBabaApp();
 };
 
 window.sendBabaKovanMessage = function() {
@@ -186,6 +187,19 @@ window.sendBabaKovanMessage = function() {
     isMe: true
   });
   inp.value = "";
+  renderBabaApp();
+};
+
+window.sendBabaNeighborMessage = function(userName) {
+  const text = prompt(`${userName} komşunuza iletmek istediğiniz mesaj:`, "Merhaba, paylaştığınız eşya ile ilgileniyorum.");
+  if (!text) return;
+  babaState.kovanMessages.push({
+    sender: "Oğuz",
+    text: `[@${userName}]: ${text}`,
+    time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+    isMe: true
+  });
+  renderBabaApp();
 };
 
 // ANA RENDER FONKSİYONU
@@ -377,7 +391,7 @@ function renderBabaTabContent(analysisCards) {
                   <div class="text-[11px] text-white/60 mt-1 leading-relaxed">${i.desc}</div>
                 </div>
               </div>
-              <button class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-xs text-white font-medium shrink-0 ml-2 transition">
+              <button onclick="sendBabaNeighborMessage('${i.user}')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-xs text-white font-medium shrink-0 ml-2 transition active:scale-95">
                 Mesaj
               </button>
             </div>

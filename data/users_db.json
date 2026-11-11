@@ -6,7 +6,7 @@
       "authProvider": "google",
       "email": "buse.baltacioglu@tohum.app",
       "onboardingCompleted": true,
-      "updatedAt": "2026-11-10T16:52:11.528928",
+      "updatedAt": "2026-11-11T17:07:44.488771",
       "user": {
         "name": "Buse Nur Ürem",
         "shortName": "Buse Nur",
@@ -21,15 +21,15 @@
         "baselineBP": "90/60",
         "baselineHR": 72,
         "heightCm": 168,
-        "currentWeight": 50,
-        "startWeight": 50,
+        "currentWeight": 65.0,
+        "startWeight": 58.0,
         "startWaist": 68,
         "waistCircumference": 98,
         "fundalHeight": 31,
         "parity": "G1P0 (İlk Gebelik · Primigravida)",
         "pregnancyType": "Tekil Gebelik",
-        "lmpDate": "2026-01-17",
-        "dueDate": "24 Ekim 2026",
+        "lmpDate": "2026-04-07",
+        "dueDate": "12 Ocak 2027",
         "bloodGroup": "A Rh-",
         "doctorName": "Dr. Ayşe Yılmaz",
         "hospitalName": "Manisa Şehir Hastanesi",
@@ -42,7 +42,9 @@
             "iron",
             "omega",
             "d3",
-            "folic"
+            "folic",
+            "collagen",
+            "magnesium"
           ],
           "symptoms": [
             "Hafif Bel Ağrısı",
@@ -51,12 +53,67 @@
           "specialConditions": [
             "Düşük Tansiyon Hassasiyeti (90/60)"
           ]
-        }
+        },
+        "activePrescription": {
+          "doctorName": "Op. Dr. Ayşe Yılmaz",
+          "hospital": "Manisa Şehir Hastanesi",
+          "prescriptionNo": "2026-REC-31W",
+          "items": [
+            {
+              "id": "rx_ferro",
+              "name": "Ferro Sanol Duodenal 100 mg",
+              "scheduledHour": "08:30",
+              "type": "iron",
+              "timing": "08:30 Aç",
+              "dmt1Rule": "Demir (Fe²⁺) Kapsülü · C vitaminiyle sinerjik, süt/çay/kahve ve magnezyumdan en az 2 saat uzakta.",
+              "dmt1Safe": true,
+              "dmt1BufferHours": 11.0
+            },
+            {
+              "id": "rx_omega",
+              "name": "Ocean Mummy Omega-3 DHA + D3",
+              "scheduledHour": "13:00",
+              "type": "omega",
+              "timing": "13:00 Tok",
+              "dmt1Rule": "Fetal beyin & retina nöron gelişimi için öğle yemeği lipitleriyle maksimum emilim.",
+              "dmt1Safe": true
+            },
+            {
+              "id": "rx_magnesium",
+              "name": "Magnimore Plus Saşe",
+              "scheduledHour": "21:30",
+              "type": "magnesium",
+              "timing": "21:30 Tok",
+              "dmt1Rule": "Magnezyum · Kas kramplarını önler, uyku rahatlığı sağlar. Sabah demiriyle 13 saatlik güvenli tampon.",
+              "dmt1Safe": true,
+              "dmt1BufferHours": 11.0
+            }
+          ],
+          "dmt1Analysis": {
+            "isCompliant": true,
+            "ironMagnesiumBufferHours": 11.0,
+            "minimumThresholdHours": 2.0,
+            "rulesApplied": [
+              "DMT1 Divalan Metal Taşıyıcı Yarışma Kuralı (>= 2h Tampon)",
+              "Demir (Fe²⁺) & C Vitamini Emilim Sinerjisi",
+              "Hidrolize Kolajen Peptit İkindi Zaman Pencerelendirmesi",
+              "Omega-3 DHA & D3 Yağda Çözünen Biyoyararlanım"
+            ],
+            "synergies": [
+              "Demir + C Vitamini Sinerjisi (Sabah Aç): Askorbik asit Fe³⁺ indirgeyerek DMT1 emilimini 3 kat artırır.",
+              "Omega-3 DHA Lipit Sinerjisi (13:00 Tok): Safra tuzları ve diyet yağları ile fetal retina ve korteks emilimi."
+            ],
+            "warnings": [],
+            "itemsValidated": 3
+          }
+        },
+        "testPing": "ping_1794405972",
+        "hasCollagen": false
       },
       "baby": {
         "name": "Güneş",
-        "week": "6",
-        "daysLeft": 238
+        "week": 31,
+        "daysLeft": 62
       },
       "partner": {
         "name": "Oğuz Ürem",
@@ -76,77 +133,113 @@
         },
         "liveFeed": [
           {
-            "id": 1794318737643,
-            "time": "16:52",
+            "id": 1794406064488,
+            "time": "17:07",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (3 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794405984931,
+            "time": "17:06",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794405980817,
+            "time": "17:06",
             "type": "care_completed",
             "title": "Amniyotik Hidrasyon Desteği",
             "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
           },
           {
-            "id": 1794318735603,
-            "time": "16:52",
+            "id": 1794405978732,
+            "time": "17:06",
             "type": "test_signal",
             "title": "M0 Test Sinyali",
             "text": "Otomasyon testi sinyal teslimatı."
           },
           {
-            "id": 1794318598322,
-            "time": "16:49",
+            "id": 1794405502444,
+            "time": "16:58",
+            "type": "biomechanic",
+            "title": "Lomber Yük Hassasiyeti",
+            "text": "Buse'nin 31. haftasında pelvik genişleme kaynaklı lomber yükü arttı. Sormasını beklemeden ılık bir bitki çayı veya nazik bir sırt masajı sunabilirsin."
+          },
+          {
+            "id": 1794404902185,
+            "time": "16:48",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794404898073,
+            "time": "16:48",
             "type": "care_completed",
             "title": "Amniyotik Hidrasyon Desteği",
             "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
           },
           {
-            "id": 1794318596287,
-            "time": "16:49",
+            "id": 1794404896021,
+            "time": "16:48",
             "type": "test_signal",
             "title": "M0 Test Sinyali",
             "text": "Otomasyon testi sinyal teslimatı."
           },
           {
-            "id": 1794318188170,
+            "id": 1794404862398,
+            "time": "16:47",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (3 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794404611062,
             "time": "16:43",
+            "type": "edema",
+            "title": "Ayak Bileklerinde Ödem",
+            "text": "Buse'nin ayaklarını 15-20 dk dinlendirmesi için ayak desteği ve ılık su ikram edebilirsin."
+          },
+          {
+            "id": 1794404096816,
+            "time": "16:34",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794404092723,
+            "time": "16:34",
             "type": "care_completed",
             "title": "Amniyotik Hidrasyon Desteği",
             "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
           },
           {
-            "id": 1794318186137,
-            "time": "16:43",
+            "id": 1794404090676,
+            "time": "16:34",
             "type": "test_signal",
             "title": "M0 Test Sinyali",
             "text": "Otomasyon testi sinyal teslimatı."
           },
           {
-            "id": 1794317155933,
-            "time": "16:25",
-            "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+            "id": 1794403977186,
+            "time": "16:32",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
           },
           {
-            "id": 1794317153902,
-            "time": "16:25",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
-          },
-          {
-            "id": 1794316975062,
-            "time": "16:22",
-            "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
-          },
-          {
-            "id": 1794316973034,
-            "time": "16:22",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
+            "id": 1794403969627,
+            "time": "16:32",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
           }
         ]
-      }
+      },
+      "hasCollagen": false
     }
   }
 }

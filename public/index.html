@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -57,10 +58,11 @@
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-0 sm:p-4 bg-[#0A0605]">
-  <div class="w-full max-w-[420px] h-[100vh] sm:h-[860px] bg-[#120B09] sm:rounded-[44px] shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col relative border-0 sm:border-4 sm:border-white/10">
+<body class="flex items-center justify-center h-screen w-screen p-0 sm:p-2 bg-[#0A0605] overflow-hidden">
+  <div class="w-full max-w-[420px] h-full max-h-[100vh] sm:max-h-[96vh] bg-[#120B09] sm:rounded-[44px] shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col relative border-0 sm:border-4 sm:border-white/10">
     <div id="appRoot" class="flex-1 flex flex-col overflow-hidden relative"></div>
   </div>
+  <script src="ai_seed_core.js?v=v1_seed_core"></script>
   <script src="app.js?v=v24_smooth_auth_no_location"></script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ToHUM</string>
+    <string name="app_subtitle">Anne ve Bebek Yaşam Ekosistemi</string>
+    <string name="health_connect_rationale">ToHUM, anne ve bebeğin huzurlu takibi için nabız, uyku ve dinlenik biyometrik verileri güvenli şekilde senkronize eder.</string>
+</resources>

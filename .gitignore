@@ -17,3 +17,12 @@ DEPARK_*.md
 scratch/
 __pycache__/
 *.pyc
+
+# Android Build & Temporary
+.gradle/
+build/
+**/build/
+*.iml
+local.properties
+.externalNativeBuild/
+.cxx/
