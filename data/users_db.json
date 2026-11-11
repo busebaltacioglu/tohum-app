@@ -6,7 +6,7 @@
       "authProvider": "google",
       "email": "buse.baltacioglu@tohum.app",
       "onboardingCompleted": true,
-      "updatedAt": "2026-11-11T17:07:44.488771",
+      "updatedAt": "2026-11-11T17:09:24.189796",
       "user": {
         "name": "Buse Nur Ürem",
         "shortName": "Buse Nur",
@@ -57,32 +57,37 @@
         "activePrescription": {
           "doctorName": "Op. Dr. Ayşe Yılmaz",
           "hospital": "Manisa Şehir Hastanesi",
-          "prescriptionNo": "2026-REC-31W",
+          "prescriptionNo": "REC-COLLAGEN-31",
           "items": [
             {
-              "id": "rx_ferro",
               "name": "Ferro Sanol Duodenal 100 mg",
-              "scheduledHour": "08:30",
               "type": "iron",
+              "scheduledHour": "08:30",
               "timing": "08:30 Aç",
               "dmt1Rule": "Demir (Fe²⁺) Kapsülü · C vitaminiyle sinerjik, süt/çay/kahve ve magnezyumdan en az 2 saat uzakta.",
               "dmt1Safe": true,
               "dmt1BufferHours": 11.0
             },
             {
-              "id": "rx_omega",
-              "name": "Ocean Mummy Omega-3 DHA + D3",
-              "scheduledHour": "13:00",
+              "name": "Ocean Mummy Omega-3",
               "type": "omega",
+              "scheduledHour": "13:00",
               "timing": "13:00 Tok",
               "dmt1Rule": "Fetal beyin & retina nöron gelişimi için öğle yemeği lipitleriyle maksimum emilim.",
               "dmt1Safe": true
             },
             {
-              "id": "rx_magnesium",
+              "name": "Day2Day Kolajen Peptit 5000 mg",
+              "type": "collagen",
+              "scheduledHour": "16:30",
+              "timing": "16:30 İkindi",
+              "dmt1Rule": "Kolajen Peptit · Demir emilimini baskılamaz, akşam magnezyumuyla yarışmaz; ikindi saatinde optimal emilim.",
+              "dmt1Safe": true
+            },
+            {
               "name": "Magnimore Plus Saşe",
-              "scheduledHour": "21:30",
               "type": "magnesium",
+              "scheduledHour": "21:30",
               "timing": "21:30 Tok",
               "dmt1Rule": "Magnezyum · Kas kramplarını önler, uyku rahatlığı sağlar. Sabah demiriyle 13 saatlik güvenli tampon.",
               "dmt1Safe": true,
@@ -101,14 +106,15 @@
             ],
             "synergies": [
               "Demir + C Vitamini Sinerjisi (Sabah Aç): Askorbik asit Fe³⁺ indirgeyerek DMT1 emilimini 3 kat artırır.",
+              "Kolajen İkindi Protokolü (16:30): Sabah demiri (8h önce) ve gece magnezyumundan (5h sonra) bağımsız hücresel peptid emilimi.",
               "Omega-3 DHA Lipit Sinerjisi (13:00 Tok): Safra tuzları ve diyet yağları ile fetal retina ve korteks emilimi."
             ],
             "warnings": [],
-            "itemsValidated": 3
+            "itemsValidated": 4
           }
         },
-        "testPing": "ping_1794405972",
-        "hasCollagen": false
+        "testPing": "ping_1794406151",
+        "hasCollagen": true
       },
       "baby": {
         "name": "Güneş",
@@ -132,6 +138,48 @@
           "eveningMassage": true
         },
         "liveFeed": [
+          {
+            "id": 1794406164189,
+            "time": "17:09",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794406160049,
+            "time": "17:09",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794406157975,
+            "time": "17:09",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
+          {
+            "id": 1794406117792,
+            "time": "17:08",
+            "type": "prescription_synced",
+            "title": "Hekim Reçetesi Senkronize",
+            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
+          },
+          {
+            "id": 1794406113679,
+            "time": "17:08",
+            "type": "care_completed",
+            "title": "Amniyotik Hidrasyon Desteği",
+            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+          },
+          {
+            "id": 1794406111628,
+            "time": "17:08",
+            "type": "test_signal",
+            "title": "M0 Test Sinyali",
+            "text": "Otomasyon testi sinyal teslimatı."
+          },
           {
             "id": 1794406064488,
             "time": "17:07",
@@ -194,52 +242,10 @@
             "type": "prescription_synced",
             "title": "Hekim Reçetesi Senkronize",
             "text": "Op. Dr. Ayşe Yılmaz reçetesi (3 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794404611062,
-            "time": "16:43",
-            "type": "edema",
-            "title": "Ayak Bileklerinde Ödem",
-            "text": "Buse'nin ayaklarını 15-20 dk dinlendirmesi için ayak desteği ve ılık su ikram edebilirsin."
-          },
-          {
-            "id": 1794404096816,
-            "time": "16:34",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794404092723,
-            "time": "16:34",
-            "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
-          },
-          {
-            "id": 1794404090676,
-            "time": "16:34",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
-          },
-          {
-            "id": 1794403977186,
-            "time": "16:32",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794403969627,
-            "time": "16:32",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
           }
         ]
       },
-      "hasCollagen": false
+      "hasCollagen": true
     }
   }
 }
