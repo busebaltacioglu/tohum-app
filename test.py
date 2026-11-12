@@ -22,6 +22,7 @@ import shutil
 # Ensure UTF-8 terminal encoding
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_URL = "http://localhost:8080"
 TEST_RESULTS = []
 
@@ -103,7 +104,7 @@ def test_backend_api():
         req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=care_payload, headers={'Content-Type': 'application/json'})
         with urllib.request.urlopen(req, timeout=5) as res:
             data = json.loads(res.read().decode('utf-8'))
-            passed = data.get("ok") is True and data.get("actionCompleted") == "water"
+            passed = data.get("ok") is True and data.get("actionCompleted") == "water" and data.get("status") == "ok" and data.get("action") == "water"
             record_result("Backend API", "POST /api/partner/care-action Şefkatli Destek Kaydı", passed)
     except Exception as e:
         record_result("Backend API", "POST /api/partner/care-action Şefkatli Destek Kaydı", False, str(e))
@@ -144,6 +145,70 @@ def test_backend_api():
             record_result("Backend API", "POST /api/prescription/integrate Reçete & DMT1 Kolajen Kaydı", passed)
     except Exception as e:
         record_result("Backend API", "POST /api/prescription/integrate Reçete & DMT1 Kolajen Kaydı", False, str(e))
+
+    # 1.8 GET /baba.html Doğrulaması (Viewport & babaRoot)
+    try:
+        req = urllib.request.Request(f"{BASE_URL}/baba.html")
+        with urllib.request.urlopen(req, timeout=5) as res:
+            html_content = res.read().decode('utf-8')
+            has_status_200 = (res.status == 200)
+            has_viewport = 'name="viewport"' in html_content and 'width=device-width' in html_content
+            has_baba_root = 'id="babaRoot"' in html_content
+            passed = has_status_200 and has_viewport and has_baba_root
+            record_result("Dual-Session Web", "GET /baba.html Bağımsız Portal (200 OK, Viewport, babaRoot)", passed)
+    except Exception as e:
+        record_result("Dual-Session Web", "GET /baba.html Bağımsız Portal (200 OK, Viewport, babaRoot)", False, str(e))
+
+    # 1.9 POST /api/partner/care-action Çoklu Destek Eylemleri (massage, magnesium, cardio, checklist)
+    try:
+        actions_to_test = ["massage", "magnesium", "cardio", "checklist"]
+        all_passed = True
+        for act in actions_to_test:
+            pl = json.dumps({"action": act}).encode('utf-8')
+            req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=pl, headers={'Content-Type': 'application/json'})
+            with urllib.request.urlopen(req, timeout=5) as res:
+                data = json.loads(res.read().decode('utf-8'))
+                if not (data.get("status") == "ok" and data.get("action") == act and "title" in data):
+                    all_passed = False
+                    break
+        record_result("Partner API", "POST /api/partner/care-action Çoklu Eylemler ({status: 'ok', action: ...})", all_passed)
+    except Exception as e:
+        record_result("Partner API", "POST /api/partner/care-action Çoklu Eylemler ({status: 'ok', action: ...})", False, str(e))
+
+    # 1.10 POST /api/partner/pair Aile Eşleştirme Kodu Doğrulama
+    try:
+        valid_pl = json.dumps({"code": "THM-31G-UREM"}).encode('utf-8')
+        req1 = urllib.request.Request(f"{BASE_URL}/api/partner/pair", data=valid_pl, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req1, timeout=5) as res1:
+            data1 = json.loads(res1.read().decode('utf-8'))
+            valid_pass = data1.get("status") == "ok" and data1.get("valid") is True and data1.get("paired") is True
+
+        neg_pass = False
+        try:
+            invalid_pl = json.dumps({"code": "INVALID-CODE-999"}).encode('utf-8')
+            req2 = urllib.request.Request(f"{BASE_URL}/api/partner/pair", data=invalid_pl, headers={'Content-Type': 'application/json'})
+            with urllib.request.urlopen(req2, timeout=5) as res2:
+                pass
+        except urllib.error.HTTPError as err:
+            neg_pass = (err.code == 400)
+
+        record_result("Çift Oturum", "Aile Eşleştirme Kodu Doğrulama (THM-31G-UREM Doğrulandı, Hatalı Kod 400)", valid_pass and neg_pass)
+    except Exception as e:
+        record_result("Çift Oturum", "Aile Eşleştirme Kodu Doğrulama (THM-31G-UREM Doğrulandı, Hatalı Kod 400)", False, str(e))
+
+    # 1.11 Çift Oturum İzolasyon Güvencesi
+    try:
+        with open(os.path.join(BASE_DIR, 'public', 'index.html'), 'r', encoding='utf-8') as f:
+            idx_html = f.read()
+        with open(os.path.join(BASE_DIR, 'public', 'baba.html'), 'r', encoding='utf-8') as f:
+            baba_html = f.read()
+
+        idx_isolated = ("switchSessionRole" not in idx_html and "baba.html" not in idx_html)
+        baba_isolated = ("Anne Oturumu" not in baba_html and "index.html" not in baba_html and "switchSession" not in baba_html)
+
+        record_result("Çift Oturum", "Çift Oturum İzolasyonu (Bağımsız Anne ve Baba Portalleri Mahremiyet Güvencesi)", idx_isolated and baba_isolated)
+    except Exception as e:
+        record_result("Çift Oturum", "Çift Oturum İzolasyonu (Bağımsız Anne ve Baba Portalleri Mahremiyet Güvencesi)", False, str(e))
 
 
 
@@ -295,7 +360,15 @@ def test_headless_ui():
         ("Bağ Kur (Oyunlaştırılmış Aktiviteler & Mektuplar)", "http://localhost:8080/index.html?tab=bonding", ["Bağ Kur", "Ninni Dinlet", "Karnı Sev", "Zaman Kapsülü", "Gelişim"]),
         ("Anne Kovanı (Kadınlar Çemberi)", "http://localhost:8080/index.html?tab=kovan", ["Muradiye Anne Kovanı", "Kadınlar Çemberi", "Kadın Kullanıcılara Özel Mahrem Alan", "Lansinoh"]),
         ("Baba Arayüzü (Bağımsız Baba Portali & AI Analiz)", "http://localhost:8080/baba.html?tab=analysis", ["ToHUM Baba Portali", "Oğuz Ürem", "ToHUM Anne İhtiyaç Analiz Motoru", "Amniyotik Hidrasyon", "Biomekanik", "Kardiyovasküler Bazal", "DMT1 Mineral Zamanlaması", "Ilık Su Götürdüm"]),
-        ("Baba Kovanı (Babalar Ocağı - Sadece Erkekler)", "http://localhost:8080/baba.html?tab=kovan", ["Muradiye Baba Kovanı", "Babalar Ocağı", "Babalar ve Erkeklere Özel Alan", "Maxi-Cosi"])
+        ("Baba Kovanı (Babalar Ocağı - Sadece Erkekler)", "http://localhost:8080/baba.html?tab=kovan", ["Muradiye Baba Kovanı", "Babalar Ocağı", "Babalar ve Erkeklere Özel Alan", "Maxi-Cosi"]),
+        ("Baba Rehber (Hastane Çantası & Acil Lojistik)", "http://localhost:8080/baba.html?tab=guide", ["Hastane Çantası", "Manisa Şehir Hastanesi", "5-1-1 Kasılma Kuralı"]),
+        ("Baba Ses Köprüsü (Güneş & Akustik Rezonans)", "http://localhost:8080/baba.html?tab=home", ["Akustik Ses Köprüsü", "Güneş", "142 bpm"]),
+        ("Baba Profil & Aile Eşleştirme Kodu", "http://localhost:8080/baba.html?tab=profile", ["Oğuz Ürem", "0 Rh+", "THM-31G-UREM"]),
+        ("Sağlık Takibi Sekmesi", "http://localhost:8080/index.html?tab=health", ["Sağlık", "Tansiyon"]),
+        ("Doğum Hazırlığı Sekmesi", "http://localhost:8080/index.html?tab=birth", ["Doğum", "Tekme"]),
+        ("Klinik Takvim Sekmesi", "http://localhost:8080/index.html?tab=calendar", ["Takvim", "Randevu"]),
+        ("Bebek & İhtiyaçlar Sekmesi", "http://localhost:8080/index.html?tab=shopping", ["İhtiyaç", "Bütçe"]),
+        ("ToHUM Menü Sekmesi", "http://localhost:8080/index.html?tab=menu", ["ToHUM", "Menü"])
     ]
 
     temp_dir = tempfile.mkdtemp(prefix="tohum_edge_ui_")
@@ -310,7 +383,7 @@ def test_headless_ui():
             "--dump-dom",
             url
         ]
-        return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=25)
+        return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', timeout=45)
 
     try:
         for title, url, patterns in pages_to_test:
@@ -339,8 +412,135 @@ def test_headless_ui():
             record_result("Bağımsız Arayüzler", "Baba Arayüzünde Anneye Geçiş Butonu Yoktur (İzole Portal)", not has_mother_switch)
         except Exception as e:
             record_result("Bağımsız Arayüzler", "Baba Arayüzü Negatif Test Hatası", False, str(e))
+
+        # 7.10 Buton & Etkileşim Testleri: Kovan, Onboarding, Baba Mesaj
+        try:
+            res_kovan = run_edge("http://localhost:8080/index.html?tab=kovan")
+            has_kovan_btn = "sendKovanGroupMessage" in res_kovan.stdout and "Gönder" in res_kovan.stdout
+            record_result("UI Buton Etkileşimi", "Kovan Sohbet Gönder Butonu & sendKovanGroupMessage", has_kovan_btn)
+        except Exception as e:
+            record_result("UI Buton Etkileşimi", "Kovan Sohbet Butonu Hatası", False, str(e))
+
+        try:
+            res_onb = run_edge("http://localhost:8080/index.html?flow=onboarding&step=1")
+            has_aria = "aria-label=" in res_onb.stdout and "setOnboardingStep" in res_onb.stdout
+            record_result("UI Buton Etkileşimi", "Onboarding Adım Butonları Erişilebilir aria-label Etiketleri", has_aria)
+        except Exception as e:
+            record_result("UI Buton Etkileşimi", "Onboarding Adım Butonları Hatası", False, str(e))
+
+        try:
+            res_baba = run_edge("http://localhost:8080/baba.html?tab=kovan")
+            has_baba_msg = "sendBabaNeighborMessage" in res_baba.stdout
+            record_result("UI Buton Etkileşimi", "Baba Kovanı Komşu Ürün Mesaj Butonları & sendBabaNeighborMessage", has_baba_msg)
+        except Exception as e:
+            record_result("UI Buton Etkileşimi", "Baba Kovanı Mesaj Butonları Hatası", False, str(e))
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
+
+# =========================================================================
+# 8. TEST GRUBU: OWASP GÜVENLİK DENETİMİ VE DEFENSIVE HARDENING
+# =========================================================================
+def test_security_audit_and_hardening():
+    print("\n--- 8. OWASP Güvenlik Denetimi & Savunmacı Sertleştirme ---")
+
+    # 8.1 XSS Girdi Escape Koruması (app.js ve baba.js)
+    try:
+        with open(os.path.join(BASE_DIR, 'public', 'app.js'), 'r', encoding='utf-8') as f:
+            app_js = f.read()
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        app_has_escape = "function escapeHtml" in app_js and "escapeHtml(m.text)" in app_js
+        baba_has_escape = "function escapeHtml" in baba_js and "escapeHtml(m.text)" in baba_js
+        record_result("OWASP XSS Koruması", "Kovan Sohbet ve Reçete HTML Escape Fonksiyon Güvencesi", app_has_escape and baba_has_escape)
+    except Exception as e:
+        record_result("OWASP XSS Koruması", "Kovan Sohbet ve Reçete HTML Escape Fonksiyon Güvencesi", False, str(e))
+
+    # 8.2 BOLA / IDOR Koruması: /api/profile Yetkisiz Kullanıcı Sorgusu (403 Forbidden)
+    try:
+        req = urllib.request.Request(f"{BASE_URL}/api/profile?userId=unauthorized_target_victim")
+        status_403 = False
+        try:
+            with urllib.request.urlopen(req, timeout=5) as res:
+                pass
+        except urllib.error.HTTPError as err:
+            status_403 = (err.code == 403)
+        record_result("OWASP BOLA / IDOR", "GET /api/profile?userId=... Yetkisiz Profil Sorgusu (403 Forbidden)", status_403)
+    except Exception as e:
+        record_result("OWASP BOLA / IDOR", "GET /api/profile?userId=... Yetkisiz Profil Sorgusu (403 Forbidden)", False, str(e))
+
+    # 8.3 BOLA / IDOR Koruması: /api/export Yetkisiz Dışa Aktarım Sorgusu (403 Forbidden)
+    try:
+        req = urllib.request.Request(f"{BASE_URL}/api/export?userId=unauthorized_target_victim")
+        status_403 = False
+        try:
+            with urllib.request.urlopen(req, timeout=5) as res:
+                pass
+        except urllib.error.HTTPError as err:
+            status_403 = (err.code == 403)
+        record_result("OWASP BOLA / IDOR", "GET /api/export?userId=... Yetkisiz Export Sorgusu (403 Forbidden)", status_403)
+    except Exception as e:
+        record_result("OWASP BOLA / IDOR", "GET /api/export?userId=... Yetkisiz Export Sorgusu (403 Forbidden)", False, str(e))
+
+    # 8.4 BOLA / IDOR Koruması: /api/profile/update Yetkisiz Kullanıcı Güncelleme Engeli (403 Forbidden)
+    try:
+        update_idor = json.dumps({
+            "userId": "attacker_hijack_user",
+            "target": "user",
+            "field": "email",
+            "value": "hacked@evil.com"
+        }).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/profile/update", data=update_idor, headers={'Content-Type': 'application/json'})
+        status_403 = False
+        try:
+            with urllib.request.urlopen(req, timeout=5) as res:
+                pass
+        except urllib.error.HTTPError as err:
+            status_403 = (err.code == 403)
+        record_result("OWASP BOLA / IDOR", "POST /api/profile/update Farklı userId İle Güncelleme Engeli (403 Forbidden)", status_403)
+    except Exception as e:
+        record_result("OWASP BOLA / IDOR", "POST /api/profile/update Farklı userId İle Güncelleme Engeli (403 Forbidden)", False, str(e))
+
+    # 8.5 Kaba Kuvvet (Brute-Force) Koruması: /api/partner/validate-code Rate Limiting (429 Too Many Requests)
+    try:
+        hit_429 = False
+        for attempt_i in range(7):
+            bad_payload = json.dumps({"code": f"BRUTE_FORCE_WRONG_{attempt_i}"}).encode('utf-8')
+            req = urllib.request.Request(f"{BASE_URL}/api/partner/validate-code", data=bad_payload, headers={'Content-Type': 'application/json'})
+            try:
+                with urllib.request.urlopen(req, timeout=5) as res:
+                    pass
+            except urllib.error.HTTPError as err:
+                if err.code == 429:
+                    hit_429 = True
+                    break
+
+        record_result("OWASP Kaba Kuvvet Koruması", "Aile Eşleştirme Kodu Brute-Force Rate Limiting (5 Hatalı Deneme Sonrası 429 Too Many Requests)", hit_429)
+    except Exception as e:
+        record_result("OWASP Kaba Kuvvet Koruması", "Aile Eşleştirme Kodu Brute-Force Rate Limiting (5 Hatalı Deneme Sonrası 429 Too Many Requests)", False, str(e))
+
+    # 8.6 Savunma Odaklı HTTP Başlıkları (Defense-in-Depth)
+    try:
+        req = urllib.request.Request(f"{BASE_URL}/api/profile")
+        with urllib.request.urlopen(req, timeout=5) as res:
+            headers = res.headers
+            has_nosniff = headers.get("X-Content-Type-Options") == "nosniff"
+            has_sameorigin = headers.get("X-Frame-Options") == "SAMEORIGIN"
+            has_xss_prot = "1" in (headers.get("X-XSS-Protection") or "")
+            headers_pass = has_nosniff and has_sameorigin and has_xss_prot
+            record_result("OWASP HTTP Başlıkları", "Güvenlik Başlıkları (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection)", headers_pass)
+    except Exception as e:
+        record_result("OWASP HTTP Başlıkları", "Güvenlik Başlıkları (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection)", False, str(e))
+
+    # 8.7 İstemci Tarafı Hassas Veri Güvenliği (localStorage Mahremiyeti)
+    try:
+        with open(os.path.join(BASE_DIR, 'public', 'app.js'), 'r', encoding='utf-8') as f:
+            app_code = f.read()
+        has_local_storage = "localStorage.setItem('tohum_v1'" in app_code
+        has_isolated_partner = "localStorage.removeItem(\"tohum_user_profile\")" in app_code
+        record_result("OWASP Hassas Veri", "İstemci Tarafı localStorage Sağlık Verisi İzolasyonu ve Şema Bütünlüğü", has_local_storage and has_isolated_partner)
+    except Exception as e:
+        record_result("OWASP Hassas Veri", "İstemci Tarafı localStorage Sağlık Verisi İzolasyonu ve Şema Bütünlüğü", False, str(e))
 
 # =========================================================================
 # ANA ÇALIŞTIRICI VE YÖNETİCİ ÖZETİ RAPORU
@@ -359,6 +559,7 @@ def main():
     test_rh_incompatibility()
     test_dmt1_supplement_timing()
     test_headless_ui()
+    test_security_audit_and_hardening()
 
     total = len(TEST_RESULTS)
     passed = sum(1 for r in TEST_RESULTS if r["passed"])

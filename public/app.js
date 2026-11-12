@@ -1,3 +1,18 @@
+// =========================================================================
+// TOHUM SAĞLIK & ANNE PORTALI - M0 TAM SÜRÜM
+// Savunma Odaklı Güvenlik & OWASP XSS Koruması
+// =========================================================================
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+window.escapeHtml = escapeHtml;
+
 // TOHUM HAFTALIK DİNAMİK YAŞAM DÖNGÜSÜ VERİ TABANI (1 - 40. HAFTA)
 // Klinik, Biyolojik, Hormonal, Güvenlik (Kaçınılacaklar) & Partner Görevleri
 // =========================================================================
@@ -2035,10 +2050,12 @@ window.loadSampleRxText = function(sampleType) {
 };
 
 window.sendKovanGroupMessage = function() {
-  const input = document.getElementById('kovanMessageInput');
+  const input = document.getElementById('kovanMsgInput') || document.getElementById('kovanMessageInput');
   if (!input) return;
-  const txt = input.value.trim();
-  if (!txt) return;
+  const rawTxt = input.value.trim();
+  if (!rawTxt) return;
+  // Savunma: Maksimum 400 karakter sınırlaması ve trim
+  const txt = rawTxt.slice(0, 400);
   if (!state.kovanMessages) {
     state.kovanMessages = [
       { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
@@ -2053,6 +2070,7 @@ window.sendKovanGroupMessage = function() {
     isMe: true
   });
   input.value = "";
+  if (typeof triggerReaction !== "undefined") triggerReaction("water", "Mesajınız Kadınlar Çemberine iletildi.");
   if (typeof triggerHaptic !== "undefined") triggerHaptic([20, 20]);
   render();
 };
@@ -2362,6 +2380,44 @@ function getTabContent() {
     case "profile": return renderProfileTab();
     default: return renderHomeTab();
   }
+}
+
+function renderMenuTab() {
+  const menuItems = [
+    { id: 'home', title: 'Güneş (Ana Sayfa)', desc: 'Anne Karnı, Beslenme & Canlı Bağ', icon: '☀️' },
+    { id: 'bonding', title: 'Bağ Kur', desc: 'Ninni, Karnı Sev & Zaman Kapsülü', icon: '🌱' },
+    { id: 'health', title: 'Sağlık & Şifa', desc: 'Biyometri, Tansiyon & Pelvik Egzersiz', icon: '💓' },
+    { id: 'birth', title: 'Doğum & Hazırlık', desc: 'Tekme Sayacı, Dalga & Doğum Çantası', icon: '🌸' },
+    { id: 'calendar', title: 'Klinik Takvim', desc: 'Randevular & Haftalık Yol Haritası', icon: '📅' },
+    { id: 'shopping', title: 'İhtiyaç & Bütçe', desc: 'Bebek & Anne İhtiyaçları', icon: '🛍️' },
+    { id: 'kovan', title: 'Muradiye Anne Kovanı', desc: 'Kadınlar Çemberi & İmece', icon: '🐝' },
+    { id: 'profile', title: 'Profil & Ayarlar', desc: 'Kişisel Bazal, Sağlık Verisi Egemenliği', icon: '⚙️' }
+  ];
+
+  return `
+    <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
+      <div class="pb-2 border-b border-white/10">
+        <h2 class="text-base font-serif font-semibold text-white/95">ToHUM Modüller & Menü</h2>
+        <p class="text-[11px] text-white/60">Tüm gebelik ve ebeveynlik modüllerine hızlı erişim</p>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        ${menuItems.map(item => `
+          <button onclick="navigateFromGridMenu('${item.id}')"
+            class="w-full p-4 bg-white/5 hover:bg-white/10 active:scale-98 rounded-3xl border border-white/10 flex items-center justify-between text-left transition shadow-xs group">
+            <div class="flex items-center space-x-3.5">
+              <span class="text-xl p-2.5 bg-white/5 rounded-2xl group-hover:bg-amber-400/20 transition">${item.icon}</span>
+              <div>
+                <div class="text-sm font-semibold text-white/95">${item.title}</div>
+                <div class="text-[11px] text-white/50 mt-0.5">${item.desc}</div>
+              </div>
+            </div>
+            <span class="text-xs text-white/30 group-hover:text-amber-200 group-hover:translate-x-0.5 transition">➔</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
 }
 
 // 1. MODÜL VE 2. MODÜL KORUMA ALTINDA (AYNEN ÇALIŞIR)
@@ -4416,11 +4472,14 @@ function renderKovanTab() {
     { id: 3, title: "Hamile Destek Yastığı & Pelvik Minderi", user: "Elif", bio: "Uncubozköy · 33. Hafta", dist: "2.5km", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80", type: "gift", desc: "Sol yan yatış için harika ergonomik destek yastığı." }
   ];
 
-  const motherMessages = [
-    { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
-    { sender: "Buse Nur", text: "Selam Merve, hafif bel hassasiyeti var ama magnezyum ve dinlenmeyle dengeliyoruz.", time: "14:15", isMe: true },
-    { sender: "Zeynep", text: "Akşamları ayakları hafifçe yükselterek dinlenmek ödeme çok iyi geliyor canım.", time: "14:22", isMe: false }
-  ];
+  if (!state.kovanMessages || !state.kovanMessages.length) {
+    state.kovanMessages = [
+      { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
+      { sender: "Buse Nur", text: "Selam Merve, hafif bel hassasiyeti var ama magnezyum ve dinlenmeyle dengeliyoruz.", time: "14:15", isMe: true },
+      { sender: "Zeynep", text: "Akşamları ayakları hafifçe yükselterek dinlenmek ödeme çok iyi geliyor canım.", time: "14:22", isMe: false }
+    ];
+  }
+  const motherMessages = state.kovanMessages;
 
   return `
     <div class="w-full h-full pt-16 pb-20 px-5 space-y-4 text-white overflow-y-auto">
@@ -4444,14 +4503,14 @@ function renderKovanTab() {
         ${motherItems.map(i => `
           <div class="p-4 bg-white/5 rounded-3xl flex items-start justify-between text-xs border border-white/10">
             <div class="flex items-start space-x-3">
-              <img src="${i.avatar}" class="w-10 h-10 rounded-full object-cover border border-white/20">
+              <img src="${escapeHtml(i.avatar)}" class="w-10 h-10 rounded-full object-cover border border-white/20">
               <div>
-                <div class="font-bold text-white/95 text-sm">${i.title}</div>
-                <div class="text-[11px] text-amber-200 mt-0.5">${i.user} · ${i.bio} (${i.dist})</div>
-                <div class="text-[11px] text-white/60 mt-1 leading-relaxed">${i.desc}</div>
+                <div class="font-bold text-white/95 text-sm">${escapeHtml(i.title)}</div>
+                <div class="text-[11px] text-amber-200 mt-0.5">${escapeHtml(i.user)} · ${escapeHtml(i.bio)} (${escapeHtml(i.dist)})</div>
+                <div class="text-[11px] text-white/60 mt-1 leading-relaxed">${escapeHtml(i.desc)}</div>
               </div>
             </div>
-            <button onclick="sendNeighborMessage('${i.user}')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-xs text-white font-medium shrink-0 ml-2 transition">
+            <button onclick="sendNeighborMessage('${i.user.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 rounded-xl text-xs text-white font-medium shrink-0 ml-2 transition">
               Mesaj
             </button>
           </div>
@@ -4463,8 +4522,8 @@ function renderKovanTab() {
         <div class="space-y-2 max-h-36 overflow-y-auto pr-1">
           ${motherMessages.map(m => `
             <div class="p-2.5 rounded-2xl ${m.isMe ? 'bg-amber-500/15 border border-amber-400/20 text-right ml-6' : 'bg-white/5 border border-white/5 mr-6'}">
-              <div class="text-[9px] text-white/40">${m.sender} · ${m.time}</div>
-              <div class="text-[11px] text-white/90 mt-0.5">${m.text}</div>
+              <div class="text-[9px] text-white/40">${escapeHtml(m.sender)} · ${escapeHtml(m.time)}</div>
+              <div class="text-[11px] text-white/90 mt-0.5 break-words">${escapeHtml(m.text)}</div>
             </div>
           `).join('')}
         </div>
@@ -7008,17 +7067,25 @@ window.addUltrasoundAudio = function() {
 };
 
 window.sendNeighborMessage = function(userName) {
-  const msg = prompt(`${userName} komşunuza iletmek istediğiniz mesaj:`, "Merhaba, paylaştığınız eşya ile ilgileniyorum.");
-  if (msg) {
-    state.messages.push({
-      sender: "Buse",
-      text: msg,
-      time: "Şimdi",
-      isMe: true
-    });
-    triggerReaction("water", `${userName} kullanıcısına mesajınız güvenle iletildi.`);
-    render();
+  const target = userName || "Komşu";
+  if (!state.kovanMessages) {
+    state.kovanMessages = [
+      { sender: "Merve (Muradiye)", text: "Kızlar 31. haftada akşam bel ağrısı yaşayan var mı? Buse sen nasılsın?", time: "14:10", isMe: false },
+      { sender: "Buse Nur", text: "Selam Merve, hafif bel hassasiyeti var ama magnezyum ve dinlenmeyle dengeliyoruz.", time: "14:15", isMe: true },
+      { sender: "Zeynep", text: "Akşamları ayakları hafifçe yükselterek dinlenmek ödeme çok iyi geliyor canım.", time: "14:22", isMe: false }
+    ];
   }
+  const now = new Date();
+  const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  state.kovanMessages.push({
+    sender: (state.user && state.user.shortName) || "Buse Nur",
+    text: `@${target} Merhaba, paylaştığınız eşya ile ilgileniyorum.`,
+    time: timeStr,
+    isMe: true
+  });
+  if (typeof triggerHaptic !== "undefined") triggerHaptic([15, 20]);
+  if (typeof triggerReaction !== "undefined") triggerReaction("water", `${target} kullanıcısına mesajınız iletildi.`);
+  render();
 };
 
 window.openNewLetterModal = function() {
@@ -7324,6 +7391,21 @@ window.sendPartnerPainAlert = function() {
   );
 };
 
+// Aliases for Calm Tech & Cross-module interactions
+window.openHospitalMap = window.openHospitalNavigation;
+window.logKickEvent = window.registerFetalKick;
+window.resetKickSession = function() {
+  if (state.birthModule && state.birthModule.kickSession) {
+    state.birthModule.kickSession.count = 0;
+    state.birthModule.kickSession.isGoalReached = false;
+    if (typeof triggerReaction !== "undefined") triggerReaction("folic", "Fetal tekme sayımı sıfırlandı.");
+    if (typeof triggerHaptic !== "undefined") triggerHaptic(15);
+    render();
+  }
+};
+window.addBloodPressureReading = window.addNewBloodPressureLog;
+window.addShoppingItem = window.addNewShoppingItem;
+
 // İLAÇ AL (Ana Sayfa kısayolu)
 window.takePrescriptionInHome = function(id) {
   const p = state.prescriptions.find(x => x.id === id);
@@ -7513,17 +7595,7 @@ window.addNewPrescription = function() {
   render();
 };
 
-// KOMŞU MESAJ GÖNDER
-window.sendNeighborMessage = function() {
-  const text = prompt("Mesajınızı yazın (Muradiye Komşu Ağı):");
-  if (!text) return;
-  const now = new Date();
-  const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  state.messages.push({ sender: "Buse", text, time: timeStr, isMe: true });
-  triggerHaptic([15, 20]);
-  triggerReaction("water", "Mesajınız Muradiye Komşu Ağı'na iletildi.");
-  render();
-};
+// KOMŞU MESAJ GÖNDER (Daha önce tanımlanan sendNeighborMessage korunur)
 
 // MEKTUP/TIME CAPSULE
 window.openNewLetterModal = function() {
@@ -8045,11 +8117,11 @@ function renderPrescriptionUploadModal() {
               <!-- Üst Hekim ve Belge Başlığı -->
               <div class="flex justify-between items-start text-xs border-b border-white/10 pb-2">
                 <div>
-                  <div class="font-bold text-white text-xs">${rx ? rx.doctorName : 'Op. Dr. Ayşe Yılmaz'}</div>
-                  <div class="text-[9px] text-emerald-300 font-mono">${rx ? (rx.hospital + ' · ' + (rx.prescriptionNo || '')) : 'Manisa Şehir Hastanesi'}</div>
+                  <div class="font-bold text-white text-xs">${escapeHtml(rx ? rx.doctorName : 'Op. Dr. Ayşe Yılmaz')}</div>
+                  <div class="text-[9px] text-emerald-300 font-mono">${escapeHtml(rx ? (rx.hospital + ' · ' + (rx.prescriptionNo || '')) : 'Manisa Şehir Hastanesi')}</div>
                 </div>
                 <span class="text-[9px] bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-400/30 font-semibold">
-                  ${rx ? (rx.source || 'Doğrulandı ✓') : '31. Hafta'}
+                  ${escapeHtml(rx ? (rx.source || 'Doğrulandı ✓') : '31. Hafta')}
                 </span>
               </div>
 
@@ -8063,14 +8135,14 @@ function renderPrescriptionUploadModal() {
                   <div class="p-2 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between group">
                     <div class="flex-1 pr-2">
                       <div class="flex items-center space-x-1.5">
-                        <span class="font-medium text-white">${it.name}</span>
+                        <span class="font-medium text-white">${escapeHtml(it.name)}</span>
                         ${it.type === 'collagen' ? '<span class="text-[8px] bg-teal-500/20 text-teal-300 px-1 rounded border border-teal-400/30 font-bold">Kolajen</span>' : ''}
                       </div>
-                      <div class="text-[9px] text-white/60 leading-tight">${it.dmt1Rule || it.dose}</div>
+                      <div class="text-[9px] text-white/60 leading-tight">${escapeHtml(it.dmt1Rule || it.dose || '')}</div>
                     </div>
                     <div class="flex items-center space-x-1.5">
                       <span class="text-[9px] font-mono ${it.type === 'iron' ? 'text-rose-300' : it.type === 'collagen' ? 'text-teal-300' : it.type === 'magnesium' ? 'text-amber-300' : 'text-emerald-300'} font-bold bg-white/5 px-2 py-1 rounded-lg">
-                        ${it.timing || it.scheduledHour}
+                        ${escapeHtml(it.timing || it.scheduledHour || '')}
                       </span>
                       <button onclick="removeParsedRxItem(${idx})" title="Listeden Kaldır" class="text-white/30 hover:text-rose-300 p-1 text-[10px] transition">
                         ✕

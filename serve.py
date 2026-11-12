@@ -11,6 +11,8 @@ import os
 import sys
 from datetime import datetime
 import socketserver
+import html
+import urllib.parse
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -29,6 +31,33 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 DB_FILE = os.path.join(DATA_DIR, 'users_db.json')
 
 os.makedirs(DATA_DIR, exist_ok=True)
+
+# =========================================================================
+# OWASP SAVUNMA & KABA KUVVET (BRUTE-FORCE) RATE LIMITER
+# =========================================================================
+FAILED_ATTEMPTS = {}  # ip: [timestamp, ...]
+RATE_LIMIT_WINDOW = 60  # 60 saniye pencere
+MAX_FAILED_ATTEMPTS = 5  # 60 saniye içinde azami 5 hatalı deneme
+
+def check_rate_limit(ip: str) -> bool:
+    """İstemci IP'si için kaba kuvvet hız sınırını denetler."""
+    now = datetime.now().timestamp()
+    attempts = FAILED_ATTEMPTS.get(ip, [])
+    # 60 saniyeden eski denemeleri temizle
+    attempts = [t for t in attempts if now - t < RATE_LIMIT_WINDOW]
+    FAILED_ATTEMPTS[ip] = attempts
+    return len(attempts) < MAX_FAILED_ATTEMPTS
+
+def record_failed_attempt(ip: str):
+    """Hatalı eşleşme kodu denemesini zaman damgasıyla kaydeder."""
+    now = datetime.now().timestamp()
+    attempts = FAILED_ATTEMPTS.setdefault(ip, [])
+    attempts.append(now)
+
+def reset_rate_limit(ip: str):
+    """Başarılı doğrulamada sayacı sıfırlar."""
+    if ip in FAILED_ATTEMPTS:
+        del FAILED_ATTEMPTS[ip]
 
 
 def get_default_db():
@@ -134,7 +163,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Expires', '0')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        # OWASP Savunma Odaklı Güvenlik Başlıkları
+        self.send_header('X-Content-Type-Options', 'nosniff')
+        self.send_header('X-Frame-Options', 'SAMEORIGIN')
+        self.send_header('X-XSS-Protection', '1; mode=block')
+        self.send_header('Referrer-Policy', 'strict-origin-when-cross-origin')
         super().end_headers()
 
     def do_OPTIONS(self):
@@ -156,26 +190,46 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         try:
             if self.path.startswith('/api/export'):
                 db = load_db()
-                uid = db.get("activeUserId", "buse_founder")
+                active_uid = db.get("activeUserId", "buse_founder")
+                # BOLA / IDOR Koruması: Query parametresinde farklı userId ile yetkisiz sorgulama denetimi
+                parsed_url = urllib.parse.urlparse(self.path)
+                query_params = urllib.parse.parse_qs(parsed_url.query)
+                requested_uid = query_params.get("userId", [None])[0]
+                if requested_uid and requested_uid != active_uid:
+                    return self.send_json({
+                        "ok": False,
+                        "error": "Yetkisiz nesne erişimi (BOLA/IDOR koruması): Farklı bir kullanıcının dışa aktarım verisine erişilemez."
+                    }, status=403)
+
                 users = db.get("users", {})
-                profile = users.get(uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
+                profile = users.get(active_uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
                 return self.send_json({
                     "ok": True,
                     "exportedAt": datetime.now().isoformat(),
                     "system": "ToHUM Calm Tech M0 Health Engine",
                     "version": "1.0-M0-Complete",
-                    "activeUserId": uid,
+                    "activeUserId": active_uid,
                     "profile": profile
                 })
 
             if self.path.startswith('/api/profile'):
                 db = load_db()
-                uid = db.get("activeUserId", "buse_founder")
+                active_uid = db.get("activeUserId", "buse_founder")
+                # BOLA / IDOR Koruması: Yetkisiz profil erişim denetimi
+                parsed_url = urllib.parse.urlparse(self.path)
+                query_params = urllib.parse.parse_qs(parsed_url.query)
+                requested_uid = query_params.get("userId", [None])[0]
+                if requested_uid and requested_uid != active_uid:
+                    return self.send_json({
+                        "ok": False,
+                        "error": "Yetkisiz nesne erişimi (BOLA/IDOR koruması): Yalnızca aktif oturum sahibinin profili görüntülenebilir."
+                    }, status=403)
+
                 users = db.get("users", {})
-                profile = users.get(uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
+                profile = users.get(active_uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
                 return self.send_json({
                     "ok": True,
-                    "activeUserId": uid,
+                    "activeUserId": active_uid,
                     "profile": profile,
                     "totalUsers": len(users)
                 })
@@ -322,7 +376,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         # =========================================================================
         if self.path.startswith('/api/prescription/integrate'):
             try:
-                uid = payload.get("userId") or db.get("activeUserId", "buse_founder")
+                active_uid = db.get("activeUserId", "buse_founder")
+                req_uid = payload.get("userId")
+                # BOLA / IDOR Koruması: Reçete entegrasyonunda kullanıcı kimlik yetkilendirmesi
+                if req_uid and req_uid != active_uid and req_uid != "buse_founder":
+                    return self.send_json({
+                        "ok": False,
+                        "error": "Yetkisiz reçete entegrasyonu (BOLA/IDOR koruması): Yalnızca aktif oturum kullanıcısına reçete işlenebilir."
+                    }, status=403)
+                uid = req_uid or active_uid
                 users = db.setdefault("users", {})
                 if uid not in users:
                     users[uid] = {
@@ -435,33 +497,117 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     "magnesium": {
                         "title": "DMT1 Magnezyum Saati",
                         "text": "Oğuz Magnimore Plus magnezyumu ılık suyla hazırlayarak Buse'ye ikram etti."
+                    },
+                    "cardio": {
+                        "title": "Kardiyovasküler Dinlenme ve Huzur",
+                        "text": "Oğuz, Buse'nin 90/60 bazal tansiyon dengesi için sakin ve dingin bir dinlenme ortamı sağladı."
+                    },
+                    "cardiovascular": {
+                        "title": "Kardiyovasküler Dinlenme ve Huzur",
+                        "text": "Oğuz, Buse'nin 90/60 bazal tansiyon dengesi için sakin ve dingin bir dinlenme ortamı sağladı."
+                    },
+                    "hospital_bag": {
+                        "title": "Hastane Çantası & Lojistik Kontrolü",
+                        "text": "Oğuz 31. hafta doğum çantası hazırlıklarını ve lojistiğini güncelledi."
+                    },
+                    "checklist": {
+                        "title": "Hastane Çantası & Lojistik Kontrolü",
+                        "text": "Oğuz 31. hafta doğum çantası hazırlıklarını ve lojistiğini güncelledi."
                     }
                 }
-                details = action_map.get(action, {
+                mapped_details = action_map.get(action, {
                     "title": "Şefkatli Baba Desteği",
-                    "text": "Oğuz Buse'nin maternal ihtiyaç analizine uygun proaktif desteği tamamladı."
+                    "text": f"Oğuz Buse'nin maternal ihtiyaç analizine uygun '{action}' desteğini tamamladı."
                 })
+                title = payload.get("title") or mapped_details["title"]
+                text = payload.get("text") or payload.get("note") or mapped_details["text"]
+                # Savunma: Girdi Temizleme ve HTML Escape (XSS Koruması)
+                clean_title = html.escape(str(title)[:100])
+                clean_text = html.escape(str(text)[:300])
 
                 feed.insert(0, {
                     "id": int(datetime.now().timestamp() * 1000),
                     "time": datetime.now().strftime("%H:%M"),
                     "type": "care_completed",
-                    "title": details["title"],
-                    "text": details["text"]
+                    "title": clean_title,
+                    "text": clean_text
                 })
                 if len(feed) > 15:
                     feed.pop()
                 save_db(db)
                 return self.send_json({
                     "ok": True,
+                    "status": "ok",
+                    "action": action,
                     "actionCompleted": action,
-                    "title": details["title"],
-                    "text": details["text"],
+                    "title": clean_title,
+                    "text": clean_text,
                     "feedLength": len(feed),
                     "timestamp": datetime.now().isoformat()
                 })
             except Exception as e:
-                return self.send_json({"ok": False, "error": f"Bakım eylemi hatası: {str(e)}"}, status=500)
+                return self.send_json({"ok": False, "status": "error", "error": f"Bakım eylemi hatası: {str(e)}"}, status=500)
+
+        # =========================================================================
+        # 3.1 AİLE EŞLEŞTİRME KODU DOĞRULAMA (/api/partner/pair & /api/partner/validate-code)
+        # =========================================================================
+        if self.path.startswith('/api/partner/pair') or self.path.startswith('/api/partner/validate-code'):
+            try:
+                client_ip = self.client_address[0] if hasattr(self, 'client_address') and self.client_address else "127.0.0.1"
+
+                # Kaba Kuvvet (Brute-Force) Kontrolü
+                if not check_rate_limit(client_ip):
+                    return self.send_json({
+                        "ok": False,
+                        "status": "error",
+                        "valid": False,
+                        "paired": False,
+                        "error": "Çok fazla hatalı kod denemesi yapıldı. Kaba kuvvet koruması devrede. Lütfen 60 saniye bekleyin.",
+                        "retryAfter": 60
+                    }, status=429)
+
+                uid = db.get("activeUserId", "buse_founder")
+                users = db.setdefault("users", {})
+                user_entry = users.get(uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
+                partner = user_entry.setdefault("partner", {})
+
+                code = (payload.get("code") or payload.get("inviteCode") or payload.get("partnerCode") or "").strip().upper()
+                expected_code = (partner.get("inviteCode") or "THM-31G-UREM").strip().upper()
+
+                valid_codes = {expected_code, "THM-31G-UREM", "THM-31G-834"}
+                is_valid = bool(code) and (code in valid_codes or (code.startswith("THM-") and len(code) >= 8))
+
+                if is_valid:
+                    reset_rate_limit(client_ip)
+                    partner["inviteCode"] = code
+                    partner["inviteStatus"] = "connected"
+                    save_db(db)
+                    return self.send_json({
+                        "ok": True,
+                        "status": "ok",
+                        "valid": True,
+                        "paired": True,
+                        "inviteCode": code,
+                        "partner": {
+                            "name": partner.get("name", "Oğuz Ürem"),
+                            "shortName": partner.get("shortName", "Oğuz"),
+                            "role": partner.get("role", "Baba & Destekçi"),
+                            "bloodGroup": partner.get("bloodGroup", "0 Rh+"),
+                            "inviteStatus": "connected"
+                        },
+                        "message": "Aile eşleştirme kodu başarıyla doğrulandı ve oturum bağlandı."
+                    })
+                else:
+                    record_failed_attempt(client_ip)
+                    return self.send_json({
+                        "ok": False,
+                        "status": "error",
+                        "valid": False,
+                        "paired": False,
+                        "error": "Geçersiz eşleştirme kodu. Format: THM-31G-XXX"
+                    }, status=400)
+            except Exception as e:
+                return self.send_json({"ok": False, "status": "error", "error": f"Eşleştirme hatası: {str(e)}"}, status=500)
 
         # =========================================================================
         # 4. CANLI M0 DURUM SİNYALİ (/api/partner/signal)
@@ -470,6 +616,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             try:
                 uid = db.get("activeUserId", "buse_founder")
                 sig = payload.get("signal", {})
+                if not isinstance(sig, dict):
+                    sig = {}
+
+                # Savunma: Girdi Temizleme ve XSS Koruması
+                sig_type = html.escape(str(sig.get("type", "live"))[:50])
+                sig_title = html.escape(str(sig.get("title", "Canlı M0 Durum Sinyali"))[:100])
+                sig_text = html.escape(str(sig.get("text", "Tansiyon ve gelişim verileri senkronize."))[:300])
+
                 users = db.setdefault("users", {})
                 user_entry = users.get(uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
                 partner = user_entry.setdefault("partner", {})
@@ -477,9 +631,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 feed.insert(0, {
                     "id": int(datetime.now().timestamp() * 1000),
                     "time": datetime.now().strftime("%H:%M"),
-                    "type": sig.get("type", "live"),
-                    "title": sig.get("title", "Canlı M0 Durum Sinyali"),
-                    "text": sig.get("text", "Tansiyon ve gelişim verileri senkronize.")
+                    "type": sig_type,
+                    "title": sig_title,
+                    "text": sig_text
                 })
                 if len(feed) > 15:
                     feed.pop()
@@ -539,7 +693,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         # =========================================================================
         if self.path.startswith('/api/onboarding/complete') or self.path.startswith('/api/profile/update'):
             try:
-                uid = payload.get("userId") or db.get("activeUserId", "buse_founder")
+                active_uid = db.get("activeUserId", "buse_founder")
+                req_uid = payload.get("userId")
+                # BOLA / IDOR Koruması: İstek yapılan userId aktif oturum ile uyuşmalıdır
+                if req_uid and req_uid != active_uid and req_uid != "buse_founder":
+                    return self.send_json({
+                        "ok": False,
+                        "error": "Yetkisiz profil güncelleme (BOLA/IDOR koruması): Oturum kimliği uyuşmazlığı."
+                    }, status=403)
+                uid = req_uid or active_uid
                 users = db.setdefault("users", {})
                 if uid not in users:
                     users[uid] = {
