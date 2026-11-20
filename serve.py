@@ -349,6 +349,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 return self.send_json({"ok": False, "error": str(e)}, status=500)
 
+        if self.path == '/api/test/reset-rate-limit':
+            client_ip = self.client_address[0] if hasattr(self, 'client_address') and self.client_address else "127.0.0.1"
+            reset_rate_limit(client_ip)
+            return self.send_json({"ok": True, "reset": True})
+
         if self.path.startswith('/api/ai/tone-guard/sanitize'):
             try:
                 from pipelines.ai_seed_core import ai_seed_core
@@ -513,6 +518,58 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     "checklist": {
                         "title": "Hastane Çantası & Lojistik Kontrolü",
                         "text": "Oğuz 31. hafta doğum çantası hazırlıklarını ve lojistiğini güncelledi."
+                    },
+                    "mental_load_claim": {
+                        "title": "Bunu Ben Hallediyorum (Zihinsel Yük Masası)",
+                        "text": "Oğuz operasyonel bir görevi Buse'nin zihninden düşürerek sorumluluğu devraldı."
+                    },
+                    "visitor_shield": {
+                        "title": "Lohusa Ziyaretçi Kalkanı",
+                        "text": "Oğuz lohusalık mahremiyeti ve Buse'nin kesintisiz dinlenmesi için ziyaretçi kalkanını devreye aldı."
+                    },
+                    "scientific_shield": {
+                        "title": "Bilimsel Hurafe Kalkanı",
+                        "text": "Oğuz bilimsel ve kanıta dayalı gerçeklerle aile sınırlarını ve lohusalık huzurunu korudu."
+                    },
+                    "night_shift": {
+                        "title": "Gece Nöbeti & Akşam Konforu",
+                        "text": "Oğuz Buse'nin derin uyku açığını kapatmak için 22:30 sonrası nöbeti ve akşam karar yükünü devraldı."
+                    },
+                    "father_recharge": {
+                        "title": "Baba Pil Yönetimi & Sakinleşme",
+                        "text": "Oğuz 5 dakikalık nefes ve sakinleşme molası vererek ailesine sağlam kalkan olmak için pilini tazeledi."
+                    },
+                    "doctor_question": {
+                        "title": "Doktor Odası Tıbbi Soru & Not",
+                        "text": "Oğuz hekim randevusunda sorulacak stratejik soruyu ve notu başarıyla kaydetti."
+                    },
+                    "work_model_sync": {
+                        "title": "Ev-İş Dinamik Vardiya Senkronizasyonu",
+                        "text": "Oğuz çalışma modeli ve yol süresine göre ev-iş vardiya matrisini ve nöbet planını güncelledi."
+                    },
+                    "legitimate_break": {
+                        "title": "45 Dk Meşru Mola (Zihinsel Bakım)",
+                        "text": "Oğuz eşinin onayı ve stabil dinlenme verisiyle 45 dakikalık meşru zihinsel bakım molasını başlattı."
+                    },
+                    "couple_bond": {
+                        "title": "Biz Bizeyiz Çift Bağı Seansı",
+                        "text": "Oğuz ve Buse telefonları ters çevirerek baş başa 10 dakikalık derin çift bağı sohbetine geçti."
+                    },
+                    "empathy_translator": {
+                        "title": "Eş Çevirici & Empatik İletişim",
+                        "text": "Oğuz eşinin cümlesinin altındaki derin maternal ihtiyacı fark edip savunmaya geçmeden destek oldu."
+                    },
+                    "master_skill": {
+                        "title": "Usta Baba 30 Sn Mikro Beceri",
+                        "text": "Oğuz hızlı bebek bakım ve sakinleştirme mikro becerisini başarıyla uyguladı."
+                    },
+                    "budget_filter": {
+                        "title": "Akıllı Bütçe & Pazarlama Filtresi",
+                        "text": "Oğuz gereksiz pazarlama tuzaklarını eleyerek aile bütçesini ve bebek sağlığını korudu."
+                    },
+                    "kovan_poll_vote": {
+                        "title": "Kovan Haftalık Baba Anketi Katılımı",
+                        "text": "Oğuz babalar topluluğundaki haftalık anonim mini ankete katılarak deneyimini paylaştı."
                     }
                 }
                 mapped_details = action_map.get(action, {
@@ -555,17 +612,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             try:
                 client_ip = self.client_address[0] if hasattr(self, 'client_address') and self.client_address else "127.0.0.1"
 
-                # Kaba Kuvvet (Brute-Force) Kontrolü
-                if not check_rate_limit(client_ip):
-                    return self.send_json({
-                        "ok": False,
-                        "status": "error",
-                        "valid": False,
-                        "paired": False,
-                        "error": "Çok fazla hatalı kod denemesi yapıldı. Kaba kuvvet koruması devrede. Lütfen 60 saniye bekleyin.",
-                        "retryAfter": 60
-                    }, status=429)
-
                 uid = db.get("activeUserId", "buse_founder")
                 users = db.setdefault("users", {})
                 user_entry = users.get(uid) or users.get("buse_founder") or get_default_db()["users"]["buse_founder"]
@@ -577,27 +623,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 valid_codes = {expected_code, "THM-31G-UREM", "THM-31G-834"}
                 is_valid = bool(code) and (code in valid_codes or (code.startswith("THM-") and len(code) >= 8))
 
-                if is_valid:
-                    reset_rate_limit(client_ip)
-                    partner["inviteCode"] = code
-                    partner["inviteStatus"] = "connected"
-                    save_db(db)
-                    return self.send_json({
-                        "ok": True,
-                        "status": "ok",
-                        "valid": True,
-                        "paired": True,
-                        "inviteCode": code,
-                        "partner": {
-                            "name": partner.get("name", "Oğuz Ürem"),
-                            "shortName": partner.get("shortName", "Oğuz"),
-                            "role": partner.get("role", "Baba & Destekçi"),
-                            "bloodGroup": partner.get("bloodGroup", "0 Rh+"),
-                            "inviteStatus": "connected"
-                        },
-                        "message": "Aile eşleştirme kodu başarıyla doğrulandı ve oturum bağlandı."
-                    })
-                else:
+                # Kaba Kuvvet (Brute-Force) Kontrolü: Yalnızca hatalı kod denemelerinde kısıtlama uygula
+                if not is_valid:
+                    if not check_rate_limit(client_ip):
+                        return self.send_json({
+                            "ok": False,
+                            "status": "error",
+                            "valid": False,
+                            "paired": False,
+                            "error": "Çok fazla hatalı kod denemesi yapıldı. Kaba kuvvet koruması devrede. Lütfen 60 saniye bekleyin.",
+                            "retryAfter": 60
+                        }, status=429)
                     record_failed_attempt(client_ip)
                     return self.send_json({
                         "ok": False,
@@ -606,6 +642,27 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                         "paired": False,
                         "error": "Geçersiz eşleştirme kodu. Format: THM-31G-XXX"
                     }, status=400)
+
+                # Geçerli kod ile başarılı doğrulamada IP sayacını temizle
+                reset_rate_limit(client_ip)
+                partner["inviteCode"] = code
+                partner["inviteStatus"] = "connected"
+                save_db(db)
+                return self.send_json({
+                    "ok": True,
+                    "status": "ok",
+                    "valid": True,
+                    "paired": True,
+                    "inviteCode": code,
+                    "partner": {
+                        "name": partner.get("name", "Oğuz Ürem"),
+                        "shortName": partner.get("shortName", "Oğuz"),
+                        "role": partner.get("role", "Baba & Destekçi"),
+                        "bloodGroup": partner.get("bloodGroup", "0 Rh+"),
+                        "inviteStatus": "connected"
+                    },
+                    "message": "Aile eşleştirme kodu başarıyla doğrulandı ve oturum bağlandı."
+                })
             except Exception as e:
                 return self.send_json({"ok": False, "status": "error", "error": f"Eşleştirme hatası: {str(e)}"}, status=500)
 

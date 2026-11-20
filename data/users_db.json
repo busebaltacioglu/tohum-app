@@ -6,45 +6,39 @@
       "authProvider": "google",
       "email": "buse.baltacioglu@tohum.app",
       "onboardingCompleted": true,
-      "updatedAt": "2026-11-11T17:09:24.189796",
+      "updatedAt": "2026-11-20T17:03:37.419564",
       "user": {
         "name": "Buse Nur Ürem",
         "shortName": "Buse Nur",
-        "age": 32,
-        "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=250&q=80",
-        "role": "Kurucu & Veri Bilimci · Anne",
+        "age": 31,
+        "occupation": "Kurucu & Biyoistatistikçi",
         "city": "Manisa",
         "district": "Yunusemre",
         "neighborhood": "Muradiye",
         "baselineSys": 90,
         "baselineDia": 60,
         "baselineBP": "90/60",
+        "baselineCategory": "low",
         "baselineHR": 72,
         "heightCm": 168,
-        "currentWeight": 65.0,
         "startWeight": 58.0,
-        "startWaist": 68,
-        "waistCircumference": 98,
-        "fundalHeight": 31,
+        "currentWeight": 65.0,
+        "bloodGroup": "A Rh+",
         "parity": "G1P0 (İlk Gebelik · Primigravida)",
-        "pregnancyType": "Tekil Gebelik",
-        "lmpDate": "2026-04-07",
-        "dueDate": "12 Ocak 2027",
-        "bloodGroup": "A Rh-",
+        "isFirstBaby": true,
+        "lmpDate": "2026-01-17",
+        "dueDate": "24 Ekim 2026",
         "doctorName": "Dr. Ayşe Yılmaz",
         "hospitalName": "Manisa Şehir Hastanesi",
         "nextCheckupDate": "10 Eylül 2026 · 14:30",
-        "baselineCategory": "low",
-        "isFirstBaby": true,
         "survey": {
           "waterHabit": "5-7",
           "supplements": [
             "iron",
+            "magnesium",
             "omega",
             "d3",
-            "folic",
-            "collagen",
-            "magnesium"
+            "collagen"
           ],
           "symptoms": [
             "Hafif Bel Ağrısı",
@@ -54,6 +48,7 @@
             "Düşük Tansiyon Hassasiyeti (90/60)"
           ]
         },
+        "testPing": "ping_1795183405",
         "activePrescription": {
           "doctorName": "Op. Dr. Ayşe Yılmaz",
           "hospital": "Manisa Şehir Hastanesi",
@@ -113,135 +108,126 @@
             "itemsValidated": 4
           }
         },
-        "testPing": "ping_1794406151",
         "hasCollagen": true
       },
       "baby": {
         "name": "Güneş",
         "week": 31,
-        "daysLeft": 62
+        "daysLeft": 63
       },
       "partner": {
         "name": "Oğuz Ürem",
         "shortName": "Oğuz",
-        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=250&q=80",
-        "role": "Baba & Destekçi",
         "phone": "+90 532 000 00 00",
         "email": "oguz@tohum.app",
-        "bloodGroup": "A Rh+",
-        "inviteCode": "THM-31G-834",
-        "inviteStatus": "pending",
-        "permissions": {
-          "shareVitals": true,
-          "shareSymptoms": true,
-          "shareSupplements": true,
-          "eveningMassage": true
-        },
+        "bloodGroup": "0 Rh+",
+        "inviteCode": "THM-31G-UREM",
+        "inviteStatus": "connected",
         "liveFeed": [
           {
-            "id": 1794406164189,
-            "time": "17:09",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794406160049,
-            "time": "17:09",
+            "id": 1795183552323,
+            "time": "17:05",
             "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+            "title": "Kovan Haftalık Baba Anketi Katılımı",
+            "text": "Oğuz babalar topluluğundaki haftalık anonim mini ankete katılarak deneyimini paylaştı."
           },
           {
-            "id": 1794406157975,
-            "time": "17:09",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
-          },
-          {
-            "id": 1794406117792,
-            "time": "17:08",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794406113679,
-            "time": "17:08",
+            "id": 1795183550233,
+            "time": "17:05",
             "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+            "title": "Akıllı Bütçe &amp; Pazarlama Filtresi",
+            "text": "Oğuz gereksiz pazarlama tuzaklarını eleyerek aile bütçesini ve bebek sağlığını korudu."
           },
           {
-            "id": 1794406111628,
-            "time": "17:08",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
-          },
-          {
-            "id": 1794406064488,
-            "time": "17:07",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (3 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794405984931,
-            "time": "17:06",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794405980817,
-            "time": "17:06",
+            "id": 1795183548163,
+            "time": "17:05",
             "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+            "title": "Usta Baba 30 Sn Mikro Beceri",
+            "text": "Oğuz hızlı bebek bakım ve sakinleştirme mikro becerisini başarıyla uyguladı."
           },
           {
-            "id": 1794405978732,
-            "time": "17:06",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
-          },
-          {
-            "id": 1794405502444,
-            "time": "16:58",
-            "type": "biomechanic",
-            "title": "Lomber Yük Hassasiyeti",
-            "text": "Buse'nin 31. haftasında pelvik genişleme kaynaklı lomber yükü arttı. Sormasını beklemeden ılık bir bitki çayı veya nazik bir sırt masajı sunabilirsin."
-          },
-          {
-            "id": 1794404902185,
-            "time": "16:48",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (4 etken madde) DMT1 kurallarıyla takvime işlendi."
-          },
-          {
-            "id": 1794404898073,
-            "time": "16:48",
+            "id": 1795183546119,
+            "time": "17:05",
             "type": "care_completed",
-            "title": "Amniyotik Hidrasyon Desteği",
-            "text": "Oğuz 1 bardak ılık su ikram ederek Buse'nin hidrasyon ve amniyotik döngüsünü destekledi."
+            "title": "Eş Çevirici &amp; Empatik İletişim",
+            "text": "Oğuz eşinin cümlesinin altındaki derin maternal ihtiyacı fark edip savunmaya geçmeden destek oldu."
           },
           {
-            "id": 1794404896021,
-            "time": "16:48",
-            "type": "test_signal",
-            "title": "M0 Test Sinyali",
-            "text": "Otomasyon testi sinyal teslimatı."
+            "id": 1795183544066,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Biz Bizeyiz Çift Bağı Seansı",
+            "text": "Oğuz ve Buse telefonları ters çevirerek baş başa 10 dakikalık derin çift bağı sohbetine geçti."
           },
           {
-            "id": 1794404862398,
-            "time": "16:47",
-            "type": "prescription_synced",
-            "title": "Hekim Reçetesi Senkronize",
-            "text": "Op. Dr. Ayşe Yılmaz reçetesi (3 etken madde) DMT1 kurallarıyla takvime işlendi."
+            "id": 1795183542012,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "45 Dk Meşru Mola (Zihinsel Bakım)",
+            "text": "Oğuz eşinin onayı ve stabil dinlenme verisiyle 45 dakikalık meşru zihinsel bakım molasını başlattı."
+          },
+          {
+            "id": 1795183539947,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Ev-İş Dinamik Vardiya Senkronizasyonu",
+            "text": "Oğuz çalışma modeli ve yol süresine göre ev-iş vardiya matrisini ve nöbet planını güncelledi."
+          },
+          {
+            "id": 1795183537884,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Baba Pil Yönetimi &amp; Sakinleşme",
+            "text": "Oğuz 5 dakikalık nefes ve sakinleşme molası vererek ailesine sağlam kalkan olmak için pilini tazeledi."
+          },
+          {
+            "id": 1795183535822,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Gece Nöbeti &amp; Akşam Konforu",
+            "text": "Oğuz Buse&#x27;nin derin uyku açığını kapatmak için 22:30 sonrası nöbeti ve akşam karar yükünü devraldı."
+          },
+          {
+            "id": 1795183533760,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Doktor Odası Tıbbi Soru &amp; Not",
+            "text": "Oğuz hekim randevusunda sorulacak stratejik soruyu ve notu başarıyla kaydetti."
+          },
+          {
+            "id": 1795183531722,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Bilimsel Hurafe Kalkanı",
+            "text": "Oğuz bilimsel ve kanıta dayalı gerçeklerle aile sınırlarını ve lohusalık huzurunu korudu."
+          },
+          {
+            "id": 1795183529682,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Lohusa Ziyaretçi Kalkanı",
+            "text": "Oğuz lohusalık mahremiyeti ve Buse&#x27;nin kesintisiz dinlenmesi için ziyaretçi kalkanını devreye aldı."
+          },
+          {
+            "id": 1795183527623,
+            "time": "17:05",
+            "type": "care_completed",
+            "title": "Bunu Ben Hallediyorum ✓",
+            "text": "Magnimore Plus &amp; Ferro Sanol Stok Kontrolü devralındı."
+          },
+          {
+            "id": 1795183427793,
+            "time": "17:03",
+            "type": "care_completed",
+            "title": "Hastane Çantası &amp; Lojistik Kontrolü",
+            "text": "Oğuz 31. hafta doğum çantası hazırlıklarını ve lojistiğini güncelledi."
+          },
+          {
+            "id": 1795183425730,
+            "time": "17:03",
+            "type": "care_completed",
+            "title": "Kardiyovasküler Dinlenme ve Huzur",
+            "text": "Oğuz, Buse&#x27;nin 90/60 bazal tansiyon dengesi için sakin ve dingin bir dinlenme ortamı sağladı."
           }
         ]
       },

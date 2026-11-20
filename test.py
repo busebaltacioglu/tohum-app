@@ -516,6 +516,13 @@ def test_security_audit_and_hardening():
                     break
 
         record_result("OWASP Kaba Kuvvet Koruması", "Aile Eşleştirme Kodu Brute-Force Rate Limiting (5 Hatalı Deneme Sonrası 429 Too Many Requests)", hit_429)
+        # Test sonrası IP hız limitini temizle
+        try:
+            reset_req = urllib.request.Request(f"{BASE_URL}/api/test/reset-rate-limit", data=b"{}", headers={'Content-Type': 'application/json'})
+            with urllib.request.urlopen(reset_req, timeout=5):
+                pass
+        except Exception:
+            pass
     except Exception as e:
         record_result("OWASP Kaba Kuvvet Koruması", "Aile Eşleştirme Kodu Brute-Force Rate Limiting (5 Hatalı Deneme Sonrası 429 Too Many Requests)", False, str(e))
 
@@ -543,6 +550,238 @@ def test_security_audit_and_hardening():
         record_result("OWASP Hassas Veri", "İstemci Tarafı localStorage Sağlık Verisi İzolasyonu ve Şema Bütünlüğü", False, str(e))
 
 # =========================================================================
+# 9. TEST GRUBU: TÜRK BABA PERSONASI & WEARABLE MODÜLLERİ (5 YENİ MODÜL)
+# =========================================================================
+def test_baba_persona_and_wearable_modules():
+    print("\n--- 9. Türk Baba Personası & Wearable Modülleri Doğrulaması ---")
+
+    # 9.1 Modül 1 - "Bunu Ben Hallediyorum" Zihinsel Yük Masası (Mental Load Offloader)
+    try:
+        claim_payload = json.dumps({
+            "action": "mental_load_claim",
+            "title": "Bunu Ben Hallediyorum ✓",
+            "text": "Magnimore Plus & Ferro Sanol Stok Kontrolü devralındı."
+        }).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=claim_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            api_pass = data.get("status") == "ok" and data.get("action") == "mental_load_claim"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        code_pass = (
+            "mentalLoadTasks" in baba_js and
+            "tohum_baba_mental_load_v1" in baba_js and
+            "claimMentalLoadTask" in baba_js and
+            "Bunu Ben Hallediyorum" in baba_js and
+            "hoursSaved" in baba_js
+        )
+        record_result("Baba Personası", "Modül 1: 'Bunu Ben Hallediyorum' Zihinsel Yük Masası & Saat Tasarrufu", api_pass and code_pass)
+    except Exception as e:
+        record_result("Baba Personası", "Modül 1: 'Bunu Ben Hallediyorum' Zihinsel Yük Masası & Saat Tasarrufu", False, str(e))
+
+    # 9.2 Modül 2 - Kalkan Modu (Hurafe Savar & Lohusa Ziyaretçi Kalkanı)
+    try:
+        v_payload = json.dumps({"action": "visitor_shield"}).encode('utf-8')
+        req1 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=v_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req1, timeout=5) as res1:
+            data1 = json.loads(res1.read().decode('utf-8'))
+            v_pass = data1.get("status") == "ok" and data1.get("action") == "visitor_shield"
+
+        s_payload = json.dumps({"action": "scientific_shield"}).encode('utf-8')
+        req2 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=s_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req2, timeout=5) as res2:
+            data2 = json.loads(res2.read().decode('utf-8'))
+            s_pass = data2.get("status") == "ok" and data2.get("action") == "scientific_shield"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        shields_pass = (
+            "scientificShields" in baba_js and
+            "visitorShieldRules" in baba_js and
+            ("copyVisitorShieldText" in baba_js or "copyVisitorShieldMessage" in baba_js or "copyVisitorShield" in baba_js) and
+            ("kiraz" in baba_js.lower() or "5-7 ml" in baba_js or "kiraz" in baba_js) and
+            ("sarılık" in baba_js.lower() or "sarilik" in baba_js.lower())
+        )
+        record_result("Baba Personası", "Modül 2: Kalkan Modu (Hurafe Savar & 20 Dk Lohusa Ziyaretçi Kalkanı)", v_pass and s_pass and shields_pass)
+    except Exception as e:
+        record_result("Baba Personası", "Modül 2: Kalkan Modu (Hurafe Savar & 20 Dk Lohusa Ziyaretçi Kalkanı)", False, str(e))
+
+    # 9.3 Modül 3 - Doktor Odası Taktikleri & Tıbbi Tercüman (Klinik Hazırlık)
+    try:
+        dq_payload = json.dumps({"action": "doctor_question"}).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=dq_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            dq_pass = data.get("status") == "ok" and data.get("action") == "doctor_question"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        terms_pass = (
+            "medicalTerms" in baba_js and
+            "doctorQuestions" in baba_js and
+            "toggleDoctorQuestion" in baba_js and
+            "AFI" in baba_js and
+            "NST" in baba_js and
+            "EFW" in baba_js
+        )
+        record_result("Klinik İletişim", "Modül 3: Doktor Odası Taktikleri & Tıbbi Terim Tercümanı (AFI, NST, EFW)", dq_pass and terms_pass)
+    except Exception as e:
+        record_result("Klinik İletişim", "Modül 3: Doktor Odası Taktikleri & Tıbbi Terim Tercümanı (AFI, NST, EFW)", False, str(e))
+
+    # 9.4 Modül 4 - Akıllı Saat (Wearable) Sessiz Nöbet & Baba Pil Yönetimi (MDR Uyumlu)
+    try:
+        ns_payload = json.dumps({"action": "night_shift"}).encode('utf-8')
+        req1 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=ns_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req1, timeout=5) as res1:
+            data1 = json.loads(res1.read().decode('utf-8'))
+            ns_pass = data1.get("status") == "ok" and data1.get("action") == "night_shift"
+
+        fr_payload = json.dumps({"action": "father_recharge"}).encode('utf-8')
+        req2 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=fr_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req2, timeout=5) as res2:
+            data2 = json.loads(res2.read().decode('utf-8'))
+            fr_pass = data2.get("status") == "ok" and data2.get("action") == "father_recharge"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        mdr_compliant = "Taşikardi" not in baba_js and "Kardiyovasküler stres" not in baba_js
+        wearable_pass = (
+            "activateNightShiftHandover" in baba_js and
+            "completeFatherRecharge" in baba_js and
+            ("4-7-8" in baba_js or "nefes" in baba_js.lower()) and
+            ("pil" in baba_js.lower() or "battery" in baba_js.lower()) and
+            mdr_compliant
+        )
+        record_result("Wearable & MDR", "Modül 4: Akıllı Saat Sessiz Nöbet, Baba Pil Yönetimi & MDR Teşhissiz Taktik", ns_pass and fr_pass and wearable_pass)
+    except Exception as e:
+        record_result("Wearable & MDR", "Modül 4: Akıllı Saat Sessiz Nöbet, Baba Pil Yönetimi & MDR Teşhissiz Taktik", False, str(e))
+
+    # 9.5 Modül 5 - Operasyonel Etki Karnesi (Erkek Odaklı Somut Gamification)
+    try:
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        gamification_pass = (
+            "Üstlenilen Sorumluluk" in baba_js and
+            "Kazandırılan Kesintisiz Dinlenme" in baba_js and
+            "Aile Kalkanı Endeksi" in baba_js
+        )
+        record_result("Operasyonel Karne", "Modül 5: Erkek Odaklı Operasyonel Etki Karnesi (Sorumluluk, Dinlenme, Kalkan Endeksi)", gamification_pass)
+    except Exception as e:
+        record_result("Operasyonel Karne", "Modül 5: Erkek Odaklı Operasyonel Etki Karnesi (Sorumluluk, Dinlenme, Kalkan Endeksi)", False, str(e))
+
+    # 9.6 Modül 6 - Ev-İş Dinamik Vardiya Matrisi (5 Çalışma Modeli & Canlı Nöbet Adaptasyonu)
+    try:
+        w_payload = json.dumps({"action": "work_model_sync"}).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=w_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            w_pass = data.get("status") == "ok" and data.get("action") == "work_model_sync"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        matrix_pass = (
+            "workLifeModels" in baba_js and
+            "tohum_baba_work_matrix_v1" in baba_js and
+            "setWorkLifeModel" in baba_js and
+            "setCommuteDuration" in baba_js and
+            "office_8_18" in baba_js and
+            "role_reversal" in baba_js and
+            "both_home" in baba_js
+        )
+        record_result("Baba Personası", "Modül 6: Ev-İş Dinamik Vardiya Matrisi (5 Çalışma Modeli & Nöbet Senkronu)", w_pass and matrix_pass)
+    except Exception as e:
+        record_result("Baba Personası", "Modül 6: Ev-İş Dinamik Vardiya Matrisi (5 Çalışma Modeli & Nöbet Senkronu)", False, str(e))
+
+    # 9.7 Modül 7 - Bireysel Mutluluk & Çift Bağı (Meşru Mola, Gizli Teşekkür, Biz Bizeyiz Modu)
+    try:
+        lb_payload = json.dumps({"action": "legitimate_break"}).encode('utf-8')
+        req1 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=lb_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req1, timeout=5) as res1:
+            data1 = json.loads(res1.read().decode('utf-8'))
+            lb_pass = data1.get("status") == "ok" and data1.get("action") == "legitimate_break"
+
+        cb_payload = json.dumps({"action": "couple_bond"}).encode('utf-8')
+        req2 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=cb_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req2, timeout=5) as res2:
+            data2 = json.loads(res2.read().decode('utf-8'))
+            cb_pass = data2.get("status") == "ok" and data2.get("action") == "couple_bond"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        wellbeing_pass = (
+            "individualWellbeing" in baba_js and
+            "claimLegitimateBreak" in baba_js and
+            "startCoupleMicroSession" in baba_js and
+            ("Meşru Mola" in baba_js or "claimLegitimateBreak" in baba_js) and
+            ("Biz Bizeyiz" in baba_js or "startCoupleMicroSession" in baba_js)
+        )
+        record_result("Bireysel Mutluluk & Çift Bağı", "Modül 7: 45 Dk Meşru Mola & Biz Bizeyiz Çift Seansı", lb_pass and cb_pass and wellbeing_pass)
+    except Exception as e:
+        record_result("Bireysel Mutluluk & Çift Bağı", "Modül 7: 45 Dk Meşru Mola & Biz Bizeyiz Çift Seansı", False, str(e))
+
+    # 9.8 Modül 8 - Eş Çevirici, Usta Baba 30 Sn Mikro Beceriler & Akıllı Bütçe Filtresi
+    try:
+        et_payload = json.dumps({"action": "empathy_translator"}).encode('utf-8')
+        req1 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=et_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req1, timeout=5) as res1:
+            data1 = json.loads(res1.read().decode('utf-8'))
+            et_pass = data1.get("status") == "ok" and data1.get("action") == "empathy_translator"
+
+        ms_payload = json.dumps({"action": "master_skill"}).encode('utf-8')
+        req2 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=ms_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req2, timeout=5) as res2:
+            data2 = json.loads(res2.read().decode('utf-8'))
+            ms_pass = data2.get("status") == "ok" and data2.get("action") == "master_skill"
+
+        bf_payload = json.dumps({"action": "budget_filter"}).encode('utf-8')
+        req3 = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=bf_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req3, timeout=5) as res3:
+            data3 = json.loads(res3.read().decode('utf-8'))
+            bf_pass = data3.get("status") == "ok" and data3.get("action") == "budget_filter"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        skills_budget_pass = (
+            ("empathyTranslator" in baba_js or "applyEmpathyTactic" in baba_js) and
+            ("masterDadSkills" in baba_js or "completeMasterSkill" in baba_js) and
+            ("Kaplan Duruşu" in baba_js or "Tiger in the Tree" in baba_js or "gaz" in baba_js.lower()) and
+            ("budgetFilter" in baba_js or "applyBudgetFilter" in baba_js)
+        )
+        record_result("Usta Baba & Bütçe", "Modül 8: Eş Çevirici, Usta Baba Mikro Beceriler & Akıllı Bütçe Filtresi", et_pass and ms_pass and bf_pass and skills_budget_pass)
+    except Exception as e:
+        record_result("Usta Baba & Bütçe", "Modül 8: Eş Çevirici, Usta Baba Mikro Beceriler & Akıllı Bütçe Filtresi", False, str(e))
+
+    # 9.9 Modül 9 - Kovan Haftalık Anonim Mini Anketler ("Kankalar Ne Durumda?")
+    try:
+        kp_payload = json.dumps({"action": "kovan_poll_vote"}).encode('utf-8')
+        req = urllib.request.Request(f"{BASE_URL}/api/partner/care-action", data=kp_payload, headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=5) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            kp_pass = data.get("status") == "ok" and data.get("action") == "kovan_poll_vote"
+
+        with open(os.path.join(BASE_DIR, 'public', 'baba.js'), 'r', encoding='utf-8') as f:
+            baba_js = f.read()
+
+        poll_pass = (
+            "kovanWeeklyPolls" in baba_js and
+            "tohum_baba_kovan_polls_v1" in baba_js and
+            "voteKovanMiniPoll" in baba_js and
+            ("Kankalar Ne Durumda" in baba_js or "Kovan Mini Anketi" in baba_js or "Kovan" in baba_js)
+        )
+        record_result("Kovan Topluluk", "Modül 9: Kovan Haftalık Anonim Mini Anketler ('Kankalar Ne Durumda?')", kp_pass and poll_pass)
+    except Exception as e:
+        record_result("Kovan Topluluk", "Modül 9: Kovan Haftalık Anonim Mini Anketler ('Kankalar Ne Durumda?')", False, str(e))
+
+# =========================================================================
 # ANA ÇALIŞTIRICI VE YÖNETİCİ ÖZETİ RAPORU
 # =========================================================================
 def main():
@@ -560,6 +799,7 @@ def main():
     test_dmt1_supplement_timing()
     test_headless_ui()
     test_security_audit_and_hardening()
+    test_baba_persona_and_wearable_modules()
 
     total = len(TEST_RESULTS)
     passed = sum(1 for r in TEST_RESULTS if r["passed"])
